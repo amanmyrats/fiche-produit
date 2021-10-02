@@ -13,7 +13,7 @@ class Product(models.Model):
     desc_ru  = models.TextField(max_length=1000, blank=True, null=True)
     desc_tm  = models.TextField(max_length=1000, blank=True, null=True)
     technical_detail = models.FileField(blank=True, null=True)
-    image = models.ImageField(blank=True, null=True)
+    image = models.ImageField(upload_to='product_image/',blank=True, null=True)
     created_by = models.ForeignKey('Employee', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -21,11 +21,42 @@ class Product(models.Model):
         return self.name_fr
     
 class Lot(models.Model):
-    no = models.CharField(max_length=5, blank=True, null=True)
+    number = models.CharField(max_length=5, blank=True, null=True)
     name_en = models.CharField(max_length=200, blank=True, null=True)
     name_fr = models.CharField(max_length=200, blank=True, null=True)
     name_ru = models.CharField(max_length=200, blank=True, null=True)
     name_tm = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.number) + ' - ' + str(self.name_fr)
+
+class Unit(models.Model):
+    name_en = models.CharField(max_length=10, blank=True, null=True)
+    name_fr = models.CharField(max_length=10, blank=True, null=True)
+    name_ru = models.CharField(max_length=10, blank=True, null=True)
+    name_tm = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return self.name_fr
+
+class Currency(models.Model):
+    short_name_en = models.CharField(max_length=3, blank=True, null=True)
+    short_name_fr = models.CharField(max_length=3, blank=True, null=True)
+    short_name_ru = models.CharField(max_length=3, blank=True, null=True)
+    short_name_tm = models.CharField(max_length=3, blank=True, null=True)
+    name_en = models.CharField(max_length=10, blank=True, null=True)
+    name_fr = models.CharField(max_length=10, blank=True, null=True)
+    name_ru = models.CharField(max_length=10, blank=True, null=True)
+    name_tm = models.CharField(max_length=10, blank=True, null=True)
+
+    def __str__(self):
+        return self.short_name_fr
+
+class PackageType(models.Model):
+    name_en = models.CharField(max_length=10, blank=True, null=True)
+    name_fr = models.CharField(max_length=10, blank=True, null=True)
+    name_ru = models.CharField(max_length=10, blank=True, null=True)
+    name_tm = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
         return self.name_fr
@@ -37,7 +68,6 @@ class Project(models.Model):
     name_ru = models.CharField(max_length=200, blank=True, null=True)
     name_tm = models.CharField(max_length=200, blank=True, null=True)
     director = models.ForeignKey('Employee', on_delete=models.SET_NULL, blank=True, null=True)
-    # client = models.ForeignKey('Client',on_delete=models.SET_NULL, blank=True, null=True)
     contract_total = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
@@ -74,6 +104,7 @@ class Room(models.Model):
     name_ru = models.CharField(max_length=200, blank=True, null=True)
     name_tm = models.CharField(max_length=200, blank=True, null=True)
     area = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    plan = models.ImageField(upload_to = 'room_plan/', blank=True, null = True)
 
     def __str__(self):
         return self.name_fr + ' - ' + self.name_fr
@@ -89,7 +120,6 @@ class Client(models.Model):
         return self.name_fr
 
 class Employee(models.Model):
-    # project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     name_en = models.CharField(max_length=200, blank=True, null=True)
     name_fr = models.CharField(max_length=200, blank=True, null=True)
     name_ru = models.CharField(max_length=200, blank=True, null=True)
@@ -98,16 +128,43 @@ class Employee(models.Model):
     def __str__(self):
         return self.name_fr
 
+class Phase(models.Model):
+    name = models.CharField(max_length=3, blank=True, null=True)
+
+    def __str__ (self):
+        return self.name
+
+class Trade(models.Model):
+    name_en = models.CharField(max_length=200, blank=True, null=True)
+    name_fr = models.CharField(max_length=200, blank=True, null=True)
+    name_ru = models.CharField(max_length=200, blank=True, null=True)
+    name_tm = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__ (self):
+        return self.name_fr
+    
+class Department(models.Model):
+    name = models.CharField(max_length=50, blank=True, null=True)
+
+    def __str__ (self):
+        return self.name
+
 class ProductCard(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
-    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
-    project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
     origin = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='origin_country')
     manufactured_in = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='manufactured_country')
-    location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
     protocol = models.CharField(max_length=300, blank=True, null=True)
     observation =models.CharField(max_length=300, blank=True, null=True)
+    project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
+    location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
+    phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
+    trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
+    lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
+    fp_type = models.CharField(max_length=10,choices=[(1,'FP'),], blank=True, null=True)
+    number = models.CharField(max_length=10, blank=True, null=True)
+    index = models.CharField(max_length=2, blank=True, null=True)
     sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
     sign_contractor2 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_director')
     sign_tehnadzor = models.CharField(max_length=200, blank=True, null=True)
@@ -115,168 +172,185 @@ class ProductCard(models.Model):
     date_contractor = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_tehnadzor = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_client = models.DateTimeField(auto_now=True, blank=True, null=True)
-    phase = models.CharField(max_length=10,choices=[('1','APD'), ('2','PEO'), ('3', 'DOE'),], blank=True, null=True)
-    fp_type = models.CharField(max_length=10,choices=[(1,'FP')], blank=True, null=True)
-    no = models.CharField(max_length=10, blank=True, null=True)
-    index = models.CharField(max_length=2, blank=True, null=True)
-    trade = models.CharField(max_length=10,choices=[('1','CEA'), ('2','MEC'), ('3', 'ELE'),], blank=True, null=True)
-    department = models.CharField(max_length=10,choices=[('1','CEA'), ('2','MEC'), ('3', 'ELE'),], blank=True, null=True)
     created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='created')
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
     note_for_achat = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return str(self.project) + ' - ' + str(self.no)
+        return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['project','no'], name = 'project-fp-no')]
+        constraints = [models.UniqueConstraint(fields=['project','number'], name = 'project-fp-number')]
 
 class Annexe5(models.Model):
-    units = [(1,'un'),(2,'mt'), (3,'pc'),(4, 'm2'),(5,'m3'), (6,'set'), (7,'ls'),]
-    currencies = [(1,'Manat'),(2,'Euro'),(3, 'USD'),]
-
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     lot = models.ForeignKey(Lot,on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=10, blank=True, null=True)
+    code = models.CharField(max_length=10, blank=True, null=True)
     name_en = models.CharField(max_length=200, blank=True, null=True)
     name_fr = models.CharField(max_length=200, blank=True, null=True)
     name_ru = models.CharField(max_length=200, blank=True, null=True)
     name_tm = models.CharField(max_length=200, blank=True, null=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    unit  = models.CharField(max_length=10,choices=units, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
+    material_unit_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    material_total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    fabrication_unit_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    fabrication_total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    transport_unit_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    transport_total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    unit_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=10,choices=currencies, blank=True, null=True)
+    currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
     country = models.ForeignKey('Country',on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return str(self.no) + str(self.name_fr)
+        return str(self.code) + ' - ' + str(self.name_fr)
 
     class Meta:
-        constraints = [models.UniqueConstraint(fields=['project','no'], name = 'project-annexe-no')]
+        constraints = [models.UniqueConstraint(fields=['project','code'], name = 'project-annexe-code')]
 
 class Order(models.Model):
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.no)
+        return str(self.number)
 
 class OrderItem(models.Model):
-    units = [(1,'un'),(2,'mt'), (3,'pc'),(4, 'm2'),(5,'m3'), (6,'set'), (7,'ls'),]
-    currencies = [(1,'Manat'),(2,'Euro'),(3, 'USD'),]
-
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
     product_card = models.ForeignKey(ProductCard, on_delete=models.SET_NULL, blank=True, null=True)
     desc_fr = models.TextField(max_length=500, blank=True, null=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    unit  = models.CharField(max_length=10,choices=units, blank=True, null=True)
+    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=10,choices=currencies, blank=True, null=True)
+    currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
     annexe5 = models.ForeignKey(Annexe5, on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return self.desc_fr
+        return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
 
 class Routage(models.Model):
-    no = models.CharField(max_length = 20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length = 20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.no
+        return self.number
+
+class RoutageItems(models.Model):
+    routage = models.ForeignKey(Routage, on_delete=models.SET_NULL, blank=True, null=True)
+    facture = models.ForeignKey('Facture',on_delete=models.SET_NULL, blank=True, null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['routage', 'facture'], name='routage-facture-number')]
+
+    def __str__(self):
+        return str(self.routage) + ' - ' + str(self.facture)
 
 class Facture(models.Model):
-    currencies = [(1,'Manat'),(2,'Euro'),(3, 'USD')]
-
-
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
-    routage = models.ForeignKey(Routage, on_delete=models.SET_NULL, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=10,choices=currencies, blank=True, null=True)
+
+    def get_total_price(self):
+        pass
 
     def __str__(self):
-        return self.no
+        return self.number
 
 class FactureItem(models.Model):
-    currencies = [(1,'Manat'),(2,'Euro'),(3, 'USD'),]
-    units = [(1,'un'),(2,'mt'), (3,'pc'),(4, 'm2'),(5,'m3'), (6,'set'), (7,'ls'),]
-    package_types = [(1,'Palette'),(2, 'Package'), (3, 'Some other type'),]
-
-    package_type = models.CharField(max_length=20,choices=package_types, blank=True, null=True)
-    hs_code  = models.CharField(max_length = 10,unique=True, blank=True, null=True)
-    item = models.ForeignKey(OrderItem, on_delete=models.SET_NULL, blank=True, null=True)
-    currency = models.CharField(max_length=10,choices=currencies, blank=True, null=True)
+    facture = models.ForeignKey(Facture,on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
+    package_type = models.ForeignKey(PackageType,on_delete=models.SET_NULL, blank=True, null=True)
+    hs_code  = models.CharField(max_length = 10, blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem, on_delete=models.SET_NULL, blank=True, null=True)
+    currency = models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    unit  = models.CharField(max_length=10,choices=units, blank=True, null=True)
+    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['facture', 'no'], name='facture-item-no')]
+
     def __str__(self):
-        return self.item.desc_fr
+        return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
+
 
 class Specification(models.Model):
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
     
     def __str__(self):
-        return self.no
+        return self.number
 
 class SpecificationItem(models.Model):
     specification =models.ForeignKey(Specification, on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['specification', 'no'], name='specification-item-no')]
+
     def __str__(self):
-        return self.facture_item.item.desc_fr
+        if not self.facture_item.order_item.desc_fr:
+            return self.facture_item.order_item.desc_fr
+        else:
+            return self.specification.number
 
 class Tds(models.Model):
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.no
+        return self.number
 
 class TdsItem(models.Model):
     tds =models.ForeignKey(Tds, on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['tds', 'no'], name='tds-item-no')]
+
     def __str__(self):
-        return self.facture_item.item.desc_fr
+        return self.facture_item.order_item.desc_fr
 
 class Declaration(models.Model):
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.no
+        return self.number
 
 class DeclarationItem(models.Model):
     declaration =models.ForeignKey(Declaration, on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20,unique=True, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['declaration', 'no'], name='declaration-item-no')]
+
     def __str__(self):
-        return self.facture_item.item.desc_fr
+        return self.facture_item.order_item.desc_fr
 
 class Coo(models.Model):
-    no = models.CharField(max_length=20,unique=True, blank=True, null=True)
+    number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.no
+        return self.number
 
 class CooFacture(models.Model):
     coo =models.ForeignKey(Coo, on_delete=models.SET_NULL, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
     def __str__(self):
-        return self.facture_item.item.desc_fr
+        return str(self.coo) + ' - ' + str(self.facture_item.facture.number)
