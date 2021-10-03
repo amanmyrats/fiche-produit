@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import constraints
@@ -149,6 +150,73 @@ class Department(models.Model):
     def __str__ (self):
         return self.name
 
+
+class OrderItem(models.Model):
+    order = models.ForeignKey('Order', on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
+    product_card = models.ForeignKey('ProductCard', on_delete=models.SET_NULL, blank=True, null=True)
+    desc_fr = models.TextField(max_length=500, blank=True, null=True)
+    quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
+    annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
+
+    def __str__(self):
+        return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
+
+
+class FactureItem(models.Model):
+    facture = models.ForeignKey('Facture',on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
+    package_type = models.ForeignKey(PackageType,on_delete=models.SET_NULL, blank=True, null=True)
+    hs_code  = models.CharField(max_length = 10, blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem, on_delete=models.SET_NULL, blank=True, null=True)
+    currency = models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
+    provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
+    quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
+    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['facture', 'no'], name='facture-item-no')]
+
+    def __str__(self):
+        return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
+
+
+class SpecificationItem(models.Model):
+    specification =models.ForeignKey('Specification', on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['specification', 'no'], name='specification-item-no')]
+
+    def __str__(self):
+        if not self.facture_item.order_item.desc_fr:
+            return self.facture_item.order_item.desc_fr
+        else:
+            return self.specification.number
+
+
+class TdsItem(models.Model):
+    tds =models.ForeignKey('Tds', on_delete=models.SET_NULL, blank=True, null=True)
+    no = models.CharField(max_length=20, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['tds', 'no'], name='tds-item-no')]
+
+    def __str__(self):
+        return self.facture_item.order_item.desc_fr
+
+
 class ProductCard(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
@@ -178,6 +246,82 @@ class ProductCard(models.Model):
 
     def __str__(self):
         return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr)
+    
+    @property
+    def product_name(self):
+        return self.product.name_fr
+
+    @property
+    def image_url(self):
+        return self.product.image.url
+    
+
+    @property
+    def order_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        orders = []
+        for item in order_items:
+            orders.append(item.order.number)
+        return orders
+
+    @property
+    def facture_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        facture_items = FactureItem.objects.filter(order_item__in = order_items)
+        factures = []
+        for item in facture_items:
+            factures.append(item.facture.number)
+        return factures
+
+    @property
+    def specification_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        facture_items = FactureItem.objects.filter(order_item__in = order_items)
+        specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        specifications = []
+        for item in specification_items:
+            specifications.append(item.specification.number)
+        return specifications
+    
+    @property
+    def tds_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        facture_items = FactureItem.objects.filter(order_item__in = order_items)
+        # specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        tds_items = TdsItem.objects.filter(facture_item__in = facture_items)
+        tdss = []
+        for item in tds_items:
+            tdss.append(item.tds.number)
+        return tdss
+    
+    @property
+    def declaration_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        facture_items = FactureItem.objects.filter(order_item__in = order_items)
+        # specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        # tds_items = TdsItem.objects.filter(facture_item__in = specification_items)
+        declaration_items = DeclarationItem.objects.filter(facture_item__in  = facture_items)
+        declarations = []
+        for item in declaration_items:
+            declarations.append(item.declaration.number)
+        return declarations
+    
+    @property
+    def coo_numbers(self):
+        order_items = OrderItem.objects.filter(product_card = self.pk)
+        facture_items = FactureItem.objects.filter(order_item__in = order_items)
+        coo_factures = CooFacture.objects.filter(facture_item__in = facture_items)
+        coos = []
+        for item in coo_factures:
+            coos.append(item.coo.number)
+        return coos
+
+
+
+# specification_numbers = serializers.CharField()
+#     tds_numbers = serializers.CharField()
+#     declaration_numbers = serializers.CharField()
+#     coo_numbers = serializers.CharField()
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['project','number'], name = 'project-fp-number')]
@@ -218,24 +362,6 @@ class Order(models.Model):
     def __str__(self):
         return str(self.number)
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20, blank=True, null=True)
-    product_card = models.ForeignKey(ProductCard, on_delete=models.SET_NULL, blank=True, null=True)
-    desc_fr = models.TextField(max_length=500, blank=True, null=True)
-    quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
-    annexe5 = models.ForeignKey(Annexe5, on_delete=models.SET_NULL, blank=True, null=True)
-
-    def __str__(self):
-        return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
-
 class Routage(models.Model):
     number = models.CharField(max_length = 20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
@@ -264,26 +390,6 @@ class Facture(models.Model):
     def __str__(self):
         return self.number
 
-class FactureItem(models.Model):
-    facture = models.ForeignKey(Facture,on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20, blank=True, null=True)
-    package_type = models.ForeignKey(PackageType,on_delete=models.SET_NULL, blank=True, null=True)
-    hs_code  = models.CharField(max_length = 10, blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem, on_delete=models.SET_NULL, blank=True, null=True)
-    currency = models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
-    provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
-    quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
-    price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['facture', 'no'], name='facture-item-no')]
-
-    def __str__(self):
-        return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
-
-
 class Specification(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
@@ -291,37 +397,12 @@ class Specification(models.Model):
     def __str__(self):
         return self.number
 
-class SpecificationItem(models.Model):
-    specification =models.ForeignKey(Specification, on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['specification', 'no'], name='specification-item-no')]
-
-    def __str__(self):
-        if not self.facture_item.order_item.desc_fr:
-            return self.facture_item.order_item.desc_fr
-        else:
-            return self.specification.number
-
 class Tds(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
         return self.number
-
-class TdsItem(models.Model):
-    tds =models.ForeignKey(Tds, on_delete=models.SET_NULL, blank=True, null=True)
-    no = models.CharField(max_length=20, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
-
-    class Meta:
-        constraints = [models.UniqueConstraint(fields=['tds', 'no'], name='tds-item-no')]
-
-    def __str__(self):
-        return self.facture_item.order_item.desc_fr
 
 class Declaration(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">FP Number</th>
+        <th scope="col">Product Name</th>
+        <th scope="col">Order</th>
+        <th scope="col">Facture</th>
+        <th scope="col">Specification</th>
+        <th scope="col">TDS</th>
+        <th scope="col">Declaration</th>
+        <th scope="col">COO</th>
+      </tr>
+    </thead>
+    <tbody>
+{% for fp in apidata %}
+      <tr  class="px-4 ">
+        <th scope="row" class="py-4 ">{{ fp.number }}</th>
+        <td  class="py-4">{{ fp.product_name }}</td>
+        <td class="py-4">{{ fp.order_numbers }}</td>
+        <td class="py-4">{{ fp.facture_numbers }}</td>
+        <td class="py-4">{{ fp.specification_numbers }}</td>
+        <td class="py-4">{{ fp.tds_numbers }}</td>
+        <td class="py-4">{{ fp.declaration_numbers }}</td>
+        <td class="py-4">{{ fp.coo_numbers }}</td>
+      </tr>
+      
+      
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+{% endblock %}
