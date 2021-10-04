@@ -5,14 +5,14 @@ from django.db import models
 from rest_framework import serializers
 
 class FPModelSerializer(serializers.ModelSerializer):
-    order_numbers = serializers.CharField()
-    facture_numbers = serializers.CharField()
-    specification_numbers = serializers.CharField()
-    tds_numbers = serializers.CharField()
-    declaration_numbers = serializers.CharField()
-    coo_numbers = serializers.CharField()
-    product_name = serializers.CharField()
-    image_url = serializers.CharField()
+    order_numbers = serializers.CharField(read_only=True)
+    facture_numbers = serializers.CharField(read_only=True)
+    specification_numbers = serializers.CharField(read_only=True)
+    tds_numbers = serializers.CharField(read_only=True)
+    declaration_numbers = serializers.CharField(read_only=True)
+    coo_numbers = serializers.CharField(read_only=True)
+    product_name = serializers.CharField(read_only=True)
+    image_url = serializers.CharField(read_only=True)
 
     class Meta:
         model = ProductCard

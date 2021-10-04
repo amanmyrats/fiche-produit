@@ -1,1 +1,99 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block head_extra %}
+<style>
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
+    }
+  </style>
+  {% endblock %}
+  {% block content %}
+  <main>
+
+  
+    <div class="album py-5 bg-light">
+      <div class="container">
+  
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-3">
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" 
+              aria-label="Placeholder: SITE TEAM" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>
+              <rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em"> SITE TEAM</text></svg>
+                <!-- <img class="bd-placeholder-img card-img-top" width="100%" height="225"  src="{% static 'img\Human_evolution.jpg' %}" alt=""> -->
+              <div class="card-body" style="height: 200px;">
+                <p class="card-text" style="height: 90px;">You can create new Fiche Produit and track if you product was ordered, purchased and declared at custom.</p>
+                <div class="d-flex justify-content-around align-items-center">
+                  <div class="btn-group">
+                      <a  class="btn btn-sm btn-primary m-1 w-50 " style="height: 60px;" href="{% url 'site' %}">See list of Fiche Produit</a>
+                    <!-- <button type="button" class="btn btn-sm btn-primary m-1 w-50 " style="height: 60px;">See list of Fiche Produit</button> -->
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Add new Fiche Produit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: SERVICE ACHAT" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">SERVICE ACHAT</text></svg>
+  
+              <div class="card-body" style="height: 200px;">
+                <p class="card-text" style="height: 90px;">You can see all orders and you can track you you purchased that order or not.</p>
+                <div class="d-flex justify-content-around align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See list of HG orders</button>
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Create HG order</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: LOGISTICS" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">LOGISTICS</text></svg>
+  
+              <div class="card-body" style="height: 200px;">
+                <p class="card-text" style="height: 90px;">You can see all factures and track them if necessary documents like specification, TDS and declaration.</p>
+                <div class="d-flex justify-content-around align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See list of Factures</button>
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Create New Facture</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col">
+            <div class="card shadow-sm">
+              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: QS" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">QS</text></svg>
+  
+              <div class="card-body" style="height: 200px;">
+                <p class="card-text" style="height: 90px;">You can find all documents related to Annexe-5. You can automatically create Inventory.</p>
+                <div class="d-flex justify-content-around align-items-center">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See all Annexe-5 documentations</button>
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Add new Annexe-5</button>
+                </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </main>
+  {% endblock %}
