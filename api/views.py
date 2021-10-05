@@ -1,17 +1,18 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 from rest_framework import filters
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 from fiche_produit.models import Employee, Product, ProductCard
 from .serializers import FPModelSerializer, ProductModelSerializer
 
 
-class FPListAPIView(generics.ListCreateAPIView):
+class FPListCreateAPIView(generics.ListCreateAPIView):
     queryset = ProductCard.objects.all()
     serializer_class = FPModelSerializer
     filter_backends =[filters.SearchFilter, ]
     search_fields = ['number','product__name_fr', 'provider__name_fr','origin__name_fr','project__code','department__name','lot__name_fr','lot__number']
     # filterset_fields = ['provider','origin','project','department','lot']
-
 
     def get_queryset(self):
         project = self.request.query_params.get('project')
@@ -38,7 +39,9 @@ class FPListAPIView(generics.ListCreateAPIView):
 
         return filtered_fps
 
-class ProductListAPIView (generics.ListAPIView):
-    queryset = Product.objects.all()
-    serializer_class = ProductModelSerializer
+class FPRetrieveAPIView (generics.RetrieveAPIView):
+    queryset = ProductCard.objects.all()
+    serializer_class = FPModelSerializer
 
+    def get_object(self):
+        return get_object_or_404(self.queryset, pk=self.kwargs['pk'])

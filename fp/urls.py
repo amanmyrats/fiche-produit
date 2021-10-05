@@ -19,7 +19,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view
+
+from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -28,9 +29,11 @@ urlpatterns = [
     path('achat/', achat_view, name='achat'),
     path('logistics/', logistics_view, name='logistics'),
     path('qs/', qs_view, name='qs'),
+    path('export/', export_view, name='export'),
     path('', include('api.urls')),
     # path('', include('api.urls'))
 ] 
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -14,37 +14,33 @@
 <body>
     <div class="container">
 
-        <nav class="navbar navbar-expand-lg navbar-primary bg-light">
+        <nav class="navbar navbar-expand-lg navbar-primary bg-light border-bottom mb-2">
             <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler  border" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">>></span>
                 </button>
-                
-                <a class="navbar-brand" href="/"><img src="{% static 'img/bytk_logo.png' %}" alt="Bouygues Turkmen"></a>
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{% url 'site' %}">Site</a>
+                <a class="navbar-brand w-25" href="/"><img  class="w-100" src="{% static 'img/bytk_logo.png' %}" alt="Bouygues Turkmen"></a>
+                <div class="collapse navbar-collapse h4 " id="navbarTogglerDemo03">
+                    <ul class="navbar-nav me-auto mb-2 px-5 mb-lg-0 = w-100   d-flex justify-content-end">
+                        <li class="nav-item w-25 text-center m-1">
+                            <a class="nav-link active px-4 rounded border border-primary view overlay" aria-current="page" href="{% url 'site' %}">Site</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'achat' %}">Service Achat</a>
+                        <li class="nav-item w-25 text-center m-1">
+                            <a class="nav-link px-4 rounded border border-primary" href="{% url 'achat' %}">Service Achat</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logistics' %}">Logistics</a>
+                        <li class="nav-item w-25 text-center m-1">
+                            <a class="nav-link px-4 rounded border border-primary" href="{% url 'logistics' %}">Logistics</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'qs' %}">QS</a>
+                        <li class="nav-item w-25 text-center m-1">
+                            <a class="nav-link px-4 rounded border border-primary" href="{% url 'qs' %}">QS</a>
                         </li>
                     </ul>
-                    <!-- <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form> -->
+
                 </div>
             </div>
         </nav>
     </div>
-    <div class="container">
+    <div class="container border-top">
         {% block content %}
       {% endblock %}
 

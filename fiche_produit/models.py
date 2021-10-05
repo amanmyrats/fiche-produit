@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.db.models import constraints
 from django.db.models.constraints import UniqueConstraint
 
+
+
 class Product(models.Model):
     name_en = models.CharField(max_length=200, blank=True, null=True)
     name_fr = models.CharField(max_length=200, blank=True, null=True)
@@ -315,6 +317,16 @@ class ProductCard(models.Model):
         for item in coo_factures:
             coos.append(item.coo.number)
         return coos
+    
+    # @property
+    # def annex5_code(self):
+    #     order_items = OrderItem.objects.filter(product_card = self.pk)
+    #     facture_items = FactureItem.objects.filter(order_item__in = order_items)
+    #     coo_factures = CooFacture.objects.filter(facture_item__in = facture_items)
+    #     coos = []
+    #     for item in coo_factures:
+    #         coos.append(item.coo.number)
+    #     return coos
 
 
 

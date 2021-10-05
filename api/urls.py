@@ -12,9 +12,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from .views import FPListAPIView, ProductListAPIView
+from .views import  FPListCreateAPIView, FPRetrieveAPIView
 
 urlpatterns = [
-    path('api/fps/', FPListAPIView.as_view(), name='fps'),
-    path('api/products/', ProductListAPIView.as_view(), name='fps'),
+    path('api/fps/', FPListCreateAPIView.as_view(), name='fps'),
+    path('api/fps/<int:pk>/', FPRetrieveAPIView.as_view(), name='fps'),
+    path('api/products/', FPListCreateAPIView.as_view(), name='fps'),
 ]

@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block head_extra %}
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock %}
 
 {% block content %}
 
+<div class="container">
+
+
   <table class="table">
     <thead>
-      <tr>
+      <tr class="kerim">
         <th scope="col">FP Number</th>
         <th scope="col">Product Name</th>
+        <th scope="col">Annexe-5</th>
         <th scope="col">Order</th>
         <th scope="col">Facture</th>
         <th scope="col">Specification</th>
@@ -17,10 +25,11 @@
       </tr>
     </thead>
     <tbody>
-{% for fp in apidata %}
-      <tr  class="px-4 ">
+      {% for fp in apidata %}
+      <tr class="px-4 ">
         <th scope="row" class="py-4 ">{{ fp.number }}</th>
-        <td  class="py-4">{{ fp.product_name }}</td>
+        <td class="py-4">{{ fp.product_name }}</td>
+        <td class="py-4">LOT - {{ fp.lot }}</td>
         <td class="py-4">{{ fp.order_numbers }}</td>
         <td class="py-4">{{ fp.facture_numbers }}</td>
         <td class="py-4">{{ fp.specification_numbers }}</td>
@@ -28,11 +37,17 @@
         <td class="py-4">{{ fp.declaration_numbers }}</td>
         <td class="py-4">{{ fp.coo_numbers }}</td>
       </tr>
-      
-      
       {% endfor %}
     </tbody>
   </table>
+
+
+
+</div>
+
+
+
+
 
 
 {% endblock %}

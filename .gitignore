@@ -1,6 +1,7 @@
 # External files
 *.xlsx
 *.pdf
+temp/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
