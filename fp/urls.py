@@ -20,12 +20,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view
+from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view, fpcreate_view
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     path('site/', site_view, name='site'),
+    path('site/fp/', fpcreate_view, name='fpcreate'),
     path('achat/', achat_view, name='achat'),
     path('logistics/', logistics_view, name='logistics'),
     path('qs/', qs_view, name='qs'),
