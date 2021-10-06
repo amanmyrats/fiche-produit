@@ -3,7 +3,7 @@
 
 {% block head_extra %}
 <style>
-#kerim table {
+#fp-list table {
   width: 90%;
   overflow: auto;
   background: rgb(255, 255, 255);
@@ -11,42 +11,46 @@
   border: none;
   border-radius: 0.5em;
   border: 0.1rem outset rgb(235, 233, 233);
+  border-collapse: separate;
+  border-spacing: 3px 1px;
   margin: 5em 0;
   margin-left: 5em;
   margin-bottom: 5px;
   margin-top: 10px;
 }
 
-#kerim th {
+#fp-list th {
   height: 2em;
   background-color: rgba(143, 188, 202, 0.87);
   color: rgba(11, 6, 22, 0.658);
   border-radius: 0.5em;
-
+  text-align: center;
+  justify-content: center;
 }
 
-#kerim tr {
+#fp-list tr {
   height: 3em;
   background-color: rgb(255, 255, 255);
   border-radius: 0.7em;
   color: rgb(77, 96, 116);
 }
 
-#kerim tbody tr:nth-child(2n + 1) {
-  background-color: rgb(245, 248, 245);
-}
-
-
-#kerim td {
+#fp-list td {
   font-size: 15px;
   margin-left: auto;
+  min-width:130px;
+  vertical-align: middle;
+}
+
+#fp-list tbody tr:nth-child(2n + 1) {
+  background-color: rgb(245, 248, 245);
 }
 
 html {
   background: rgb(238, 236, 236);
 }
 
-:root {
+/* :root {
   --rad: 0.7rem;
   --dur: 0.3s;
   --color-dark: #2f2f2f;
@@ -62,13 +66,81 @@ html {
 *::before,
 *::after {
   box-sizing: inherit;
+} */
+
+.fp-list {
+  display: grid;
+  /* grid-template-rows: 0.5fr 1fr; */
+}
+
+.pgntn{
+  margin-left:auto;
+  margin-right: auto;
 }
 </style>
+
+<!-- CSS for filter and search -->
+<link rel="stylesheet" href="{% static 'css/site/main.css' %}">
 {% endblock %}
 
 {% block content %}
+<!-- Search -->
+<section style="padding-top: 10px;">
+  <div class="container">
+    <div class="row justify-content-center padding">
+      <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
+        <form type="GET" action="" class="domain-form">
+          <div class="form-group d-md-flex">
+            <!-- Project Dropdowns -->
+            <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;">
 
-<div class="container-fluid" id="kerim">
+            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+              <option selected>
+                All
+              </option>
+              <option value="hemmesi">CRA</option>
+              <option value="saherici">CRI</option>
+              <option value="etrapobalary">CCI</option>
+              <option value="saherara">HTC</option>
+            </select>
+            <!-- Trade Dropdowns -->
+            <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;">
+
+            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+              <option selected>
+                All
+              </option>
+              <option value="hemmesi">CEA</option>
+              <option value="saherici">CC</option>
+              <option value="etrapobalary">MEC</option>
+              <option value="saherara">ELE</option>
+            </select>
+            <!-- Lot Dropdowns -->
+            <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;">
+
+            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+              <option selected>
+                All
+              </option>
+              <option value="hemmesi">02</option>
+              <option value="saherici">20</option>
+              <option value="etrapobalary">70C</option>
+              <option value="saherara">31</option>
+            </select>
+            <!-- Search box -->
+            <input id="search" name='search' type="text" class="form-control px-4 my-1  mx-1"
+              placeholder="What are you searching for...">
+            <input type="submit" class="search-domain btn btn-primary px-5 my-1  mx-1" value="Search">
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="fp-list" id="fp-list">
 
 
   <table class="table">
@@ -100,12 +172,19 @@ html {
       </tr>
       {% endfor %}
     </tbody>
-  </table>
-</div>
+  </div>
+</table>
+<nav class="pgntn" aria-label="Pagination">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav>
 
+{% endblock %}
 
-
-
-
-
+{% block js %}
+<!-- JS for filter and search. -->
+<script src="{% static 'js/site/main.js' %}"></script>
 {% endblock %}
