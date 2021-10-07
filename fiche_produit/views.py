@@ -1,7 +1,9 @@
-from django.shortcuts import render, HttpResponse
+from fiche_produit.models import Product
+from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 import requests
 import json
 from django.template.response import TemplateResponse
+from requests.api import get
 
 from openpyxl import Workbook, load_workbook
 from pathlib import Path
@@ -61,8 +63,24 @@ def export_view(request):
 
 def fpcreate_view(request):
     if request.method=='GET':
-        return render(request, 'site/fpform.html', {'msg':'working'})
+        product_id = request.GET.get('product_id')
+        product = get_object_or_404(Product, pk = product_id)
+        context = {'product': product}
+        return render(request, 'site/fpform.html', context)
     else:
-        pass
+        context = {'success': 'FP has been submitted, you are now redirected to products list.'}
+        return redirect('/site/')
 
+def products_view(request):
+    products = requests.get(url=mysitedomain + 'api/products/')
+    return render(request, 'site/products.html', {'products': products.json()})
+
+def product_create_view(request):
+
+    if request.method=='GET':
+        context={'productform': 'this is product form.'}
+        return render(request, 'site/productform.html', context)
+    else:
+        context = {'success': 'Product has been submitted, you are now redirected to products list.'}
+        return redirect('/products/')
 

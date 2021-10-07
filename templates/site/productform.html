@@ -12,11 +12,11 @@
 
   
 {% block content %}
-<!-- FP Form -->
-<h3>I will create Fiche Produit out of this product {{ product.pk }} - {{ product.name_fr }}</h3>
+<h1>this is product creation form {{ productform }}</h1>
+<!-- PRODUCT Form -->
 <div class="container">
   <form method="POST">
-  {% csrf_token %}
+    {% csrf_token %}
     <div class="form-row">
       <div class="form-group col-md-6">
         <label for="inputEmail4">Email</label>

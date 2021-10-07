@@ -11,11 +11,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.urls.conf import include
+from rest_framework.routers import DefaultRouter
 
-from .views import  FPListCreateAPIView, FPRetrieveAPIView
+from .views import FPViewSet, ProductViewSet, ProductViewSet #  FPListCreateAPIView, FPRetrieveAPIView, ProductListCreateAPIView, ProductRetrieveAPIView, ProductViewSet
+
+router = DefaultRouter()
+router.register(r'products', ProductViewSet)
+router.register(r'fps', FPViewSet)
+
+
 
 urlpatterns = [
-    path('api/fps/', FPListCreateAPIView.as_view(), name='fps'),
-    path('api/fps/<int:pk>/', FPRetrieveAPIView.as_view(), name='fps'),
-    path('api/products/', FPListCreateAPIView.as_view(), name='fps'),
+    # path('api/fps/', FPListCreateAPIView.as_view(), name='api-fps'),
+    # path('api/fps/<int:pk>/', FPRetrieveAPIView.as_view(), name='api-fps-detail'),
+    path(r'api/', include(router.urls)),
 ]

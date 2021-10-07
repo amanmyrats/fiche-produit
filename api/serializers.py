@@ -23,7 +23,7 @@ class ProductModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name_fr']
+        fields = '__all__'
 
 
 class QueueSerializer(serializers.Serializer):
