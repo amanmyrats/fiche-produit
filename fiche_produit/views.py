@@ -4,11 +4,11 @@ import requests
 import json
 from django.template.response import TemplateResponse
 from requests.api import get
-
 from openpyxl import Workbook, load_workbook
 from pathlib import Path
-
 from django.conf import settings
+
+from .forms import ProductModelForm
 
 # Create your views here.
 mysitedomain = 'http://127.0.0.1:8000/'
@@ -78,7 +78,8 @@ def products_view(request):
 def product_create_view(request):
 
     if request.method=='GET':
-        context={'productform': 'this is product form.'}
+        product_form = ProductModelForm()
+        context={'product_form': product_form}
         return render(request, 'site/productform.html', context)
     else:
         context = {'success': 'Product has been submitted, you are now redirected to products list.'}

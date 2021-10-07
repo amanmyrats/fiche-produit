@@ -12,55 +12,70 @@
 
   
 {% block content %}
-<h1>this is product creation form {{ productform }}</h1>
+
 <!-- PRODUCT Form -->
 <div class="container">
   <form method="POST">
     {% csrf_token %}
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
+    <div class="row">
+      <div class="form-group col-md-3">
+        <label for="name_en">Name (EN)</label>
+        {{ product_form.name_en }}
+        <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
       </div>
-      <div class="form-group col-md-6">
-        <label for="inputPassword4">Password</label>
-        <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
+      <div class="form-group col-md-3">
+        <label for="inputPassword4">Name (FR)</label>
+        {{ product_form.name_fr }}
+        <!-- <input type="text" class="form-control" id="inputPassword4" placeholder="Name (FR)"> -->
       </div>
-    </div>
-    <div class="form-group">
-      <label for="inputAddress">Address</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-group">
-      <label for="inputAddress2">Address 2</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+      <div class="form-group  col-md-3">
+          <label for="inputAddress">Name (RU)</label>
+          {{ product_form.name_ru }}
+          <!-- <input type="text" class="form-control" id="inputAddress" placeholder="RU"> -->
+        </div>
+        <div class="form-group  col-md-3">
+            <label for="inputAddress2">Name (TM)</label>
+            {{ product_form.name_tm }}
+            <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+        </div>
     </div>
     <div class="row">
       <div class="form-group col-md-6">
-        <label for="inputCity">City</label>
-        <input type="text" class="form-control" id="inputCity">
+        <label for="inputCity">Description (EN)</label>
+        {{ product_form.desc_en }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
       </div>
-      <div class="form-group col-md-4">
-        <label for="inputState">State</label>
-        <select id="inputState" class="form-control">
-          <option selected>Choose...</option>
-          <option>...</option>
-        </select>
+      <div class="form-group col-md-6">
+        <label for="inputState">Description (FR)</label>
+        {{ product_form.desc_fr }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Zip</label>
-        <input type="text" class="form-control" id="inputZip">
+      <div class="form-group col-md-6">
+        <label for="inputZip">Description (RU)</label>
+        {{ product_form.desc_ru }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
-    </div>
-    <div class="form-group">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
-          Check me out
-        </label>
+      <div class="form-group col-md-6">
+        <label for="inputZip">Description (TM)</label>
+        {{ product_form.desc_tm }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+    <div class="row text-center justify-content-center">
+        <div class="form-group col-md-4">
+            <label for="inputZip">Technical Detail</label>
+            {{ product_form.technical_detail }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputZip">Image</label>
+            {{ product_form.image }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+    </div>
+
+            <button type="submit" class="btn btn-primary">Add Product</button>
+
   </form>
 
 </div>
