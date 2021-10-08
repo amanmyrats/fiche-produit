@@ -12,6 +12,10 @@ class FPModelSerializer(serializers.ModelSerializer):
     declaration_numbers = serializers.CharField(read_only=True)
     coo_numbers = serializers.CharField(read_only=True)
     product_name = serializers.CharField(read_only=True)
+    product_name_fr = serializers.CharField(read_only=True)
+    product_name_ru = serializers.CharField(read_only=True)
+    product_desc_fr = serializers.CharField(read_only=True)
+    product_desc_ru = serializers.CharField(read_only=True)
     image_url = serializers.CharField(read_only=True)
 
     class Meta:

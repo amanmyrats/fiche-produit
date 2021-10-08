@@ -21,7 +21,10 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        if self.name_fr:
+            return self.name_fr
+        else:
+            return 'no french name'
     
 class Lot(models.Model):
     number = models.CharField(max_length=5, blank=True, null=True)
@@ -163,7 +166,6 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     total_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
-    annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
@@ -219,20 +221,28 @@ class TdsItem(models.Model):
         return self.facture_item.order_item.desc_fr
 
 
+class FPType(models.Model):
+    name = models.CharField(max_length=10)
+
+    def __str__(self):
+        return self.name
+
+
 class ProductCard(models.Model):
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
     origin = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='origin_country')
     manufactured_in = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='manufactured_country')
-    protocol = models.CharField(max_length=300, blank=True, null=True)
-    observation =models.CharField(max_length=300, blank=True, null=True)
+    protocol = models.TextField(max_length=500, blank=True, null=True)
+    observation =models.TextField(max_length=500, blank=True, null=True)
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
     location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
     phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
     trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
     lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
-    fp_type = models.CharField(max_length=10,choices=[(1,'FP'),], blank=True, null=True)
+    annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
+    fp_type =  models.ForeignKey(FPType, on_delete=models.SET_NULL, blank=True, null=True)
     number = models.CharField(max_length=10, blank=True, null=True)
     index = models.CharField(max_length=2, blank=True, null=True)
     sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
@@ -252,12 +262,27 @@ class ProductCard(models.Model):
     @property
     def product_name(self):
         return self.product.name_fr
+    
+    @property
+    def product_name_fr(self):
+        return self.product.name_fr
+    
+    @property
+    def product_name_ru(self):
+        return self.product.name_ru
+
+    @property
+    def product_desc_fr(self):
+        return self.product.desc_fr
+
+    @property
+    def product_desc_ru(self):
+        return self.product.desc_ru
 
     @property
     def image_url(self):
         return self.product.image.url
     
-
     @property
     def order_numbers(self):
         order_items = OrderItem.objects.filter(product_card = self.pk)

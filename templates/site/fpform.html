@@ -7,63 +7,157 @@
   body {
     background-color: #dee9ff;
   }
+  textarea {
+    min-height: 200px;
+  }
 </style>
 {% endblock %}
 
   
 {% block content %}
-<!-- FP Form -->
-<h3>I will create Fiche Produit out of this product {{ product.pk }} - {{ product.name_fr }}</h3>
-<div class="container">
+
+
+<!-- product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
+    -provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
+    -origin = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='origin_country')
+    -manufactured_in = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='manufactured_country')
+    -protocol = models.CharField(max_length=300, blank=True, null=True)
+    -observation =models.CharField(max_length=300, blank=True, null=True)
+    -project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
+    -department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
+    -location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
+    -trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
+    -lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
+
+
+
+    -phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
+    -fp_type = models.CharField(max_length=10,choices=[(1,'FP'),], blank=True, null=True)
+    -number = models.CharField(max_length=10, blank=True, null=True)
+    -index = models.CharField(max_length=2, blank=True, null=True)
+    
+    sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
+    sign_contractor2 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_director')
+    sign_tehnadzor = models.CharField(max_length=200, blank=True, null=True)
+    sign_client = models.ForeignKey(Client,on_delete=models.SET_NULL, blank=True, null=True)
+    
+    date_contractor = models.DateTimeField(auto_now=True, blank=True, null=True)
+    date_tehnadzor = models.DateTimeField(auto_now=True, blank=True, null=True)
+    date_client = models.DateTimeField(auto_now=True, blank=True, null=True)
+    
+    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='created')
+    created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+
+    note_for_achat = models.TextField(max_length=500, blank=True, null=True)
+     -->
+<!-- PRODUCT Form -->
+<!-- <div class="container-fluid"> -->
   <form method="POST">
-  {% csrf_token %}
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" placeholder="Email">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputPassword4">Password</label>
-        <input type="password" class="form-control" id="inputPassword4" placeholder="Password">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="inputAddress">Address</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-group">
-      <label for="inputAddress2">Address 2</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-    </div>
-    <div class="row">
-      <div class="form-group col-md-6">
-        <label for="inputCity">City</label>
-        <input type="text" class="form-control" id="inputCity">
-      </div>
-      <div class="form-group col-md-4">
-        <label for="inputState">State</label>
-        <select id="inputState" class="form-control">
-          <option selected>Choose...</option>
-          <option>...</option>
-        </select>
+    {% csrf_token %}
+    <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputState">Number</label>
+        {{ form.number }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
       <div class="form-group col-md-2">
-        <label for="inputZip">Zip</label>
-        <input type="text" class="form-control" id="inputZip">
+        <label for="name_en">Product</label>
+        {{ form.product }}
+        <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputPassword4">Provider</label>
+        {{ form.provider }}
+        <!-- <input type="text" class="form-control" id="inputPassword4" placeholder="Name (FR)"> -->
+      </div>
+      <div class="form-group  col-md-2">
+          <label for="inputAddress">Origin</label>
+          {{ form.origin }}
+          <!-- <input type="text" class="form-control" id="inputAddress" placeholder="RU"> -->
+        </div>
+        <div class="form-group  col-md-2">
+            <label for="inputAddress2">Manufactured in</label>
+            {{ form.manufactured_in }}
+            <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+        </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputCity">Project</label>
+        {{ form.project }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputState">Department</label>
+        {{ form.department }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Location</label>
+        {{ form.location }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Trade</label>
+        {{ form.trade }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Lot</label>
+        {{ form.lot }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
     </div>
-    <div class="form-group">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
-          Check me out
-        </label>
+
+    <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputCity">FP Type</label>
+        {{ form.fp_type }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
       </div>
+      <div class="form-group col-md-2">
+        <label for="inputCity">Phase</label>
+        {{ form.phase }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Index</label>
+        {{ form.index }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="row">
+        <div class="form-group col-md-6">
+          <label for="inputCity">Protocol</label>
+          {{ form.protocol }}
+          <!-- <input type="text" class="form-control" id="inputCity"> -->
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputState">Observation</label>
+          {{ form.observation }}
+          <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+      </div>
+      <div class="row text-center justify-content-center">
+        <div class="form-group col-md-4">
+            <label for="inputZip">Location</label>
+            {{ form.location }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+        <div class="form-group col-md-4">
+            <label for="inputZip">Phase</label>
+            {{ form.phase }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+  </div>
+    <div class="container">
+
+      <button type="submit" class="btn btn-primary">Add Fiche Produit</button>
+    </div>
+
   </form>
 
-</div>
+<!-- </div> -->
 
 
 {% endblock %}

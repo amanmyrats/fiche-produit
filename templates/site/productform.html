@@ -7,6 +7,9 @@
   body {
     background-color: #dee9ff;
   }
+  textarea {
+    min-height: 200px;
+  }
 </style>
 {% endblock %}
 
@@ -15,6 +18,7 @@
 
 <!-- PRODUCT Form -->
 <div class="container">
+  {{ errors }}
   <form method="POST">
     {% csrf_token %}
     <div class="row">

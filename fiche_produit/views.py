@@ -7,9 +7,11 @@ from requests.api import get
 from openpyxl import Workbook, load_workbook
 from pathlib import Path
 from django.conf import settings
+from django.http import HttpResponse
+from wsgiref.util import FileWrapper
 
-from .forms import ProductModelForm
-
+from .forms import ProductModelForm, FPModelForm
+from .utility import fp_excel_works, fp_pdf_works, download
 # Create your views here.
 mysitedomain = 'http://127.0.0.1:8000/'
 
@@ -36,52 +38,88 @@ def export_view(request):
     pk = request.GET.get('pk')
 
     print(what, towhat, pk)
-    fp = requests.get(url=mysitedomain + 'api/fps/{}/'.format(pk))
-    fp =fp.json()
+    fp_from_api = requests.get(url=mysitedomain + 'api/fps/{}/'.format(pk))
+    fp_from_api =fp_from_api.json()
 
-    
-    if what == 'fp' and towhat == 'excel':
+    if what == 'fp':
         print('inside excel if')
         excel_path = Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp.xlsx'
+        parent_path = Path(settings.MEDIA_ROOT) / 'excel_template' 
+        print('path of openpyxl', excel_path)
         wb = load_workbook(excel_path)
-        print('wb created successfully')
+        print('wb loaded successfully')
         sh = wb['Fiche technique']
         print(sh.title)
-        for cl in wb.defined_names:
-            print('defined names:',cl, wb.defined_names[cl])
+        # Call excel creator
+        wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api)
         
         wb.save(excel_path)
         wb.close()
-        file = open(excel_path, "rb")
-        response = HttpResponse(file.read(),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=Report.xlsx'
-        return response
+        # if towhat=='pdf':
+        #     print('before download pdf')
+        #     pdf_path = fp_pdf_works(excel_path=excel_path, sh_name=sh.title, parent_path= parent_path , file_name = fp_from_api.get('number'))
+        #     # pdf_path= Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp.pdf'
+        #     print('returned from pdf function', pdf_path)
+        #     wrapper = FileWrapper(open(pdf_path, 'rb'))
+        #     response = HttpResponse(wrapper, content_type='application/force-download')
+        #     response['Content-Disposition'] = 'attachment; filename=' + fp_from_api.get('number') + '.pdf'
+        #     return response
 
-    context={'fp': fp}
+        if towhat=='excel':
+            file = open(excel_path, "rb")
+            response = HttpResponse(file.read(),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=' + fp_from_api.get('number') + '.xlsx'
+            return response
+        
+        return redirect('/site/')
 
-    return render(request, 'qs/qs.html', context)
 
 def fpcreate_view(request):
-    if request.method=='GET':
-        product_id = request.GET.get('product_id')
-        product = get_object_or_404(Product, pk = product_id)
-        context = {'product': product}
-        return render(request, 'site/fpform.html', context)
-    else:
-        context = {'success': 'FP has been submitted, you are now redirected to products list.'}
-        return redirect('/site/')
+    product_id = request.GET.get('product_id')
+    product = get_object_or_404(Product, pk = product_id)
+    form = FPModelForm({'product':product})
+    context = {'form': form}
+
+    if request.method=='POST':
+        form = FPModelForm(request.POST)
+        if form.is_valid():
+            api_create_fp = mysitedomain + 'api/fps/'
+            create_request = requests.post(url = api_create_fp, data = request.POST)
+            response =create_request.json()
+            print(response['id'])
+            print(create_request.status_code)
+            context = {'success': 'FP has been created, you are now redirected to products list.'}
+            return redirect('/site/')
+        else:
+            context['form'] = form
+            context['errors'] = form.errors
+
+    return render(request, 'site/fpform.html', context)
 
 def products_view(request):
     products = requests.get(url=mysitedomain + 'api/products/')
     return render(request, 'site/products.html', {'products': products.json()})
 
 def product_create_view(request):
+    product_form = ProductModelForm()
+    context={'product_form': product_form}
 
-    if request.method=='GET':
-        product_form = ProductModelForm()
-        context={'product_form': product_form}
-        return render(request, 'site/productform.html', context)
-    else:
-        context = {'success': 'Product has been submitted, you are now redirected to products list.'}
-        return redirect('/products/')
+    if request.method=='POST':
+        form = ProductModelForm(request.POST)
+        if form.is_valid():
+            api_create_product = mysitedomain + 'api/products/'
+            create_request = requests.post(url = api_create_product, data = request.POST)
+            response =create_request.json()
+            print(response['id'])
+            print(create_request.status_code)
+            context = {'success': 'Product has been submitted, you are now redirected to products list.'}  
+            return redirect('/products/')
+        else:
+            product_form = form
+            context={'product_form': product_form}
+            context['errors']=form.errors
 
+    return render(request, 'site/productform.html', context)
+
+def test_view(request):
+    pass

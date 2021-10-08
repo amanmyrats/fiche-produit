@@ -84,6 +84,7 @@ html {
 {% endblock %}
 
 {% block content %}
+<a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
 <!-- Search -->
 <section style="padding-top: 10px;">
   <div class="container">
@@ -155,6 +156,7 @@ html {
         <th scope="col">TDS</th>
         <th scope="col">Declaration</th>
         <th scope="col">COO</th>
+        <th scope="col">Export to</th>
       </tr>
     </thead>
     <tbody>
@@ -169,6 +171,10 @@ html {
         <td class="">{{ fp.tds_numbers }}</td>
         <td class="">{{ fp.declaration_numbers }}</td>
         <td class="">{{ fp.coo_numbers }}</td>
+        <td class="row justify-content-center" style="max-width: 100px;">
+          <a href="{% url 'export'%}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary mb-1">To Excel</a>
+          <!-- <a href="{% url 'export'%}?what=fp&towhat=pdf&pk={{fp.id}}" class="btn btn-info">To PDF</a> -->
+        </td>
       </tr>
       {% endfor %}
     </tbody>
