@@ -1,4 +1,4 @@
-from fiche_produit.models import Product
+from fiche_produit.models import Product, ProductCard
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 import requests
 import json
@@ -9,6 +9,7 @@ from pathlib import Path
 from django.conf import settings
 from django.http import HttpResponse
 from wsgiref.util import FileWrapper
+import shutil
 
 from .forms import ProductModelForm, FPModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
@@ -37,22 +38,27 @@ def export_view(request):
     towhat = request.GET.get('towhat')
     pk = request.GET.get('pk')
 
+    current_fp = ProductCard.objects.get(pk=pk)
+
     print(what, towhat, pk)
     fp_from_api = requests.get(url=mysitedomain + 'api/fps/{}/'.format(pk))
     fp_from_api =fp_from_api.json()
 
     if what == 'fp':
         print('inside excel if')
-        excel_path = Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp.xlsx'
+        
+        shutil.copy(Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp.xlsx', Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp_temp.xlsx')
+        excel_path = Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp_temp.xlsx'
         parent_path = Path(settings.MEDIA_ROOT) / 'excel_template' 
         print('path of openpyxl', excel_path)
+        # try:
         wb = load_workbook(excel_path)
         print('wb loaded successfully')
         sh = wb['Fiche technique']
         print(sh.title)
         # Call excel creator
-        wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api)
-        
+        wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api, image_path = current_fp.product.image)
+        print('excel has been returned')
         wb.save(excel_path)
         wb.close()
         # if towhat=='pdf':
@@ -70,6 +76,12 @@ def export_view(request):
             response = HttpResponse(file.read(),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=' + fp_from_api.get('number') + '.xlsx'
             return response
+        # except:
+        #     try:
+        #         wb.close()
+        #     except:
+        #         pass
+
         
         return redirect('/site/')
 
