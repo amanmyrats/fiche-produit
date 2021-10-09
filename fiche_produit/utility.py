@@ -1,10 +1,10 @@
 from django.http import HttpResponse
 from wsgiref.util import FileWrapper
-import pythoncom
-import win32com.client
+# import pythoncom
+# import win32com.client
 from pathlib import Path
-import pandas as pd
-import pdfkit
+# import pandas as pd
+# import pdfkit
 
 def fp_excel_works(**kwargs):
     wb = kwargs['wb']
