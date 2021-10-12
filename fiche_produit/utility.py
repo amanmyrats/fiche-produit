@@ -42,48 +42,49 @@ def fp_excel_works(**kwargs):
     sh['D4'] = data_dict.get('lot')
     sh['J45'] = data_dict.get('fp_type')
     print('image is',kwargs['image_path'])
-    pimg = Image.open(kwargs['image_path'])
-    # pimg.resize((200,200), Image.LANCZOS)
-    print('pimg', pimg)
-    imgo = openpyxl.drawing.image.Image(pimg)
-    # imgo.width = 200
-    # imgo.height = 200
-    # print('imgo', imgo)
-    # # imgo.anchor = sh['D23']
-    # imgo.anchor = 'H23'
-    c2e = cm_to_EMU
+    if kwargs['image_path']:
+        pimg = Image.open(kwargs['image_path'])
+        # pimg.resize((200,200), Image.LANCZOS)
+        print('pimg', pimg)
+        imgo = openpyxl.drawing.image.Image(pimg)
+        # imgo.width = 200
+        # imgo.height = 200
+        # print('imgo', imgo)
+        # # imgo.anchor = sh['D23']
+        # imgo.anchor = 'H23'
+        c2e = cm_to_EMU
 
-    p2e = pixels_to_EMU
-    h, w = imgo.height, imgo.width
-    h = 245
-    if w > 400:
-        w=400
-    offset_number_horizontal = (420 - w)/2/18
-    offset_number_vertical = (260 - h)/2
-    print('offset_number_horizontal', offset_number_horizontal)
-    print('offset_number_vertical', offset_number_vertical)
-    # cellw =lambda x:  c2e(x * offset_number_horizontal)
-    # cellh =lambda x:  c2e(x * offset_number_vertical)
-    cellh = lambda x: c2e((x * 49.77)/99)
-    cellw = lambda x: c2e((x * (18.65-1.71))/10)
-    print('cellh', cellh)
-    print('cellw',cellw)
-    # Want to place image in row 5 (6 in excel), column 2 (C in excel)
-    # Also offset by half a column.
-    column = 3 + int(offset_number_horizontal)
-    coloffset = cellw(0.5)
-    row = 22
-    rowoffset = cellh(0.5)
-    
-    size = XDRPositiveSize2D(p2e(w), p2e(h))
-    marker = AnchorMarker(col=column, colOff=coloffset, row=row, rowOff= rowoffset)
-    imgo.anchor = OneCellAnchor(_from=marker, ext=size)
-    # position = XDRPoint2D(p2e(200), p2e(200))
-    # size = XDRPositiveSize2D(p2e(w), p2e(h))
+        p2e = pixels_to_EMU
+        h, w = imgo.height, imgo.width
+        h = 245
+        if w > 400:
+            w=400
+        offset_number_horizontal = (420 - w)/2/18
+        offset_number_vertical = (260 - h)/2
+        print('offset_number_horizontal', offset_number_horizontal)
+        print('offset_number_vertical', offset_number_vertical)
+        # cellw =lambda x:  c2e(x * offset_number_horizontal)
+        # cellh =lambda x:  c2e(x * offset_number_vertical)
+        cellh = lambda x: c2e((x * 49.77)/99)
+        cellw = lambda x: c2e((x * (18.65-1.71))/10)
+        print('cellh', cellh)
+        print('cellw',cellw)
+        # Want to place image in row 5 (6 in excel), column 2 (C in excel)
+        # Also offset by half a column.
+        column = 3 + int(offset_number_horizontal)
+        coloffset = cellw(0.5)
+        row = 22
+        rowoffset = cellh(0.5)
+        
+        size = XDRPositiveSize2D(p2e(w), p2e(h))
+        marker = AnchorMarker(col=column, colOff=coloffset, row=row, rowOff= rowoffset)
+        imgo.anchor = OneCellAnchor(_from=marker, ext=size)
+        # position = XDRPoint2D(p2e(200), p2e(200))
+        # size = XDRPositiveSize2D(p2e(w), p2e(h))
 
-    # imgo.anchor = AbsoluteAnchor(pos=position, ext=size)
-    sh.add_image(imgo)
-    # pimg.close()
+        # imgo.anchor = AbsoluteAnchor(pos=position, ext=size)
+        sh.add_image(imgo)
+        # pimg.close()
     
     print('image added successfully')
     return wb

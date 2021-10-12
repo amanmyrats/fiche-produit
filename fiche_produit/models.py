@@ -24,7 +24,7 @@ class Product(models.Model):
         if self.name_fr:
             return self.name_fr
         else:
-            return 'no french name'
+            return super().__str__()
     
 class Lot(models.Model):
     number = models.CharField(max_length=5, blank=True, null=True)
@@ -157,9 +157,9 @@ class Department(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey('Order', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
-    product_card = models.ForeignKey('ProductCard', on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey('Order', related_name = 'orderorderitems', on_delete=models.SET_NULL, blank=True, null=True)
+    product_card = models.ForeignKey('ProductCard', related_name='productcardorderitems', on_delete=models.SET_NULL, blank=True, null=True)
     desc_fr = models.TextField(max_length=500, blank=True, null=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     unit  = models.ForeignKey(Unit,on_delete=models.SET_NULL, blank=True, null=True)
@@ -168,14 +168,17 @@ class OrderItem(models.Model):
     currency =  models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
+        try:
+            return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
+        except:
+            return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.desc_fr)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
 
 
 class FactureItem(models.Model):
-    facture = models.ForeignKey('Facture',on_delete=models.SET_NULL, blank=True, null=True)
+    facture = models.ForeignKey('Facture',related_name='factureitems', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
     package_type = models.ForeignKey(PackageType,on_delete=models.SET_NULL, blank=True, null=True)
     hs_code  = models.CharField(max_length = 10, blank=True, null=True)
@@ -195,7 +198,7 @@ class FactureItem(models.Model):
 
 
 class SpecificationItem(models.Model):
-    specification =models.ForeignKey('Specification', on_delete=models.SET_NULL, blank=True, null=True)
+    specification =models.ForeignKey('Specification',related_name='specifications', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
@@ -210,7 +213,7 @@ class SpecificationItem(models.Model):
 
 
 class TdsItem(models.Model):
-    tds =models.ForeignKey('Tds', on_delete=models.SET_NULL, blank=True, null=True)
+    tds =models.ForeignKey('Tds', related_name='tdsitems', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
@@ -218,7 +221,10 @@ class TdsItem(models.Model):
         constraints = [models.UniqueConstraint(fields=['tds', 'no'], name='tds-item-no')]
 
     def __str__(self):
-        return self.facture_item.order_item.desc_fr
+        try:
+            return self.facture_item.order_item.desc_fr
+        except:
+            return super().__str__()
 
 
 class FPType(models.Model):
@@ -257,31 +263,52 @@ class ProductCard(models.Model):
     note_for_achat = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr)
+        try:
+            return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr)
+        except:
+            return super().__str__()
     
     @property
     def product_name(self):
-        return self.product.name_fr
+        try:
+            return self.product.name_fr
+        except:
+            return ''
     
     @property
     def product_name_fr(self):
-        return self.product.name_fr
+        try:
+            return self.product.name_fr
+        except:
+            return ''
     
     @property
     def product_name_ru(self):
-        return self.product.name_ru
+        try:
+            return self.product.name_ru
+        except:
+            return ''
 
     @property
     def product_desc_fr(self):
-        return self.product.desc_fr
+        try:
+            return self.product.desc_fr
+        except:
+            return ''
 
     @property
     def product_desc_ru(self):
-        return self.product.desc_ru
+        try:
+            return self.product.desc_ru
+        except:
+            return ''
 
     @property
     def image_url(self):
-        return self.product.image.url
+        try:
+            return self.product.image.url
+        except:
+            return 'no image'
     
     @property
     def order_numbers(self):
@@ -392,19 +419,73 @@ class Annexe5(models.Model):
 
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
-    project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
+    project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
     created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.number)
+        try:
+            return str(self.number)
+        except:
+            return 'Without order number.'
+
+    @property
+    def facture_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        factures = []
+        for item in facture_items:
+            factures.append(item.facture.number)
+        return factures
+
+    @property
+    def specification_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        specifications = []
+        for item in specification_items:
+            specifications.append(item.specification.number)
+        return specifications
+    
+    @property
+    def tds_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        # specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        tds_items = TdsItem.objects.filter(facture_item__in = facture_items)
+        tdss = []
+        for item in tds_items:
+            tdss.append(item.tds.number)
+        return tdss
+    
+    @property
+    def declaration_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        # specification_items = SpecificationItem.objects.filter(facture_item__in = facture_items)
+        # tds_items = TdsItem.objects.filter(facture_item__in = specification_items)
+        declaration_items = DeclarationItem.objects.filter(facture_item__in  = facture_items)
+        declarations = []
+        for item in declaration_items:
+            declarations.append(item.declaration.number)
+        return declarations
+    
+    @property
+    def coo_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        coo_factures = CooFacture.objects.filter(facture_item__in = facture_items)
+        coos = []
+        for item in coo_factures:
+            coos.append(item.coo.number)
+        return coos
+
 
 class Routage(models.Model):
     number = models.CharField(max_length = 20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without Routage Number'
 
 class RoutageItems(models.Model):
     routage = models.ForeignKey(Routage, on_delete=models.SET_NULL, blank=True, null=True)
@@ -414,7 +495,13 @@ class RoutageItems(models.Model):
         constraints = [models.UniqueConstraint(fields=['routage', 'facture'], name='routage-facture-number')]
 
     def __str__(self):
-        return str(self.routage) + ' - ' + str(self.facture)
+        try:
+            return str(self.routage) + ' - ' + str(self.facture)
+        except:
+            try:
+                return str(self.facture)
+            except:
+                return 'There is no assigned facture.'
 
 class Facture(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
@@ -425,31 +512,43 @@ class Facture(models.Model):
         pass
 
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without facture number.'
 
 class Specification(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
     
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without specification number.'
 
 class Tds(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without TDS number.'
 
 class Declaration(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without declaration number.'
 
 class DeclarationItem(models.Model):
-    declaration =models.ForeignKey(Declaration, on_delete=models.SET_NULL, blank=True, null=True)
+    declaration =models.ForeignKey(Declaration,related_name='declarationitems', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20,unique=True, blank=True, null=True)
     facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
@@ -457,18 +556,30 @@ class DeclarationItem(models.Model):
         constraints = [models.UniqueConstraint(fields=['declaration', 'no'], name='declaration-item-no')]
 
     def __str__(self):
-        return self.facture_item.order_item.desc_fr
+        try:
+            return self.facture_item.order_item.desc_fr
+        except:
+            return 'Declaration item is empty.'
 
 class Coo(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
     def __str__(self):
-        return self.number
+        try:
+            return str(self.number)
+        except:
+            return 'Without COO number.'
 
 class CooFacture(models.Model):
-    coo =models.ForeignKey(Coo, on_delete=models.SET_NULL, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+    coo =models.ForeignKey(Coo,related_name='cootofacture', on_delete=models.SET_NULL, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem,related_name='facturetocoo', on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
     def __str__(self):
-        return str(self.coo) + ' - ' + str(self.facture_item.facture.number)
+        try:
+            return str(self.coo) + ' - ' + str(self.facture_item.facture)
+        except:
+            try:
+                return str(self.facture_item.facture)
+            except:
+                return 'There is no assigned facture.'

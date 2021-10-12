@@ -57,7 +57,11 @@ def export_view(request):
         sh = wb['Fiche technique']
         print(sh.title)
         # Call excel creator
-        wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api, image_path = current_fp.product.image)
+        try:
+            current_image = current_fp.product.image
+            wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api, image_path = current_fp.product.image)
+        except:
+            wb = fp_excel_works(wb=wb, sh=sh, data_dict=fp_from_api, image_path = '')
         print('excel has been returned')
         wb.save(excel_path)
         wb.close()
@@ -74,7 +78,10 @@ def export_view(request):
         if towhat=='excel':
             file = open(excel_path, "rb")
             response = HttpResponse(file.read(),content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=' + fp_from_api.get('number') + '.xlsx'
+            if len(fp_from_api.get('number'))>0:
+                response['Content-Disposition'] = 'attachment; filename=' + fp_from_api.get('number') + '.xlsx'
+            else:
+                response['Content-Disposition'] = 'attachment; filename=No-Number.xlsx'
             return response
         # except:
         #     try:
@@ -88,6 +95,7 @@ def export_view(request):
 
 def fpcreate_view(request):
     product_id = request.GET.get('product_id')
+    print('fp will created using product with as id:', product_id)
     product = get_object_or_404(Product, pk = product_id)
     form = FPModelForm({'product':product})
     context = {'form': form}
@@ -98,6 +106,7 @@ def fpcreate_view(request):
             api_create_fp = mysitedomain + 'api/fps/'
             create_request = requests.post(url = api_create_fp, data = request.POST)
             response =create_request.json()
+            print('this is response from api request:', response)
             print(response['id'])
             print(create_request.status_code)
             context = {'success': 'FP has been created, you are now redirected to products list.'}
