@@ -487,9 +487,9 @@ class Routage(models.Model):
         except:
             return 'Without Routage Number'
 
-class RoutageItems(models.Model):
-    routage = models.ForeignKey(Routage, on_delete=models.SET_NULL, blank=True, null=True)
-    facture = models.ForeignKey('Facture',on_delete=models.SET_NULL, blank=True, null=True)
+class RoutageItem(models.Model):
+    routage = models.ForeignKey(Routage, related_name='routagetoroutageitem', on_delete=models.SET_NULL, blank=True, null=True)
+    facture = models.ForeignKey('Facture', related_name='facturetoroutageitem', on_delete=models.SET_NULL, blank=True, null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['routage', 'facture'], name='routage-facture-number')]

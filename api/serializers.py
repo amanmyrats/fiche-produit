@@ -1,7 +1,8 @@
 from django.db.models import fields
 from django.db.models.query_utils import select_related_descend
 from fiche_produit.models import FactureItem, OrderItem, Product, ProductCard, Order, Facture, OrderItem, FactureItem, Specification, \
-    SpecificationItem, Facture, Specification, Declaration, DeclarationItem, TdsItem, Tds, CooFacture, Coo
+    SpecificationItem, Facture, Specification, Declaration, DeclarationItem, TdsItem, Tds, CooFacture, Coo, \
+        RoutageItem, Routage
 from django.db import models
 from rest_framework import serializers
 
@@ -107,6 +108,20 @@ class TdsModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tds
         fields = ['number', 'tdsitems']
+
+
+class RoutageItemModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RoutageItem
+        fields = '__all__'
+
+
+class RoutageModelSerializer(serializers.ModelSerializer):
+    # routageitems = RoutageItemModelSerializer(many=True, read_only=True)
+    routagetoroutageitem = serializers.StringRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Routage
+        fields = ['number', 'routagetoroutageitem']
 
 
 class CooFactureModelSerializer(serializers.ModelSerializer):
