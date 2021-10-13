@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+{% endblock %}
+
+  
+{% block content %}
+
+{{ fps }}
+
+<br><br><br><br><br>
+{{ fps.product.name_fr }}
+<br><br>
+{{ fps.product.name_ru }}
+<br><br>
+{{ fps.product.desc_fr }}
+<br><br>
+{{ fps.product.desc_ru }}
+<br><br><br><br><br>
+
+
+{% for oitem in fps.orderitem_set.all %}
+  test
+  {{ oitem.no }}
+{% endfor %}
+
+{% endblock %}

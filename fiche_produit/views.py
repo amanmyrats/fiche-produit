@@ -1,8 +1,10 @@
 from fiche_produit.models import Product, ProductCard
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
+from django.views import generic
 import requests
 import json
 from django.template.response import TemplateResponse
+from rest_framework  import status
 from requests.api import get
 from openpyxl import Workbook, load_workbook
 from pathlib import Path
@@ -99,6 +101,7 @@ def fpcreate_view(request):
     product = get_object_or_404(Product, pk = product_id)
     form = FPModelForm({'product':product})
     context = {'form': form}
+    context['submit_button_name'] = 'Add New Fiche Produit'
 
     if request.method=='POST':
         form = FPModelForm(request.POST)
@@ -107,10 +110,45 @@ def fpcreate_view(request):
             create_request = requests.post(url = api_create_fp, data = request.POST)
             response =create_request.json()
             print('this is response from api request:', response)
-            print(response['id'])
             print(create_request.status_code)
-            context = {'success': 'FP has been created, you are now redirected to products list.'}
-            return redirect('/site/')
+            if status.is_success(create_request.status_code):
+                print(response['id'])
+                context = {'success': 'FP has been created, you are now redirected to fp list.'}
+                return redirect('/site/')
+            else:
+                context['form'] = form
+                context['errors'] = form.errors
+        else:
+            context['form'] = form
+            context['errors'] = form.errors
+
+    return render(request, 'site/fpform.html', context)
+
+def fpchange_view(request, **kwargs):
+    # fp_id = request.GET.get('fp_id')
+    fp_id = kwargs.get('pk')
+    print('fp will change fp with an id:', fp_id)
+    fp = get_object_or_404(ProductCard, pk = fp_id)
+    form = FPModelForm(instance = fp)
+    context = {'form': form}
+    context['submit_button_name'] = 'Save Changes'
+
+    if request.method=='POST':
+        # form = FPModelForm(request.POST)
+        # print('will check if form is valid')
+        # if form.is_valid():
+        #     print('form is valid')
+        api_change_fp = mysitedomain + 'api/fps/{}/'.format(fp_id)
+        create_request = requests.patch(url = api_change_fp, data = request.POST)
+        print(create_request.status_code)
+        response =create_request.json()
+        print('this is response from api request:', response)
+        if status.is_success(create_request.status_code):
+                print(response['id'])
+                context = {'success': 'FP has been edited, you are now redirected to fp list.'}
+                # Here it must be fp detail list with Kerim's template
+                return redirect('/site/')
+
         else:
             context['form'] = form
             context['errors'] = form.errors
@@ -126,13 +164,14 @@ def product_create_view(request):
     context={'product_form': product_form}
 
     if request.method=='POST':
-        form = ProductModelForm(request.POST)
+        form = ProductModelForm(request.POST, request.FILES)
         if form.is_valid():
             api_create_product = mysitedomain + 'api/products/'
-            create_request = requests.post(url = api_create_product, data = request.POST)
+            create_request = requests.post(url = api_create_product, data = request.POST, files=request.FILES)
+            print('status code:',create_request.status_code)
             response =create_request.json()
+            print('respone:', response)
             print(response['id'])
-            print(create_request.status_code)
             context = {'success': 'Product has been submitted, you are now redirected to products list.'}  
             return redirect('/products/')
         else:
@@ -144,3 +183,15 @@ def product_create_view(request):
 
 def test_view(request):
     pass
+
+
+class FPListView(generic.ListView):
+    model = ProductCard
+    # context_object_name  = 'fps'
+    template_name = 'site/fplist.html'
+
+
+class FPDetailView(generic.DetailView):
+    queryset = ProductCard.objects.all()
+    context_object_name  = 'fps'
+    template_name = 'site/fpdetail.html'

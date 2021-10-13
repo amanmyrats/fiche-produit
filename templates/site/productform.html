@@ -19,7 +19,7 @@
 <!-- PRODUCT Form -->
 <div class="container">
   {{ errors }}
-  <form method="POST">
+  <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row">
       <div class="form-group col-md-3">

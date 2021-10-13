@@ -84,10 +84,12 @@ html {
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
+{{ fps }}
 <!-- Search -->
+<h5>There is no suitable product for me. </h5>
+<a href="{% url 'product-create' %}" class="btn btn-lg btn-warning">Create New Product</a>
 <section style="padding-top: 10px;">
-  <div class="container">
+    <div class="container">
     <div class="row justify-content-center padding">
       <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
         <form type="GET" action="" class="domain-form">
@@ -147,35 +149,31 @@ html {
   <table class="table">
     <thead>
       <tr class="">
-        <th scope="col">FP Number</th>
-        <th scope="col">Product Name</th>
-        <th scope="col">Annexe-5</th>
-        <th scope="col">Order</th>
-        <th scope="col">Facture</th>
-        <th scope="col">Specification</th>
-        <th scope="col">TDS</th>
-        <th scope="col">Declaration</th>
-        <th scope="col">COO</th>
-        <th scope="col">Export to</th>
+        <!-- <th scope="col">Name (EN)</th> -->
+        <th scope="col" style="min-width:200px">Name (FR)</th>
+        <th scope="col" style="min-width:200px">Name (RU)</th>
+        <!-- <th scope="col">Name (TM)</th> -->
+        <!-- <th scope="col">Description (EN)</th> -->
+        <th scope="col" style="min-width:300px">Description (FR)</th>
+        <th scope="col" style="min-width:300px">Description (RU)</th>
+        <!-- <th scope="col">Description (TM)</th> -->
+        <th scope="col">Image</th>
+        <th scope="col">Use this</th>
       </tr>
     </thead>
     <tbody>
-      {% for fp in apidata %}
+      {% for fp in object_list %}
       <tr class="px-4 ">
-        <td scope="row" class="">{{ fp.number }}</td>
-        <td class="">{{ fp.product_name }}</td>
-        <td class="">LOT - {{ fp.lot }}</td>
-        <td class="">{{ fp.order_numbers }}</td>
-        <td class="">{{ fp.facture_numbers }}</td>
-        <td class="">{{ fp.specification_numbers }}</td>
-        <td class="">{{ fp.tds_numbers }}</td>
-        <td class="">{{ fp.declaration_numbers }}</td>
-        <td class="">{{ fp.coo_numbers }}</td>
-        <td class="row justify-content-center" style="max-width: 100px;">
-          <a href="{% url 'export' %}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary mb-1">To Excel</a>
-          <a href="/fps/{{ fp.id }}/change/" class="btn btn-info mb-1">Edit</a>
-          <!-- <a href="{% url 'export'%}?what=fp&towhat=pdf&pk={{fp.id}}" class="btn btn-info">To PDF</a> -->
-        </td>
+        <!-- <td scope="row" class="">{{ product.name_en }}</td> -->
+        <td class="">{{ fp.product.name_fr }}</td>
+        <td class="">{{ fp.product.name_ru }}</td>
+        <!-- <td class="">{{ fp.product.name_tm }}</td> -->
+        <!-- <td class="">{{ fp.product.desc_en }}</td> -->
+        <td class="">{{ fp.product.desc_fr }}</td>
+        <td class="">{{ fp.product.desc_ru }}</td>
+        <!-- <td class="">{{ fp.product.desc_tm }}</td> -->
+        <td class=""><img style="max-height: 150px;" src="{{ product.image }}" alt=""></td>
+        <td class=""><a href="{% url 'fpcreate' %}?product_id={{ product.id }}" class="btn btn-primary">Create Fiche Produit using this Product</a></td>
       </tr>
       {% endfor %}
     </tbody>
@@ -189,9 +187,4 @@ html {
   </ul>
 </nav>
 
-{% endblock %}
-
-{% block js %}
-<!-- JS for filter and search. -->
-<script src="{% static 'js/site/main.js' %}"></script>
 {% endblock %}

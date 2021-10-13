@@ -22,13 +22,16 @@ from django.conf.urls.static import static
 
 
 from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view, fpcreate_view, products_view, \
-                                product_create_view
+                                product_create_view, fpchange_view, FPListView, FPDetailView
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     path('site/', site_view, name='site'),
-    path('/fps/create/', fpcreate_view, name='fpcreate'),
+    path('fps/', FPListView.as_view(), name='fplist'),
+    path('fps/<int:pk>/', FPDetailView.as_view(), name='fpdetail'),
+    path('fps/create/', fpcreate_view, name='fpcreate'),
+    path('fps/<int:pk>/change/', fpchange_view, name='fpchange'),
     path('achat/', achat_view, name='achat'),
     path('logistics/', logistics_view, name='logistics'),
     path('qs/', qs_view, name='qs'),

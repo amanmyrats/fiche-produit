@@ -4,7 +4,7 @@ from django.forms import fields
 from .models import Product, ProductCard
 
 class ProductModelForm(forms.ModelForm):
-
+    
     class Meta:
         model = Product
         fields = '__all__'
@@ -16,7 +16,6 @@ class ProductModelForm(forms.ModelForm):
             self.fields[fld].widget.attrs={
                 'class': 'form-control'
             }
-
 
 class FPModelForm(forms.ModelForm):
 

@@ -15,8 +15,8 @@ class Product(models.Model):
     desc_fr = models.TextField(max_length=1000, blank=True, null=True)
     desc_ru  = models.TextField(max_length=1000, blank=True, null=True)
     desc_tm  = models.TextField(max_length=1000, blank=True, null=True)
-    technical_detail = models.FileField(blank=True, null=True)
     image = models.ImageField(upload_to='product_image/',blank=True, null=True)
+    technical_detail = models.FileField(upload_to='technical_detail/', blank=True, null=True)
     created_by = models.ForeignKey('Employee', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -25,6 +25,7 @@ class Product(models.Model):
             return self.name_fr
         else:
             return super().__str__()
+    
     
 class Lot(models.Model):
     number = models.CharField(max_length=5, blank=True, null=True)

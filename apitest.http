@@ -1,0 +1,8 @@
+# GET http://127.0.0.1:8000/api/products/
+
+
+
+PUT   http://127.0.0.1:8000/api/products/20/
+content-type: application/json
+
+{"name_fr":"russian namaergae test"}

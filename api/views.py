@@ -11,7 +11,17 @@ from .serializers import FPModelSerializer, ProductModelSerializer, OrderModelSe
         RoutageModelSerializer
 
 
-class FPViewSet(viewsets.ModelViewSet):
+class EnablePartialUpdateMixin:
+    """Enable partial updates
+
+    Override partial kwargs in UpdateModelMixin class
+    https://github.com/encode/django-rest-framework/blob/91916a4db14cd6a06aca13fb9a46fc667f6c0682/rest_framework/mixins.py#L64
+    """
+    def update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
+class FPViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = ProductCard.objects.all()
     serializer_class = FPModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -20,7 +30,7 @@ class FPViewSet(viewsets.ModelViewSet):
     filter_fields = ['provider','origin','project','department','lot']
 
 
-class ProductViewSet(viewsets.ModelViewSet):
+class ProductViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -28,7 +38,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     filter_fields = ['created_by__name_en']
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -36,7 +46,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     filter_fields = ['project']
 
 
-class FactureViewSet(viewsets.ModelViewSet):
+class FactureViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Facture.objects.all()
     serializer_class = FactureModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -44,7 +54,7 @@ class FactureViewSet(viewsets.ModelViewSet):
     filter_fields = ['project']
 
 
-class SpecificationViewSet(viewsets.ModelViewSet):
+class SpecificationViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Specification.objects.all()
     serializer_class = SpecificationModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -52,7 +62,7 @@ class SpecificationViewSet(viewsets.ModelViewSet):
     filter_fields = ['number']
 
 
-class DeclarationViewSet(viewsets.ModelViewSet):
+class DeclarationViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Declaration.objects.all()
     serializer_class = DeclarationModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -60,7 +70,7 @@ class DeclarationViewSet(viewsets.ModelViewSet):
     filter_fields = ['number']
 
 
-class TdsViewSet(viewsets.ModelViewSet):
+class TdsViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Tds.objects.all()
     serializer_class = TdsModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -68,7 +78,7 @@ class TdsViewSet(viewsets.ModelViewSet):
     filter_fields = ['number']
 
 
-class CooViewSet(viewsets.ModelViewSet):
+class CooViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Coo.objects.all()
     serializer_class = CooModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
@@ -76,7 +86,7 @@ class CooViewSet(viewsets.ModelViewSet):
     filter_fields = ['number']
 
 
-class RoutageViewSet(viewsets.ModelViewSet):
+class RoutageViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Routage.objects.all()
     serializer_class = RoutageModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
