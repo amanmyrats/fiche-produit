@@ -114,7 +114,7 @@ class Room(models.Model):
     plan = models.ImageField(upload_to = 'room_plan/', blank=True, null = True)
 
     def __str__(self):
-        return self.name_fr + ' - ' + self.name_fr
+        return self.no + ' - ' + self.name_fr
 
 class Client(models.Model):
     name_en = models.CharField(max_length=200, blank=True, null=True)
@@ -236,31 +236,36 @@ class FPType(models.Model):
 
 
 class ProductCard(models.Model):
+    number = models.CharField(max_length=10, blank=True, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
     origin = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='origin_country')
     manufactured_in = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='manufactured_country')
-    protocol = models.TextField(max_length=500, blank=True, null=True)
-    observation =models.TextField(max_length=500, blank=True, null=True)
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
     location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
-    phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
     trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
     lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
-    annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
     fp_type =  models.ForeignKey(FPType, on_delete=models.SET_NULL, blank=True, null=True)
-    number = models.CharField(max_length=10, blank=True, null=True)
+    phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
     index = models.CharField(max_length=2, blank=True, null=True)
+    protocol = models.TextField(max_length=500, blank=True, null=True)
+    observation =models.TextField(max_length=500, blank=True, null=True)
+
+    annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
+    
     sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
     sign_contractor2 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_director')
     sign_tehnadzor = models.CharField(max_length=200, blank=True, null=True)
     sign_client = models.ForeignKey(Client,on_delete=models.SET_NULL, blank=True, null=True)
+    
     date_contractor = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_tehnadzor = models.DateTimeField(auto_now=True, blank=True, null=True)
     date_client = models.DateTimeField(auto_now=True, blank=True, null=True)
+    
     created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='created')
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
+    
     note_for_achat = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):

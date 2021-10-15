@@ -5,10 +5,11 @@ import django_filters.rest_framework
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
-from fiche_produit.models import Employee, Product, ProductCard, Order, Facture, Specification, Declaration, Tds, Coo, Routage
+from fiche_produit.models import Employee, Product, ProductCard, Order, Facture, Specification, Declaration, Tds, Coo, Routage, \
+    OrderItem
 from .serializers import FPModelSerializer, ProductModelSerializer, OrderModelSerializer, FactureModelSerializer, \
     SpecificationModelSerializer, DeclarationModelSerializer, TdsModelSerializer, CooModelSerializer, RoutageModelSerializer, \
-        RoutageModelSerializer
+        RoutageModelSerializer, OrderItemModelSerializer
 
 
 class EnablePartialUpdateMixin:
@@ -41,6 +42,14 @@ class ProductViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
 class OrderViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderModelSerializer
+    filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+    search_fields = ['number', 'project']
+    filter_fields = ['project']
+
+
+class OrderItemViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
     search_fields = ['number', 'project']
     filter_fields = ['project']

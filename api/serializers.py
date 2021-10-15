@@ -58,6 +58,12 @@ class OrderModelSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OrderItemModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
+
 class FactureItemModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = FactureItem

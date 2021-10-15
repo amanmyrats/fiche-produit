@@ -16,40 +16,6 @@
   
 {% block content %}
 
-
-<!-- product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
-    -provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
-    -origin = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='origin_country')
-    -manufactured_in = models.ForeignKey(Country, on_delete=models.SET_NULL, blank=True, null=True, related_name='manufactured_country')
-    -protocol = models.CharField(max_length=300, blank=True, null=True)
-    -observation =models.CharField(max_length=300, blank=True, null=True)
-    -project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
-    -department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
-    -location = models.ForeignKey(Room, on_delete=models.SET_NULL, blank=True, null=True)
-    -trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
-    -lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
-
-
-
-    -phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
-    -fp_type = models.CharField(max_length=10,choices=[(1,'FP'),], blank=True, null=True)
-    -number = models.CharField(max_length=10, blank=True, null=True)
-    -index = models.CharField(max_length=2, blank=True, null=True)
-    
-    sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
-    sign_contractor2 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_director')
-    sign_tehnadzor = models.CharField(max_length=200, blank=True, null=True)
-    sign_client = models.ForeignKey(Client,on_delete=models.SET_NULL, blank=True, null=True)
-    
-    date_contractor = models.DateTimeField(auto_now=True, blank=True, null=True)
-    date_tehnadzor = models.DateTimeField(auto_now=True, blank=True, null=True)
-    date_client = models.DateTimeField(auto_now=True, blank=True, null=True)
-    
-    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='created')
-    created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
-
-    note_for_achat = models.TextField(max_length=500, blank=True, null=True)
-     -->
 <!-- PRODUCT Form -->
 <!-- <div class="container-fluid"> -->
   <h4>{{ form.errors }}</h4>
@@ -89,11 +55,6 @@
         <!-- <input type="text" class="form-control" id="inputCity"> -->
       </div>
       <div class="form-group col-md-2">
-        <label for="inputState">Department</label>
-        {{ form.department }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
-      </div>
-      <div class="form-group col-md-2">
         <label for="inputZip">Location</label>
         {{ form.location }}
         <!-- <input type="text" class="form-control" id="inputZip"> -->
@@ -108,9 +69,20 @@
         {{ form.lot }}
         <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Annexe-5</label>
+        {{ form.annexe5 }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+    </div>
     </div>
 
     <div class="row justify-content-center">
+      
+      <div class="form-group col-md-2">
+        <label for="inputState">Department</label>
+        {{ form.department }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
       <div class="form-group col-md-2">
         <label for="inputCity">FP Type</label>
         {{ form.fp_type }}
@@ -126,34 +98,24 @@
         {{ form.index }}
         <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
-      <div class="row">
-        <div class="form-group col-md-6">
+    </div>
+      
+      <div class="row justify-content-center">
+        <div class="form-group col-md-4">
           <label for="inputCity">Protocol</label>
           {{ form.protocol }}
           <!-- <input type="text" class="form-control" id="inputCity"> -->
         </div>
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-4">
           <label for="inputState">Observation</label>
           {{ form.observation }}
           <!-- <input type="text" class="form-control" id="inputZip"> -->
         </div>
       </div>
-      <div class="row text-center justify-content-center">
-        <div class="form-group col-md-4">
-            <label for="inputZip">Location</label>
-            {{ form.location }}
-            <!-- <input type="text" class="form-control" id="inputZip"> -->
-        </div>
-        <div class="form-group col-md-4">
-            <label for="inputZip">Phase</label>
-            {{ form.phase }}
-            <!-- <input type="text" class="form-control" id="inputZip"> -->
-        </div>
-    </div>
-  </div>
-    <div class="container">
 
-      <button type="submit" class="btn btn-primary">{{ submit_button_name }}</button>
+  <div class="row justify-content-center m-5">
+
+      <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ submit_button_name }}</button>
     </div>
 
   </form>

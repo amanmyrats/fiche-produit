@@ -43,9 +43,9 @@
                 <p class="card-text" style="height: 60px;">You can create new Fiche Produit and track if you product was ordered, purchased and declared at custom.</p>
                 <div class="d-flex justify-content-around align-items-center">
                   <div class="btn-group">
-                      <a  class="btn btn-sm btn-primary m-1 w-50 " style="height: 60px;" href="{% url 'site' %}">See list of Fiche Produit</a>
+                      <a  class="btn btn-sm btn-primary m-1 w-50 " style="height: 60px;" href="{% url 'site' %}">See Dashboard of Site</a>
                     <!-- <button type="button" class="btn btn-sm btn-primary m-1 w-50 " style="height: 60px;">See list of Fiche Produit</button> -->
-                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'products' %}"">Add new Fiche Produit</a>
+                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'fplist' %}"">List Of Fiche Produits</a>
                     <!-- <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Add new Fiche Produit</button> -->
                   </div>
                 </div>
@@ -61,8 +61,10 @@
                 <p class="card-text" style="height: 60px;">You can see all orders and you can track you you purchased that order or not.</p>
                 <div class="d-flex justify-content-around align-items-center">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See list of HG orders</button>
-                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Create HG order</button>
+                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'achat' %}"">See Achat Dashboard</a>
+                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'hgcreate' %}"">Create HG order</a>
+                    <!-- <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See list of HG orders</button>
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Create HG order</button> -->
                   </div>
                 </div>
               </div>

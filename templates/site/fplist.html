@@ -26,6 +26,7 @@
   border-radius: 0.5em;
   text-align: center;
   justify-content: center;
+  vertical-align: middle;
 }
 
 #fp-list tr {
@@ -38,7 +39,7 @@
 #fp-list td {
   font-size: 15px;
   margin-left: auto;
-  min-width:130px;
+  min-width:100px;
   vertical-align: middle;
 }
 
@@ -86,8 +87,8 @@ html {
 {% block content %}
 {{ fps }}
 <!-- Search -->
-<h5>There is no suitable product for me. </h5>
-<a href="{% url 'product-create' %}" class="btn btn-lg btn-warning">Create New Product</a>
+
+<a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
 <section style="padding-top: 10px;">
     <div class="container">
     <div class="row justify-content-center padding">
@@ -149,31 +150,52 @@ html {
   <table class="table">
     <thead>
       <tr class="">
-        <!-- <th scope="col">Name (EN)</th> -->
+        <th scope="col">Project</th>
+        <th scope="col">FP Number</th>
         <th scope="col" style="min-width:200px">Name (FR)</th>
         <th scope="col" style="min-width:200px">Name (RU)</th>
-        <!-- <th scope="col">Name (TM)</th> -->
-        <!-- <th scope="col">Description (EN)</th> -->
-        <th scope="col" style="min-width:300px">Description (FR)</th>
-        <th scope="col" style="min-width:300px">Description (RU)</th>
-        <!-- <th scope="col">Description (TM)</th> -->
+        <!-- <th scope="col" style="min-width:300px">Description (FR)</th>
+        <th scope="col" style="min-width:300px">Description (RU)</th> -->
+        <th scope="col">LOT</th>
+        <th scope="col">Provider</th>
+        <th scope="col" style="max-width:100px">Location</th>
         <th scope="col">Image</th>
-        <th scope="col">Use this</th>
+        <th scope="col">Action</th>
       </tr>
     </thead>
     <tbody>
       {% for fp in object_list %}
       <tr class="px-4 ">
-        <!-- <td scope="row" class="">{{ product.name_en }}</td> -->
+
+        <!-- <th scope="col">Project</th>
+        <th scope="col">FP Number</th>
+        <th scope="col" style="min-width:200px">Name (FR)</th>
+        <th scope="col" style="min-width:200px">Name (RU)</th>
+        <th scope="col" style="min-width:300px">Description (FR)</th>
+        <th scope="col" style="min-width:300px">Description (RU)</th>
+        <th scope="col">LOT</th>
+        <th scope="col">Provider</th>
+        <th scope="col">Location</th>
+        <th scope="col">Image</th>
+        <th scope="col">Action</th> -->
+
+
+        <td scope="row" class="">{{ fp.project.code }}</td>
+        <td class="">{{ fp.number }}</td>
         <td class="">{{ fp.product.name_fr }}</td>
         <td class="">{{ fp.product.name_ru }}</td>
-        <!-- <td class="">{{ fp.product.name_tm }}</td> -->
-        <!-- <td class="">{{ fp.product.desc_en }}</td> -->
-        <td class="">{{ fp.product.desc_fr }}</td>
-        <td class="">{{ fp.product.desc_ru }}</td>
-        <!-- <td class="">{{ fp.product.desc_tm }}</td> -->
-        <td class=""><img style="max-height: 150px;" src="{{ product.image }}" alt=""></td>
-        <td class=""><a href="{% url 'fpcreate' %}?product_id={{ product.id }}" class="btn btn-primary">Create Fiche Produit using this Product</a></td>
+        <!-- <td class="">{{ fp.product.desc_fr }}</td>
+        <td class="">{{ fp.product.desc_ru }}</td> -->
+        <td class="">{{ fp.lot.number }}</td>
+        <td class="">{{ fp.provider.name_fr }}</td>
+        <td class="">{{ fp.location }}</td>
+        <td class=""><img style="max-height: 130px;" src="{{ fp.product.image.url }}" alt="{{ fp.product.name_fr }}"></td>
+        <td  class="row justify-content-center" style="max-width: 110px;">
+          <a href="{{ fp.id }}/change/" class="btn btn-primary p-1">Edit</a>
+          <a href="{{ fp.id }}/" class="btn btn-primary my-1 p-1">Detail</a>
+          <a href="{{ fp.id }}/" class="btn btn-primary p-1">Print</a>
+        </td>
+       
       </tr>
       {% endfor %}
     </tbody>

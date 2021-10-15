@@ -23,6 +23,8 @@ from django.conf.urls.static import static
 
 from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view, fpcreate_view, products_view, \
                                 product_create_view, fpchange_view, FPListView, FPDetailView
+from achat.views import hgcreate_view, hgadditem_view
+
 
 urlpatterns = [
     path('', home_view, name='home'),
@@ -33,6 +35,8 @@ urlpatterns = [
     path('fps/create/', fpcreate_view, name='fpcreate'),
     path('fps/<int:pk>/change/', fpchange_view, name='fpchange'),
     path('achat/', achat_view, name='achat'),
+    path('hg/create', hgcreate_view, name = 'hgcreate'),
+    path('hg/<int:pk>/additem/', hgadditem_view, name = 'hgadditem'),
     path('logistics/', logistics_view, name='logistics'),
     path('qs/', qs_view, name='qs'),
     path('export/', export_view, name='export'),

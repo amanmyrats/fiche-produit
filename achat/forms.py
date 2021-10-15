@@ -1,13 +1,14 @@
 from django import forms
 from django.forms import fields
 
-from .models import Product, ProductCard
+from fiche_produit.models import  Order, OrderItem
 
-class ProductModelForm(forms.ModelForm):
+
+class OrderModelForm(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Order
         fields = '__all__'
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -15,19 +16,17 @@ class ProductModelForm(forms.ModelForm):
             self.fields[fld].widget.attrs={
                 'class': 'form-control'
             }
+        
 
-class FPModelForm(forms.ModelForm):
-
+class OrderItemModelForm(forms.ModelForm):
     class Meta:
-        model = ProductCard
+        model = OrderItem
         fields = '__all__'
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         for fld in self.fields:
-            self.fields[fld].widget.attrs={
-                'class': 'form-control'
+            self.fields[fld].widget.attrs = {
+                'class' : 'form-control'
             }
-
-

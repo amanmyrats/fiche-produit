@@ -15,7 +15,7 @@ import shutil
 
 from .forms import ProductModelForm, FPModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
-# Create your views here.
+
 mysitedomain = 'http://127.0.0.1:8000/'
 
 def home_view(request):
@@ -114,7 +114,7 @@ def fpcreate_view(request):
             if status.is_success(create_request.status_code):
                 print(response['id'])
                 context = {'success': 'FP has been created, you are now redirected to fp list.'}
-                return redirect('/site/')
+                return redirect('/fps/')
             else:
                 context['form'] = form
                 context['errors'] = form.errors
@@ -147,7 +147,7 @@ def fpchange_view(request, **kwargs):
                 print(response['id'])
                 context = {'success': 'FP has been edited, you are now redirected to fp list.'}
                 # Here it must be fp detail list with Kerim's template
-                return redirect('/site/')
+                return redirect('/fps/')
 
         else:
             context['form'] = form
@@ -184,11 +184,11 @@ def product_create_view(request):
 def test_view(request):
     pass
 
-
 class FPListView(generic.ListView):
     model = ProductCard
     # context_object_name  = 'fps'
     template_name = 'site/fplist.html'
+    ordering = ['-created_at']
 
 
 class FPDetailView(generic.DetailView):

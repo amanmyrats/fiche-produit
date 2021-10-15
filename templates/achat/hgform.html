@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+<style>
+  body {
+    background-color: #dee9ff;
+  }
+  textarea {
+    min-height: 200px;
+  }
+</style>
+{% endblock %}
+
+  
+{% block content %}
+
+<!-- PRODUCT Form -->
+<div class="container-fluid">
+  <h4>{{ orderform.errors }}</h4>
+
+<form id='order' method="POST">
+    {% csrf_token %}
+    orderform
+    orderitemform
+    <div class="row justify-content-center">
+        <div class="form-group col-md-2">
+            <label for="inputState">Project</label>
+            {{ orderform.project }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+          </div>
+      <div class="form-group col-md-2">
+        <label for="inputState">Number</label>
+        {{ orderform.number }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      
+      <div class="row justify-content-center m-5">
+
+        <button type="submit" id='ordersubmit' class="btn btn-primary" style="max-width: max-content;">Create New Order</button>
+      </div>
+</form>
+
+</div>
+
+
+{% endblock %}
