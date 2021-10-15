@@ -170,12 +170,13 @@ class OrderItem(models.Model):
 
     def __str__(self):
         try:
-            return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.product_card.product.name_fr) + ' - ' + str(self.desc_fr)
+            return str(str(self.no) + ' - ' + str(self.desc_fr))
         except:
-            return str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.desc_fr)
+            return 'Empty item (should be deleted)'
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
+        ordering = ['no']
 
 
 class FactureItem(models.Model):

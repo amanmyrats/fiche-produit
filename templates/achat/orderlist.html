@@ -26,6 +26,7 @@
   border-radius: 0.5em;
   text-align: center;
   justify-content: center;
+  vertical-align: middle;
 }
 
 #fp-list tr {
@@ -38,7 +39,7 @@
 #fp-list td {
   font-size: 15px;
   margin-left: auto;
-  min-width:130px;
+  min-width:100px;
   vertical-align: middle;
 }
 
@@ -84,11 +85,12 @@ html {
 {% endblock %}
 
 {% block content %}
-<a href="{% url 'orderlist' %}" class="btn btn-lg btn-warning border border-dark">See All List Of Orders</a>
-<a href="{% url 'ordercreate' %}" class="btn btn-lg btn-warning border border-dark">Create New order</a>
+{{ fps }}
 <!-- Search -->
+
+<a href="{% url 'ordercreate' %}" class="btn btn-lg btn-warning">Create New Order</a>
 <section style="padding-top: 10px;">
-  <div class="container">
+    <div class="container">
     <div class="row justify-content-center padding">
       <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
         <form type="GET" action="" class="domain-form">
@@ -144,34 +146,58 @@ html {
 </section>
 <div class="fp-list" id="fp-list">
 
-
   <table class="table">
     <thead>
       <tr class="">
-        <th scope="col">Order</th>
-        <th scope="col">Facture</th>
-        <th scope="col">Specification</th>
-        <th scope="col">TDS</th>
-        <th scope="col">Declaration</th>
-        <th scope="col">COO</th>
-        <th scope="col">Export to</th>
+        <th scope="col">HG Number</th>
+        <th scope="col">Details of Items</th>
       </tr>
     </thead>
     <tbody>
       {% for order in orders %}
       <tr class="px-4 ">
-        <td class="">{{ order.number }}</td>
-        <td class="">{{ order.facture_numbers }}</td>
-        <td class="">{{ order.specification_numbers }}</td>
-        <td class="">{{ order.tds_numbers }}</td>
-        <td class="">{{ order.declaration_numbers }}</td>
-        <td class="">{{ order.coo_numbers }}</td>
-        <td class="row justify-content-center" style="max-width: 100px;">
-          <a href="{% url 'export' %}?what=order&towhat=excel&pk={{order.id}}" class="btn btn-primary mb-1">To Excel</a>
-          <a href="/orders/{{ order.id }}/edit/" class="btn btn-info mb-1">Edit</a>
-          <!-- <a href="{% url 'export'%}?what=order&towhat=pdf&pk={{order.id}}" class="btn btn-info">To PDF</a> -->
-        </td>
-      </tr>
+          <td scope="row" class="">{{ order.number }}</td>
+          <td>
+              
+                <table  class="table m-0">
+                    <thead>
+                        <tr class="">
+                            <th scope="col">No:</th>
+                            <th scope="col" style="min-width:300px">Product Card Reference</th>
+                            <th scope="col" style="min-width:300px">Description</th>
+                            <th scope="col">Annexe-5</th>
+                            <th scope="col" style="min-width:100px">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total Price</th>
+                            <th scope="col" style="max-width:100px">Unit</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    {% for orderitem in order.orderorderitems.all %}
+                    <tbody>
+                        <td class="">{{ orderitem.no }}</td>
+                        <td class="">{{ orderitem.product_card.product.name_fr }}</td>
+                        <td class="">{{ orderitem.desc_fr }}</td>
+                        <td class="">{{ orderitem.product_card.annexe5.code }}</td>
+                        <td class="">{{ orderitem.quantity }}</td>
+                        <td class="">{{ orderitem.price }}</td>
+                        <td class="">--</td>
+                        <td class="">{{ orderitem.unit }}</td>
+                        <td class="">{{ orderitem.currency }}</td>
+                        <td class=""><img src="{{ orderitem.product_card.product.image.url }}" style="max-width: 100px;" alt=""></td>
+                        <td  class="d-flex">
+                            <a href="{{ order.pk }}/edit/" class="btn btn-primary p-1" style="max-width: 80px;">Edit</a>
+                            <a href="{{ order.pk }}/" class="btn btn-primary mx-1 p-1" style="max-width: 80px;">Detail</a>
+                            <a href="{{ order.pk }}/" class="btn btn-primary p-1" style="max-width: 80px;">Print</a>
+                        </td>
+                      
+                    </tbody>
+                        {% endfor %}
+                </table>
+            </td>
+        </tr>
       {% endfor %}
     </tbody>
   </div>
@@ -184,9 +210,4 @@ html {
   </ul>
 </nav>
 
-{% endblock %}
-
-{% block js %}
-<!-- JS for filter and search. -->
-<script src="{% static 'js/site/main.js' %}"></script>
 {% endblock %}

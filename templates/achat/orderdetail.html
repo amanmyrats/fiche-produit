@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+
+<!-- CSS for filter and search -->
+<link rel="stylesheet" href="{% static 'css/site/main.css' %}">
+<style>
+    table th{
+      min-width: 150px;
+      max-width: 400px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'orderlist' %}" class="btn btn-lg btn-warning border border-dark">See full list of Orders</a>
+<a href="/orders/{{ order.id }}/edit/" class="btn btn-lg btn-warning border border-dark">Edit This Order</a>
+<a href="{% url 'ordercreate' %}" class="btn btn-lg btn-warning border border-dark">Create New order</a>
+<br><br><br>
+{{ order.project.code }}
+{{ order.number }}
+<br><br>
+
+
+<table class="mt-5">
+    <thead>
+        <th>NO</th>
+        <th>Item Description</th>
+        <th>Fiche Produit Reference</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Price</th>
+        <th>Currency</th>
+    </thead>
+    {% for item in order.orderorderitems.all %}
+        <tbody>
+            <td style="max-width: 30px;">{{ item.no }}</td>
+            <td style="min-width: 300px;">{{item.desc_fr}}</td>
+            <td>{{item.product_card}}</td>
+            <td>{{item.quantity }}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.price }}</td>
+            <td>{{item.currency }}</td>
+        </tbody>
+        {% endfor %}
+    </table> 
+
+    <br>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}

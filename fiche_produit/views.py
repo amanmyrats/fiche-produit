@@ -26,9 +26,6 @@ def site_view(request):
     context={'apidata': apidata.json()}
     return render(request, 'site/site.html', context)
 
-def achat_view(request):
-    return render(request, 'achat/achat.html', {'msg': 'Hello Home'})
-
 def logistics_view(request):
     return render(request, 'logistics/logistics.html', {'msg': 'Hello Home'})
 

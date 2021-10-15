@@ -51,8 +51,8 @@ class OrderItemViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     queryset = OrderItem.objects.all()
     serializer_class = OrderItemModelSerializer
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
-    search_fields = ['number', 'project']
-    filter_fields = ['project']
+    search_fields = ['order__number', 'desc_fr']
+    filter_fields = ['order__number']
 
 
 class FactureViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):

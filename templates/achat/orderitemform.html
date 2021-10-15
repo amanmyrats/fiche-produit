@@ -10,6 +10,10 @@
   textarea {
     min-height: 200px;
   }
+  table th{
+      min-width: 150px;
+      max-width: 400px;
+  }
 </style>
 {% endblock %}
 
@@ -19,17 +23,35 @@
 <!-- PRODUCT Form -->
 <div class="container-fluid">
   <h4>{{ orderitemform.errors }}</h4>
-<h4>You adding items for Order: {{ order.number }}</h4>
+<h4>You are adding and editing items of Order: {{ order.number }}</h4>
+<a href="?additem=true" class="btn btn-primary">Add New Item</a>
+<a href="/orders/{{ order.id }}/" class="btn btn-primary">Print</a>
 <h5>Existing items of this Order:</h5>
-{% for item in existing_items %}
-    {{item.no}}
-    {{item.desc_fr}}
-    {{item.product_card}}
-    {{item.price }}
-    {{item.quantity }}
-    {{item.unit}}
+<table class="mt-5">
+    <thead>
+        <th>NO</th>
+        <th>Item Description</th>
+        <th>Fiche Produit Reference</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Price</th>
+        <th>Edit</th>
+    </thead>
+    {% for item in existing_items %}
+        <tbody>
+            <td style="max-width: 30px;">{{ item.no }}</td>
+            <td style="min-width: 300px;">{{item.desc_fr}}</td>
+            <td>{{item.product_card}}</td>
+            <td>{{item.quantity }}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.price }}</td>
+            <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+        </tbody>
+        {% endfor %}
+    </table>    
+    
     <br> <br>
-{% endfor %}
+{% if show_form %}
 <form id='orderitem' method="POST" class="mt-5">
         {% csrf_token %}
         <div class="row">
@@ -72,12 +94,14 @@
             
             <div class="form-group  col-md-1">
                 
-                <button type="submit"  id='ordersubmit' class="btn btn-primary" style="max-width: max-content;">Add New Item</button>
+                <button type="submit"  id='ordersubmit' class="btn btn-primary" style="max-width: max-content;">{{ buttonname}}</button>
             </div>
             
         </div>
         </form>
+    {% endif %}
 </div>
+
 
 
 {% endblock %}

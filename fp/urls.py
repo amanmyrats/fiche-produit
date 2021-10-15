@@ -21,9 +21,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from fiche_produit.views import home_view, site_view, achat_view, logistics_view, qs_view, export_view, fpcreate_view, products_view, \
+from fiche_produit.views import home_view, site_view, logistics_view, qs_view, export_view, fpcreate_view, products_view, \
                                 product_create_view, fpchange_view, FPListView, FPDetailView
-from achat.views import hgcreate_view, hgadditem_view
+from achat.views import achat_view, order_create_view, OrderListView, OrderDetailView, order_edit_view
 
 
 urlpatterns = [
@@ -34,16 +34,19 @@ urlpatterns = [
     path('fps/<int:pk>/', FPDetailView.as_view(), name='fpdetail'),
     path('fps/create/', fpcreate_view, name='fpcreate'),
     path('fps/<int:pk>/change/', fpchange_view, name='fpchange'),
+
     path('achat/', achat_view, name='achat'),
-    path('hg/create', hgcreate_view, name = 'hgcreate'),
-    path('hg/<int:pk>/additem/', hgadditem_view, name = 'hgadditem'),
+    path('orders/', OrderListView.as_view(), name = 'orderlist'),
+    path('orders/<int:pk>/', OrderDetailView.as_view(), name = 'orderdetail'),
+    path('orders/create/', order_create_view, name = 'ordercreate'),
+    path('orders/<int:pk>/edit/', order_edit_view, name = 'orderedit'),
+
     path('logistics/', logistics_view, name='logistics'),
     path('qs/', qs_view, name='qs'),
     path('export/', export_view, name='export'),
     path('products/', products_view, name='products'),
     path('products/create/', product_create_view, name='product-create'),
     path('', include('api.urls')),
-    # path('', include('api.urls'))
 ] 
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 

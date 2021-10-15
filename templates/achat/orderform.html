@@ -19,11 +19,9 @@
 <!-- PRODUCT Form -->
 <div class="container-fluid">
   <h4>{{ orderform.errors }}</h4>
-
+  <a href="{% url 'orderlist' %}" class="btn btn-lg btn-warning border border-dark">See full list of Orders</a>
 <form id='order' method="POST">
     {% csrf_token %}
-    orderform
-    orderitemform
     <div class="row justify-content-center">
         <div class="form-group col-md-2">
             <label for="inputState">Project</label>
@@ -40,6 +38,7 @@
 
         <button type="submit" id='ordersubmit' class="btn btn-primary" style="max-width: max-content;">Create New Order</button>
       </div>
+    </div>
 </form>
 
 </div>
