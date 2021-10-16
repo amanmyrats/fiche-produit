@@ -170,7 +170,7 @@ class OrderItem(models.Model):
 
     def __str__(self):
         try:
-            return str(str(self.no) + ' - ' + str(self.desc_fr))
+            return str(str(self.order.number) + ' - ' + str(self.no) + ' - ' + str(self.desc_fr))
         except:
             return 'Empty item (should be deleted)'
 
@@ -196,13 +196,16 @@ class FactureItem(models.Model):
         constraints = [models.UniqueConstraint(fields=['facture', 'no'], name='facture-item-no')]
 
     def __str__(self):
-        return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
+        try:
+            return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
+        except:
+            return str(self.no)
 
 
 class SpecificationItem(models.Model):
     specification =models.ForeignKey('Specification',related_name='specifications', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem,related_name='specificationfactures', on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['specification', 'no'], name='specification-item-no')]
@@ -217,7 +220,7 @@ class SpecificationItem(models.Model):
 class TdsItem(models.Model):
     tds =models.ForeignKey('Tds', related_name='tdsitems', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem,related_name='tdsfactures', on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['tds', 'no'], name='tds-item-no')]
@@ -557,7 +560,7 @@ class Declaration(models.Model):
 class DeclarationItem(models.Model):
     declaration =models.ForeignKey(Declaration,related_name='declarationitems', on_delete=models.SET_NULL, blank=True, null=True)
     no = models.CharField(max_length=20,unique=True, blank=True, null=True)
-    facture_item = models.ForeignKey(FactureItem, on_delete=models.SET_NULL, unique=True, blank=True, null=True)
+    facture_item = models.ForeignKey(FactureItem, related_name='declarationfactures', on_delete=models.SET_NULL, unique=True, blank=True, null=True)
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['declaration', 'no'], name='declaration-item-no')]

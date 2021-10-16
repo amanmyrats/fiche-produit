@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+<style>
+  body {
+    background-color: #dee9ff;
+  }
+  textarea {
+    min-height: 200px;
+  }
+  table th{
+      min-width: 150px;
+      max-width: 400px;
+  }
+</style>
+{% endblock %}
+
+  
+{% block content %}
+
+<!-- PRODUCT Form -->
+<div class="container-fluid">
+  <h4>{{ factureitemform.errors }}</h4>
+<h4>You are adding and editing items of Facture: {{ facture.number }}</h4>
+<a href="?additem=true" class="btn btn-primary">Add New Item</a>
+<a href="/factures/{{ facture.id }}/" class="btn btn-primary">Print</a>
+<h5>Existing items of this Facture:</h5>
+<table class="mt-5">
+    <thead>
+        <th>Facture Item No</th>
+        <th>Order Reference</th>
+        <th>HS Code</th>
+        <th>Package Type</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Unit Price</th>
+        <th>Currency</th>
+        <th>Edit</th>
+    </thead>
+    {% for item in existing_items %}
+        <tbody>
+            <td style="max-width: 30px;">{{ item.no }}</td>
+            <td style="min-width: 300px;">{{item.order_item}}</td>
+            <td>{{item.hs_code}}</td>
+            <td>{{item.package_type }}</td>
+            <td>{{item.quantity }}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.price }}</td>
+            <td>{{item.currency }}</td>
+            <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+        </tbody>
+        {% endfor %}
+    </table>    
+    
+    <br> <br>
+{% if show_form %}
+<form id='factureitem' method="POST" class="mt-5">
+        {% csrf_token %}
+        <div class="row">
+
+            <div class="form-group col-md-1">
+                <label for="orderitemno">Facture Item No</label>
+                {{ factureitemform.no }}
+                <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
+            </div>
+            <div class="form-group col-md-3">
+                <label for="whichficheproduit">Package Type</label>
+                {{ factureitemform.package_type }}
+                <!-- <input type="text" class="form-control" id="inputPassword4" placeholder="Name (FR)"> -->
+            </div>
+            <div class="form-group  col-md-3">
+                <label for="descriptionfr">HS Code</label>
+                {{ factureitemform.hs_code }}
+                <!-- <input type="text" class="form-control" id="inputAddress" placeholder="RU"> -->
+            </div>
+            <div class="form-group  col-md-1">
+                <label for="quantity">Order Reference</label>
+                {{ factureitemform.order_item }}
+                <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            </div>
+            <div class="form-group  col-md-1">
+                <label for="unit">Quantity</label>
+                {{ factureitemform.quantity }}
+                <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            </div>
+            <div class="form-group  col-md-1">
+                <label for="unit">Unit</label>
+                {{ factureitemform.unit }}
+                <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            </div>
+            <div class="form-group  col-md-1">
+                <label for="price">Unit Price</label>
+                {{ factureitemform.price }}
+                <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            </div>
+            <div class="form-group  col-md-1">
+                <label for="currency">Currency</label>
+                {{ factureitemform.currency }}
+                <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            </div>
+            
+            <div class="form-group  col-md-1">
+                
+                <button type="submit"  id='ordersubmit' class="btn btn-primary" style="max-width: max-content;">{{ buttonname}}</button>
+            </div>
+            
+        </div>
+        </form>
+    {% endif %}
+</div>
+
+
+
+{% endblock %}

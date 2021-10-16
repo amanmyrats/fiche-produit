@@ -79,8 +79,10 @@
                 <p class="card-text" style="height: 60px;">You can see all factures and track them if necessary documents like specification, TDS and declaration.</p>
                 <div class="d-flex justify-content-around align-items-center">
                   <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See list of Factures</button>
-                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">Create New Facture</button>
+                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'logistics' %}"">See Logistics Dashboard</a>
+                    <a  class="btn btn-sm btn-primary m-1" style="height: 60px;" href="{% url 'facturelist' %}"">See List of All Factures</a>
+                    <!-- <button type="button" class="btn btn-sm btn-primary m-1 w-50" style="height: 60px;">See Logistics Dashboard</button>
+                    <button type="button" class="btn btn-sm btn-primary m-1" style="height: 60px;">See List of All Factures</button> -->
                   </div>
 
                 </div>

@@ -6,10 +6,10 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from fiche_produit.models import Employee, Product, ProductCard, Order, Facture, Specification, Declaration, Tds, Coo, Routage, \
-    OrderItem
+    OrderItem, FactureItem
 from .serializers import FPModelSerializer, ProductModelSerializer, OrderModelSerializer, FactureModelSerializer, \
     SpecificationModelSerializer, DeclarationModelSerializer, TdsModelSerializer, CooModelSerializer, RoutageModelSerializer, \
-        RoutageModelSerializer, OrderItemModelSerializer
+        RoutageModelSerializer, OrderItemModelSerializer, FactureItemModelSerializer
 
 
 class EnablePartialUpdateMixin:
@@ -61,6 +61,14 @@ class FactureViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
     filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
     search_fields = ['number', 'project']
     filter_fields = ['project']
+
+
+class FactureItemViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):
+    queryset = FactureItem.objects.all()
+    serializer_class = FactureItemModelSerializer
+    filter_backends =[filters.SearchFilter, django_filters.rest_framework.DjangoFilterBackend]
+    search_fields = ['facture__number']
+    filter_fields = ['facture__number']
 
 
 class SpecificationViewSet(EnablePartialUpdateMixin, viewsets.ModelViewSet):

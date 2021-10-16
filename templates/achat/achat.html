@@ -161,11 +161,87 @@ html {
       {% for order in orders %}
       <tr class="px-4 ">
         <td class="">{{ order.number }}</td>
-        <td class="">{{ order.facture_numbers }}</td>
-        <td class="">{{ order.specification_numbers }}</td>
-        <td class="">{{ order.tds_numbers }}</td>
-        <td class="">{{ order.declaration_numbers }}</td>
-        <td class="">{{ order.coo_numbers }}</td>
+        
+        <td class="" style="text-align: center;">
+          <table class="m-0" style="max-width: 100%;">
+            <tbody class="removeDuplicate" id='removeFactureDuplicate'>
+              {% for item in order.orderorderitems.all %}
+                {% for fitem in item.factureitem_set.all %}
+                <tr>
+                  <td>{{ fitem.facture.number }}</td>
+                </tr>
+                {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+          
+        <td class="" style="text-align: center;">
+          <table class="m-0" style="max-width: 100%;">
+            <tbody class="removeDuplicate" id='removeSpecificationDuplicate'>
+              {% for item in order.orderorderitems.all %}
+              {% for fitem in item.factureitem_set.all %}
+              {% for sitem in fitem.specificationfactures.all %}
+              <tr>
+                <td>{{ sitem.specification.number }}</td>
+              </tr>
+              {% endfor %}
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+
+        <!-- <td class="">{{ order.tds_numbers }} </td> -->
+        <td class="" style="text-align: center;">
+          <table class="m-0" style="max-width: 100%;">
+            <tbody class="removeDuplicate" id='removeTdsDuplicate'>
+              {% for item in order.orderorderitems.all %}
+              {% for fitem in item.factureitem_set.all %}
+              {% for tdsitem in fitem.tdsfactures.all %}
+              <tr>
+                <td>{{ tdsitem.tds.number }}</td>
+              </tr>
+              {% endfor %}
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+
+        <!-- <td class="">{{ order.declaration_numbers }}</td> -->
+        <td class="" style="text-align: center;">
+          <table class="m-0" style="max-width: 100%;">
+            <tbody class="removeDuplicate" id='removeDeclarationDuplicate'>
+              {% for item in order.orderorderitems.all %}
+              {% for fitem in item.factureitem_set.all %}
+              {% for declarationitem in fitem.declarationfactures.all %}
+              <tr>
+                <td>{{ declarationitem.declaration.number }}</td>
+              </tr>
+              {% endfor %}
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
+
+        <!-- <td class="">{{ order.coo_numbers }}</td> -->
+        <td class="" style="text-align: center;">
+          <table class="m-0" style="max-width: 100%;">
+            <tbody  class="removeDuplicate" id='removeDeclarationDuplicate'>
+              {% for item in order.orderorderitems.all %}
+              {% for fitem in item.factureitem_set.all %}
+              {% for cooitem in fitem.facturetocoo.all %}
+              <tr>
+                <td>{{ cooitem.coo.number }}</td>
+              </tr>
+              {% endfor %}
+              {% endfor %}
+              {% endfor %}
+            </tbody>
+          </table>
+        </td>
         <td class="row justify-content-center" style="max-width: 100px;">
           <a href="{% url 'export' %}?what=order&towhat=excel&pk={{order.id}}" class="btn btn-primary mb-1">To Excel</a>
           <a href="/orders/{{ order.id }}/edit/" class="btn btn-info mb-1">Edit</a>
@@ -187,6 +263,27 @@ html {
 {% endblock %}
 
 {% block js %}
+<script>
+
+  $(document).ready(function(){
+    var removeDuplicates = $('.removeDuplicate')
+    var uniqueArray = []
+    removeDuplicates.each( function(){
+
+        $(this).children('tr').each(function(){
+          value = $(this).children('td').html()
+          if (uniqueArray.indexOf(value)<0) {
+            uniqueArray.unshift(value)
+          } else{
+            $(this).hide()
+          }
+      });
+      uniqueArray=[]
+      }
+      );
+
+  });
+</script>
 <!-- JS for filter and search. -->
 <script src="{% static 'js/site/main.js' %}"></script>
 {% endblock %}

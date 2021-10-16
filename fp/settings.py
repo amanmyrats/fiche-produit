@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'fiche_produit',
     'corsheaders',
     'rest_framework',
+    'achat',
+    'logistics',
 ]
 
 MIDDLEWARE = [

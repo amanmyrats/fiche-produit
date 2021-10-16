@@ -1,4 +1,3 @@
-from fiche_produit.models import Product, ProductCard
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from django.views import generic
 import requests
@@ -13,6 +12,7 @@ from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 import shutil
 
+from fiche_produit.models import Product, ProductCard
 from .forms import ProductModelForm, FPModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
 
@@ -22,12 +22,13 @@ def home_view(request):
     return render(request, 'home.html', {'msg': 'Hello Home'})
 
 def site_view(request):
-    apidata = requests.get(url=mysitedomain + 'api/fps/')
-    context={'apidata': apidata.json()}
+    # apidata = requests.get(url=mysitedomain + 'api/fps/')
+    # context={'apidata': apidata.json()}
+    fps = ProductCard.objects.all()
+    context = {
+        'fps':fps
+    }
     return render(request, 'site/site.html', context)
-
-def logistics_view(request):
-    return render(request, 'logistics/logistics.html', {'msg': 'Hello Home'})
 
 def qs_view(request):
     return render(request, 'qs/qs.html', {'msg': 'Hello Home'})

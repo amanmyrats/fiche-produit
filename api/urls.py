@@ -16,7 +16,7 @@ from rest_framework.routers import DefaultRouter
 
 from .views import FPViewSet, ProductViewSet, ProductViewSet, OrderViewSet, FactureViewSet, \
     SpecificationViewSet, DeclarationViewSet, TdsViewSet, CooViewSet, RoutageViewSet, \
-        OrderItemViewSet
+        OrderItemViewSet, FactureItemViewSet
 
 
 
@@ -26,6 +26,7 @@ router.register(r'fps', FPViewSet)
 router.register(r'orders', OrderViewSet)
 router.register(r'orderitems', OrderItemViewSet)
 router.register(r'factures', FactureViewSet)
+router.register(r'factureitems', FactureItemViewSet)
 router.register(r'specifications', SpecificationViewSet)
 router.register(r'tds', TdsViewSet)
 router.register(r'declarations', DeclarationViewSet)

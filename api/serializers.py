@@ -74,7 +74,7 @@ class FactureModelSerializer(serializers.ModelSerializer):
     factureitems = FactureItemModelSerializer(many=True, read_only=True)
     class Meta:
         model = Facture
-        fields = ['number', 'factureitems']
+        fields = '__all__'
 
     
 class SpecificationItemModelSerializer(serializers.ModelSerializer):

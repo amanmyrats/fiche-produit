@@ -1,0 +1,32 @@
+from django import forms
+from django.forms import fields
+
+from fiche_produit.models import  Facture, FactureItem
+
+
+class FactureModelForm(forms.ModelForm):
+    class Meta:
+        model = Facture
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for fld in self.fields:
+            self.fields[fld].widget.attrs={
+                'class': 'form-control'
+            }
+        
+
+class FactureItemModelForm(forms.ModelForm):
+    class Meta:
+        model = FactureItem
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for fld in self.fields:
+            self.fields[fld].widget.attrs = {
+                'class' : 'form-control'
+            }

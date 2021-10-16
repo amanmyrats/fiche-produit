@@ -85,10 +85,9 @@ html {
 {% endblock %}
 
 {% block content %}
-{{ fps }}
 <!-- Search -->
 
-<a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
+<a href="{% url 'facturecreate' %}" class="btn btn-lg btn-warning">Create New Facture</a>
 <section style="padding-top: 10px;">
     <div class="container">
     <div class="row justify-content-center padding">
@@ -146,59 +145,58 @@ html {
 </section>
 <div class="fp-list" id="fp-list">
 
-
   <table class="table">
     <thead>
       <tr class="">
-        <th scope="col">Project</th>
-        <th scope="col">FP Number</th>
-        <th scope="col" style="min-width:200px">Name (FR)</th>
-        <th scope="col" style="min-width:200px">Name (RU)</th>
-        <!-- <th scope="col" style="min-width:300px">Description (FR)</th>
-        <th scope="col" style="min-width:300px">Description (RU)</th> -->
-        <th scope="col">LOT</th>
-        <th scope="col">Annexe-5</th>
-        <th scope="col">Provider</th>
-        <th scope="col" style="max-width:100px">Location</th>
-        <th scope="col">Image</th>
-        <th scope="col">Action</th>
+        <th scope="col">Facture Number</th>
+        <th scope="col">Details of Items</th>
       </tr>
     </thead>
     <tbody>
-      {% for fp in object_list %}
+      {% for facture in factures %}
       <tr class="px-4 ">
-
-        <!-- <th scope="col">Project</th>
-        <th scope="col">FP Number</th>
-        <th scope="col" style="min-width:200px">Name (FR)</th>
-        <th scope="col" style="min-width:200px">Name (RU)</th>
-        <th scope="col" style="min-width:300px">Description (FR)</th>
-        <th scope="col" style="min-width:300px">Description (RU)</th>
-        <th scope="col">LOT</th>
-        <th scope="col">Provider</th>
-        <th scope="col">Location</th>
-        <th scope="col">Image</th>
-        <th scope="col">Action</th> -->
-
-
-        <td scope="row" class="">{{ fp.project.code }}</td>
-        <td class="">{{ fp.number }}</td>
-        <td class="">{{ fp.product.name_fr }}</td>
-        <td class="">{{ fp.product.name_ru }}</td>
-        <!-- <td class="">{{ fp.product.desc_fr }}</td>
-        <td class="">{{ fp.product.desc_ru }}</td> -->
-        <td class="">{{ fp.lot.number }}</td>
-        <td class="">{{ fp.annexe5 }}</td>
-        <td class="">{{ fp.provider.name_fr }}</td>
-        <td class="">{{ fp.location }}</td>
-        <td class=""><img style="max-height: 130px;" src="{{ fp.product.image.url }}" alt="{{ fp.product.name_fr }}"></td>
-        <td  class="row justify-content-center" style="max-width: 110px;">
-          <a href="{{ fp.id }}/change/" class="btn btn-primary p-1">Edit</a>
-          <a href="{{ fp.id }}/" class="btn btn-primary my-1 p-1">Detail</a>
-          <a href="{{ fp.id }}/" class="btn btn-primary p-1">Print</a>
-        </td>
-       
-      </tr>
+          <td scope="row" class="">{{ facture.number }}</td>
+          <td>
+              
+                <table  class="table m-0">
+                    <thead>
+                        <tr class="">
+                            <th scope="col">No:</th>
+                            <th scope="col" style="min-width:300px">Product Card Reference</th>
+                            <th scope="col" style="min-width:300px">Description</th>
+                            <th scope="col">Annexe-5</th>
+                            <th scope="col" style="min-width:100px">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Total Price</th>
+                            <th scope="col" style="max-width:100px">Unit</th>
+                            <th scope="col">Currency</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    {% for factureitem in facture.factureitems.all %}
+                    <tbody>
+                        <td class="">{{ factureitem.no }}</td>
+                        <td class="">{{ factureitem.orderitem.product_card.product.name_fr }}</td>
+                        <td class="">{{ factureitem.orderitem.desc_fr }}</td>
+                        <td class="">{{ factureitem.orderitem.product_card.annexe5.code }}</td>
+                        <td class="">{{ factureitem.quantity }}</td>
+                        <td class="">{{ factureitem.price }}</td>
+                        <td class="">--</td>
+                        <td class="">{{ factureitem.unit }}</td>
+                        <td class="">{{ factureitem.currency }}</td>
+                        <td class=""><img src="{{ factureitem.orderitem.product_card.product.image.url }}" style="max-width: 100px;" alt=""></td>
+                        <td  class="d-flex">
+                            <a href="{{ facture.pk }}/edit/" class="btn btn-primary p-1" style="max-width: 80px;">Edit</a>
+                            <a href="{{ facture.pk }}/" class="btn btn-primary mx-1 p-1" style="max-width: 80px;">Detail</a>
+                            <a href="{{ facture.pk }}/" class="btn btn-primary p-1" style="max-width: 80px;">Print</a>
+                        </td>
+                      
+                    </tbody>
+                        {% endfor %}
+                </table>
+            </td>
+        </tr>
       {% endfor %}
     </tbody>
   </div>
