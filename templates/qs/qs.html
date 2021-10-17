@@ -1,7 +1,56 @@
 {% extends 'base.html' %}
 
+
+{% block head_extra %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+{% endblock %}
 {% block content %}
 QS
 <br>
+
+<div class="row justify-content-center">
+
+    <canvas id="myChart" width="200" height="200" style="max-width: 1000px; max-height: 600px;"></canvas>
+</div>
  {{ fp }}
+{% endblock %}
+
+{% block js %}
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Annexe', 'Order', 'Facture', 'TDS', 'Declaration', 'Paid'],
+            datasets: [{
+                label: 'USD',
+                data: [112, 98, 75, 65, 56, 53],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    </script>
 {% endblock %}
