@@ -1,7 +1,13 @@
+from django.db import models
+from django.db.models import fields
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from django.views import generic
 import requests
 import json
+
+import django_filters
+from django_filters.views import FilterView
+
 from django.template.response import TemplateResponse
 from rest_framework  import status
 from requests.api import get
@@ -21,17 +27,6 @@ mysitedomain = 'http://127.0.0.1:8000/'
 def home_view(request):
     return render(request, 'home.html', {'msg': 'Hello Home'})
 
-def site_view(request):
-    # apidata = requests.get(url=mysitedomain + 'api/fps/')
-    # context={'apidata': apidata.json()}
-    fps = ProductCard.objects.all()
-    context = {
-        'fps':fps
-    }
-    return render(request, 'site/site.html', context)
-
-def qs_view(request):
-    return render(request, 'qs/qs.html', {'msg': 'Hello Home'})
 
 def export_view(request):
     what = request.GET.get('what')
@@ -179,13 +174,49 @@ def product_create_view(request):
 
     return render(request, 'site/productform.html', context)
 
-def test_view(request):
+
+def test_view(request, **kwargs):
     pass
+
+
+def fpprint_view(request, **kwargs):
+    fp_id = kwargs.get('pk')
+    print('fp will print fiche produit with an id:', fp_id)
+    fp = get_object_or_404(ProductCard, pk = fp_id)
+    context = {'fp': fp}
+    return render(request, 'site/fpprint.html', context)
+
+
+class FPFilter(django_filters.FilterSet):
+    search = django_filters.CharFilter(field_name = 'product__name_fr', lookup_expr = 'icontains')
+    class Meta:
+        model = ProductCard
+        fields = ['project', 'trade', 'lot']
+
+class SiteFilterView(FilterView):
+    model = ProductCard
+    context_object_name  = 'fps'
+    template_name = 'site/site.html'
+    ordering = ['-created_at']
+    filterset_class = FPFilter
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     filter = FPFilter(self.request.GET, queryset)
+    #     return filter.qs
+
 
 class FPListView(generic.ListView):
     model = ProductCard
-    # context_object_name  = 'fps'
+    context_object_name  = 'fps'
     template_name = 'site/fplist.html'
+    ordering = ['-created_at']
+
+
+class SiteListView(generic.ListView):
+    model = ProductCard
+    context_object_name  = 'fps'
+    template_name = 'site/site.html'
     ordering = ['-created_at']
 
 

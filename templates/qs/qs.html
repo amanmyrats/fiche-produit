@@ -7,6 +7,9 @@
 {% block content %}
 QS
 <br>
+{{ project }}
+{{ data }}
+<br>
 
 <div class="row justify-content-center">
 
@@ -18,13 +21,14 @@ QS
 {% block js %}
 <script>
     var ctx = document.getElementById('myChart').getContext('2d');
+    var data = JSON.parse("{{data}}")
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Annexe', 'Order', 'Facture', 'TDS', 'Declaration', 'Paid'],
             datasets: [{
                 label: 'USD',
-                data: [112, 98, 75, 65, 56, 53],
+                data: data,
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

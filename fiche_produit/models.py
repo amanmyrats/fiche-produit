@@ -79,6 +79,16 @@ class Project(models.Model):
 
     def __str__(self):
         return self.code
+    
+    @property
+    def total_sum(self):
+        annexe_list = list(self.annexe5_set.all())
+        total_sum=0
+        for annexe in annexe_list:
+            total_sum += annexe.total_price
+            print(total_sum)
+        print(total_sum)
+        return total_sum
 
 class Provider(models.Model):
     code = models.CharField(max_length=20, blank=True, null=True)
@@ -174,6 +184,13 @@ class OrderItem(models.Model):
         except:
             return 'Empty item (should be deleted)'
 
+    def save(self, *args, **kwargs):
+        try:
+            self.total_price = self.quantity * self.price
+        except:
+            self.total_price = 0
+        super(OrderItem, self).save(*args, **kwargs)
+
     class Meta:
         constraints = [models.UniqueConstraint(fields=['order', 'no'], name='order-item-no')]
         ordering = ['no']
@@ -200,6 +217,13 @@ class FactureItem(models.Model):
             return str(self.facture.number) + ' - ' + str(self.no) + ' - ' + str(self.order_item.product_card.product.name_fr) + ' - ' + str(self.order_item.desc_fr)
         except:
             return str(self.no)
+    
+    def save(self, *args, **kwargs):
+        try:
+            self.total_price = self.quantity * self.price
+        except:
+            self.total_price = 0
+        super(FactureItem, self).save(*args, **kwargs)
 
 
 class SpecificationItem(models.Model):
@@ -380,25 +404,9 @@ class ProductCard(models.Model):
             coos.append(item.coo.number)
         return coos
     
-    # @property
-    # def annex5_code(self):
-    #     order_items = OrderItem.objects.filter(product_card = self.pk)
-    #     facture_items = FactureItem.objects.filter(order_item__in = order_items)
-    #     coo_factures = CooFacture.objects.filter(facture_item__in = facture_items)
-    #     coos = []
-    #     for item in coo_factures:
-    #         coos.append(item.coo.number)
-    #     return coos
-
-
-
-# specification_numbers = serializers.CharField()
-#     tds_numbers = serializers.CharField()
-#     declaration_numbers = serializers.CharField()
-#     coo_numbers = serializers.CharField()
-
     class Meta:
         constraints = [models.UniqueConstraint(fields=['project','number'], name = 'project-fp-number')]
+
 
 class Annexe5(models.Model):
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
@@ -438,6 +446,17 @@ class Order(models.Model):
             return str(self.number)
         except:
             return 'Without order number.'
+    @property
+    def total_sum(self):
+        orderitems = self.orderorderitems.all()
+        total_sum = 0
+        for item in orderitems:
+            try:
+                total_sum += item.total_price
+            except:
+                pass
+        
+        return total_sum
 
     @property
     def facture_numbers(self):
@@ -497,6 +516,7 @@ class Routage(models.Model):
         except:
             return 'Without Routage Number'
 
+
 class RoutageItem(models.Model):
     routage = models.ForeignKey(Routage, related_name='routagetoroutageitem', on_delete=models.SET_NULL, blank=True, null=True)
     facture = models.ForeignKey('Facture', related_name='facturetoroutageitem', on_delete=models.SET_NULL, blank=True, null=True)
@@ -518,14 +538,31 @@ class Facture(models.Model):
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, blank=True, null=True)
     date = models.DateTimeField( blank=True, null=True)
 
-    def get_total_price(self):
-        pass
+    @property
+    def total_sum(self):
+        factureitems = self.factureitems.all()
+        total = 0
+        for item in factureitems:
+            try:
+                total += item.total_price
+            except:
+                pass
+        return total
 
     def __str__(self):
         try:
             return str(self.number)
         except:
             return 'Without facture number.'
+
+    @property
+    def facture_numbers(self):
+        facture_items = FactureItem.objects.filter(order_item = self.pk)
+        factures = []
+        for item in facture_items:
+            factures.append(item.facture.number)
+        return factures
+
 
 class Specification(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)

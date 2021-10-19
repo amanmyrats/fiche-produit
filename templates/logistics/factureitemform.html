@@ -25,6 +25,7 @@
   <h4>{{ factureitemform.errors }}</h4>
 <h4>You are adding and editing items of Facture: {{ facture.number }}</h4>
 <a href="?additem=true" class="btn btn-primary">Add New Item</a>
+<a href="{% url 'facturelist' %}" class="btn btn-primary">See Full List of Factures</a>
 <a href="/factures/{{ facture.id }}/" class="btn btn-primary">Print</a>
 <h5>Existing items of this Facture:</h5>
 <table class="mt-5">
@@ -33,25 +34,41 @@
         <th>Order Reference</th>
         <th>HS Code</th>
         <th>Package Type</th>
-        <th>Quantity</th>
         <th>Unit</th>
+        <th>Quantity</th>
         <th>Unit Price</th>
+        <th>Total Price</th>
         <th>Currency</th>
         <th>Edit</th>
     </thead>
+    <tbody>
     {% for item in existing_items %}
-        <tbody>
-            <td style="max-width: 30px;">{{ item.no }}</td>
-            <td style="min-width: 300px;">{{item.order_item}}</td>
-            <td>{{item.hs_code}}</td>
-            <td>{{item.package_type }}</td>
-            <td>{{item.quantity }}</td>
-            <td>{{item.unit}}</td>
-            <td>{{item.price }}</td>
-            <td>{{item.currency }}</td>
-            <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+            <tr>
+                <td style="max-width: 30px;">{{ item.no }}</td>
+                <td style="min-width: 300px;">{{item.order_item}}</td>
+                <td>{{item.hs_code}}</td>
+                <td>{{item.package_type }}</td>
+                <td>{{item.unit}}</td>
+                <td>{{item.quantity }}</td>
+                <td>{{item.price }}</td>
+                <td>{{item.total_price }}</td>
+                <td>{{item.currency }}</td>
+                <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+            </tr>
+            {% endfor %}
+
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total Sum</td>
+                <td>{{ facture.total_sum }}</td>
+                <td></td>
+            </tr>
         </tbody>
-        {% endfor %}
     </table>    
     
     <br> <br>

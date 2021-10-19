@@ -8,6 +8,7 @@
   
 {% block content %}
 <a href="{% url 'fplist' %}" class="btn btn-lg btn-warning border border-dark">Back to Full List of Fiche Produits</a>
+<a href="{/fps/{{ fps.id }}/print/" class="btn btn-lg btn-warning border border-dark">Print</a>
 
 <br><br><br><br><br>
 {{ fps.product.name_fr }}

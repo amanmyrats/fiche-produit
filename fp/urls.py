@@ -21,19 +21,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from fiche_produit.views import home_view, site_view, qs_view, export_view, fpcreate_view, products_view, \
-                                product_create_view, fpchange_view, FPListView, FPDetailView
+from fiche_produit.views import home_view, SiteFilterView, export_view, fpcreate_view, products_view, \
+                                product_create_view, fpchange_view,fpprint_view, FPListView, FPDetailView, SiteListView
 from achat.views import achat_view, order_create_view, OrderListView, OrderDetailView, order_edit_view
 from logistics.views import logistics_view, facture_create_view, FactureListView, FactureDetailView, facture_edit_view
+from qs.views import qs_view
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
-    path('site/', site_view, name='site'),
+    
+    path('site/', SiteFilterView.as_view(), name='site'),
     path('fps/', FPListView.as_view(), name='fplist'),
     path('fps/<int:pk>/', FPDetailView.as_view(), name='fpdetail'),
     path('fps/create/', fpcreate_view, name='fpcreate'),
     path('fps/<int:pk>/change/', fpchange_view, name='fpchange'),
+    path('fps/<int:pk>/print/', fpprint_view, name='fpprint'),
 
     path('achat/', achat_view, name='achat'),
     path('orders/', OrderListView.as_view(), name = 'orderlist'),
@@ -51,6 +54,7 @@ urlpatterns = [
     path('export/', export_view, name='export'),
     path('products/', products_view, name='products'),
     path('products/create/', product_create_view, name='product-create'),
+
     path('', include('api.urls')),
 ] 
 

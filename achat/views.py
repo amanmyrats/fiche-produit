@@ -91,7 +91,6 @@ def order_edit_view(request, **kwargs):
         if status.is_success(order_add_item_request.status_code):
             return redirect('/orders/{}/edit/'.format(order_id))
 
-
     context = {
         'order':order,
         'existing_items':existing_items,

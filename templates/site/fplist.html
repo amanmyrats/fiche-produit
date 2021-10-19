@@ -85,7 +85,7 @@ html {
 {% endblock %}
 
 {% block content %}
-{{ fps }}
+
 <!-- Search -->
 
 <a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
@@ -165,7 +165,7 @@ html {
       </tr>
     </thead>
     <tbody>
-      {% for fp in object_list %}
+      {% for fp in fps %}
       <tr class="px-4 ">
 
         <!-- <th scope="col">Project</th>
@@ -195,7 +195,7 @@ html {
         <td  class="row justify-content-center" style="max-width: 110px;">
           <a href="{{ fp.id }}/change/" class="btn btn-primary p-1">Edit</a>
           <a href="{{ fp.id }}/" class="btn btn-primary my-1 p-1">Detail</a>
-          <a href="{{ fp.id }}/" class="btn btn-primary p-1">Print</a>
+          <a href="{{ fp.id }}/print/" class="btn btn-primary p-1">Print</a>
         </td>
        
       </tr>

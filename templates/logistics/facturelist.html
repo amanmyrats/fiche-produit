@@ -165,10 +165,10 @@ html {
                             <th scope="col" style="min-width:300px">Product Card Reference</th>
                             <th scope="col" style="min-width:300px">Description</th>
                             <th scope="col">Annexe-5</th>
+                            <th scope="col" style="max-width:100px">Unit</th>
                             <th scope="col" style="min-width:100px">Quantity</th>
                             <th scope="col">Price</th>
                             <th scope="col">Total Price</th>
-                            <th scope="col" style="max-width:100px">Unit</th>
                             <th scope="col">Currency</th>
                             <th scope="col">Image</th>
                             <th scope="col">Action</th>
@@ -180,10 +180,10 @@ html {
                         <td class="">{{ factureitem.orderitem.product_card.product.name_fr }}</td>
                         <td class="">{{ factureitem.orderitem.desc_fr }}</td>
                         <td class="">{{ factureitem.orderitem.product_card.annexe5.code }}</td>
+                        <td class="">{{ factureitem.unit }}</td>
                         <td class="">{{ factureitem.quantity }}</td>
                         <td class="">{{ factureitem.price }}</td>
-                        <td class="">--</td>
-                        <td class="">{{ factureitem.unit }}</td>
+                        <td class="">{{ factureitem.total_price }}</td>
                         <td class="">{{ factureitem.currency }}</td>
                         <td class=""><img src="{{ factureitem.orderitem.product_card.product.image.url }}" style="max-width: 100px;" alt=""></td>
                         <td  class="d-flex">

@@ -96,43 +96,40 @@ html {
         <form type="GET" action="" class="domain-form">
           <div class="form-group d-md-flex">
             <!-- Project Dropdowns -->
-            <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;">
+            <!-- <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;"> -->
 
-            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+            <select name="project"  class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
               <option selected>
                 All
               </option>
-              <option value="hemmesi">CRA</option>
-              <option value="saherici">CRI</option>
-              <option value="etrapobalary">CCI</option>
-              <option value="saherara">HTC</option>
+              {% for project in projects %}
+                <option value="{{project.id}}">{{project.code}}</option>
+              {% endfor %}
             </select>
             <!-- Trade Dropdowns -->
-            <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;">
+            <!-- <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;"> -->
 
-            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+            <select name = "trade" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
               <option selected>
                 All
               </option>
-              <option value="hemmesi">CEA</option>
-              <option value="saherici">CC</option>
-              <option value="etrapobalary">MEC</option>
-              <option value="saherara">ELE</option>
+              {% for trade in trades %}
+              <option value="{{trade.id}}">{{trade.name_fr}}</option>
+              {% endfor %}
             </select>
             <!-- Lot Dropdowns -->
-            <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;">
+            <!-- <input type="text" name="category" id="categoryinput" value="1"
+              style="visibility: hidden; width: 1px;"> -->
 
-            <select class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+            <select name="lot" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
               <option selected>
                 All
               </option>
-              <option value="hemmesi">02</option>
-              <option value="saherici">20</option>
-              <option value="etrapobalary">70C</option>
-              <option value="saherara">31</option>
+              {% for lot in lots %}
+              <option value="{{lot.id}}">{{lot}}</option>
+              {% endfor %}
             </select>
             <!-- Search box -->
             <input id="search" name='search' type="text" class="form-control px-4 my-1  mx-1"
@@ -150,6 +147,7 @@ html {
   <table class="table">
     <thead>
       <tr class="">
+        <th scope="col">Project</th>
         <th scope="col">FP Number</th>
         <th scope="col">Product Name</th>
         <th scope="col">Lot</th>
@@ -164,8 +162,9 @@ html {
       </tr>
     </thead>
     <tbody>
-      {% for fp in fps %}
+      {% for fp in filter.qs %}
       <tr class="px-4 ">
+        <td scope="row" class="">{{ fp.project.code }}</td>
         <td scope="row" class="">{{ fp.number }}</td>
         <td class="">{{ fp.product.name_fr }}</td>
         <td class="" >{{ fp.lot.number }}</td>
@@ -275,6 +274,7 @@ html {
         <td class="row justify-content-center" style="max-width: 120px; min-width: 100px;">
           <a href="{% url 'export' %}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary mb-1">To Excel</a>
           <a href="/fps/{{ fp.id }}/change/" class="btn btn-info mb-1">Edit</a>
+          <a href="/fps/{{ fp.id }}/print/" class="btn btn-info mb-1">Print</a>
           <!-- <a href="{% url 'export'%}?what=fp&towhat=pdf&pk={{fp.id}}" class="btn btn-info">To PDF</a> -->
         </td>
       </tr>

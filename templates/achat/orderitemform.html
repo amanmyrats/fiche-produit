@@ -25,6 +25,7 @@
   <h4>{{ orderitemform.errors }}</h4>
 <h4>You are adding and editing items of Order: {{ order.number }}</h4>
 <a href="?additem=true" class="btn btn-primary">Add New Item</a>
+<a href="{% url 'orderlist' %}" class="btn btn-primary">See Full List of Orders</a>
 <a href="/orders/{{ order.id }}/" class="btn btn-primary">Print</a>
 <h5>Existing items of this Order:</h5>
 <table class="mt-5">
@@ -32,22 +33,37 @@
         <th>NO</th>
         <th>Item Description</th>
         <th>Fiche Produit Reference</th>
-        <th>Quantity</th>
         <th>Unit</th>
+        <th>Quantity</th>
         <th>Price</th>
+        <th>Total Price</th>
         <th>Edit</th>
     </thead>
+    <tbody>
     {% for item in existing_items %}
-        <tbody>
-            <td style="max-width: 30px;">{{ item.no }}</td>
-            <td style="min-width: 300px;">{{item.desc_fr}}</td>
-            <td>{{item.product_card}}</td>
-            <td>{{item.quantity }}</td>
-            <td>{{item.unit}}</td>
-            <td>{{item.price }}</td>
-            <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+            <tr>    
+                <td style="max-width: 30px;">{{ item.no }}</td>
+                <td style="min-width: 300px;">{{item.desc_fr}}</td>
+                <td>{{item.product_card}}</td>
+                <td>{{item.unit}}</td>
+                <td>{{item.quantity }}</td>
+                <td>{{item.price }}</td>
+                <td>{{item.total_price }}</td>
+                <td><a href="?edititem={{item.id}}" class="btn btn-primary">Edit</a></td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total Sum</td>
+                <td>{{order.total_sum}}</td>
+                <td></td>
+            </tr>
         </tbody>
-        {% endfor %}
+        <tbody>
     </table>    
     
     <br> <br>
