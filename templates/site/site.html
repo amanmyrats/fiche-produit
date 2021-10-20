@@ -88,6 +88,7 @@ html {
 {% block content %}
 <a href="{% url 'fplist' %}" class="btn btn-lg btn-warning border border-dark">See All List Of Fiche Produit</a>
 <a href="{% url 'products' %}" class="btn btn-lg btn-warning border border-dark">Create New Fiche Produit</a>
+
 <!-- Search -->
 <section style="padding-top: 10px;">
   <div class="container">
@@ -95,49 +96,137 @@ html {
       <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
         <form type="GET" action="" class="domain-form">
           <div class="form-group d-md-flex">
-            <!-- Project Dropdowns -->
-            <!-- <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;"> -->
 
             <select name="project"  class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
-              <option selected>
-                All
-              </option>
+              <!-- <option selected>
+                {{ users_selections.project }}
+              </option> -->
+              
+              {% if request.GET.project is None %}
+                  <option value="" selected> All</option>
+              {% else %}
+                  <option  value="">All</option>
+              {% endif %}
+
               {% for project in projects %}
-                <option value="{{project.id}}">{{project.code}}</option>
+                {% if request.GET.project|floatformat:"0" == project.id|floatformat:"0" %}
+                  <option value="{{project.id}}" selected>{{project.code}}</option>
+                {% else %}
+                  <option value="{{project.id}}">{{project.code}}</option>
+                {% endif %}
               {% endfor %}
             </select>
-            <!-- Trade Dropdowns -->
-            <!-- <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;"> -->
 
             <select name = "trade" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
-              <option selected>
-                All
-              </option>
+              <!-- <option selected>
+                {{ users_selections.trade }}
+              </option> -->
+              {% if request.GET.trade is None %}
+                  <option value=""  selected> All</option>
+              {% else %}
+                  <option value="" >All</option>
+              {% endif %}
+
               {% for trade in trades %}
-              <option value="{{trade.id}}">{{trade.name_fr}}</option>
+                {% if request.GET.trade|floatformat:"0" == trade.id|floatformat:"0" %}
+                  <option value="{{trade.id}}" selected>{{trade.name_fr}}</option>
+                {% else %}
+                  <option value="{{trade.id}}">{{trade.name_fr}}</option>
+                {% endif %}
               {% endfor %}
             </select>
-            <!-- Lot Dropdowns -->
-            <!-- <input type="text" name="category" id="categoryinput" value="1"
-              style="visibility: hidden; width: 1px;"> -->
 
             <select name="lot" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
-              <option selected>
-                All
-              </option>
+              {% if request.GET.lot is None %}
+                  <option  value="" selected>All</option>
+              {% else %}
+                  <option value="" > All</option>
+              {% endif %}
+
               {% for lot in lots %}
-              <option value="{{lot.id}}">{{lot}}</option>
+              {% if request.GET.lot|floatformat:"0" == lot.id|floatformat:"0" %}
+                  <option value="{{lot.id}}" selected>{{lot}}</option>
+                {% else %}
+                <option value="{{lot.id}}">{{lot}}</option>
+                {% endif %}
               {% endfor %}
             </select>
+
             <!-- Search box -->
             <input id="search" name='search' type="text" class="form-control px-4 my-1  mx-1"
-              placeholder="What are you searching for...">
+              placeholder="Search product name...">
             <input type="submit" class="search-domain btn btn-primary px-5 my-1  mx-1" value="Search">
+
+            
           </div>
         </form>
       </div>
+      
+      <div class="row col-4 justify-content-end">
+        <a href="?" class="btn btn-info col-5 mx-1">Clear Filter</a>
+        <button type="button" id="advancedbutton" class="btn btn-info col-5 mx-1" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Advanced Search</button>
+      </div>
+      
+      <div class="modal fade bd-example-modal-lg" tabindex="-1" id="advanvedsearch" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content px-4 py-5">
+            <h1>Advanced Search</h1>
+            
+            <form type="GET" action="" class="domain-form mx-3">
+              <!-- Order -->
+              <div class="form-group row">
+                <label for="ordersearch" class="col-sm-2 col-form-label my-2">Order</label>
+                <div class="col-sm-10">
+                  <input type="text" name='order' class="form-control" id="ordersearch" placeholder="Order">
+                </div>
+              </div>
+              
+              <!-- Facture -->
+              <div class="form-group row">
+                <label for="facturesearch" class="col-sm-2 col-form-label my-2">Facture</label>
+                <div class="col-sm-10">
+                  <input type="text" name='facture'  class="form-control" id="facturesearch" placeholder="Facture">
+                </div>
+              </div>
+              
+              <!-- Specification -->
+              <div class="form-group row">
+                <label for="specificationsearch" class="col-sm-2 col-form-label my-2">Specification</label>
+                <div class="col-sm-10">
+                  <input type="text" name='specification'  class="form-control" id="specificationsearch" placeholder="Specification">
+                </div>
+              </div>
+              
+              <!-- TDS -->
+              <div class="form-group row">
+                <label for="tdssearch" class="col-sm-2 col-form-label my-2">TDS</label>
+                <div class="col-sm-10">
+                  <input type="text" name="tds" class="form-control" id="tdssearch" placeholder="TDS">
+                </div>
+              </div>
+
+              <!-- COO -->
+              <div class="form-group row">
+                <label for="coosearch" class="col-sm-2 col-form-label my-2">COO</label>
+                <div class="col-sm-10">
+                  <input type="text" name="coo" class="form-control" id="coosearch" placeholder="COO">
+                </div>
+              </div>
+              
+              <!-- Submit Button -->
+              <div class="form-group row py-2 mt-3">
+                <div class="col-sm-10">
+                  <button type="submit" class="btn btn-primary">Search very advanced</button>
+                </div>
+              </div>
+
+
+              </form>
+          </div>
+        </div>
+      </div>
+
+
     </div>
   </div>
 </section>
@@ -162,7 +251,7 @@ html {
       </tr>
     </thead>
     <tbody>
-      {% for fp in filter.qs %}
+      {% for fp in fps %}
       <tr class="px-4 ">
         <td scope="row" class="">{{ fp.project.code }}</td>
         <td scope="row" class="">{{ fp.number }}</td>
@@ -188,7 +277,7 @@ html {
           <table class="m-0" style="max-width: 100%;">
             <tbody class="removeDuplicate" id='removeFactureDuplicate'>
               {% for oitem in fp.productcardorderitems.all %}
-                {% for fitem in oitem.factureitem_set.all %}
+                {% for fitem in oitem.orderitemsinfactureitems.all %}
                   <tr>
                     <td style="min-width: 120px;">{{ fitem.facture.number }}</td>
                   </tr>
@@ -203,7 +292,7 @@ html {
           <table class="m-0" style="max-width: 100%;">
             <tbody class="removeDuplicate" id='removeFactureDuplicate'>
               {% for oitem in fp.productcardorderitems.all %}
-                {% for fitem in oitem.factureitem_set.all %}
+                {% for fitem in oitem.orderitemsinfactureitems.all %}
                 {% for sitem in fitem.specificationfactures.all %}
                   <tr>
                     <td>{{ sitem.specification.number }}</td>
@@ -220,7 +309,7 @@ html {
           <table class="m-0" style="max-width: 100%;">
             <tbody class="removeDuplicate" id='removeFactureDuplicate'>
               {% for oitem in fp.productcardorderitems.all %}
-                {% for fitem in oitem.factureitem_set.all %}
+                {% for fitem in oitem.orderitemsinfactureitems.all %}
                 {% for titem in fitem.tdsfactures.all %}
                   <tr>
                     <td>{{ titem.tds.number }}</td>
@@ -237,7 +326,7 @@ html {
           <table class="m-0" style="max-width: 100%;">
             <tbody class="removeDuplicate" id='removeFactureDuplicate'>
               {% for oitem in fp.productcardorderitems.all %}
-                {% for fitem in oitem.factureitem_set.all %}
+                {% for fitem in oitem.orderitemsinfactureitems.all %}
                 {% for ditem in fitem.declarationfactures.all %}
                   <tr>
                     <td>{{ ditem.declaration.number }}</td>
@@ -254,7 +343,7 @@ html {
           <table class="m-0" style="max-width: 100%;">
             <tbody class="removeDuplicate" id='removeFactureDuplicate'>
               {% for oitem in fp.productcardorderitems.all %}
-                {% for fitem in oitem.factureitem_set.all %}
+                {% for fitem in oitem.orderitemsinfactureitems.all %}
                 {% for cooitem in fitem.facturetocoo.all %}
                   <tr>
                     <td>{{ cooitem.coo.number }}</td>

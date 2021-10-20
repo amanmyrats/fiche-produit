@@ -18,7 +18,7 @@ from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 import shutil
 
-from fiche_produit.models import Product, ProductCard
+from fiche_produit.models import Product, ProductCard, Specification
 from .forms import ProductModelForm, FPModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
 
@@ -189,9 +189,18 @@ def fpprint_view(request, **kwargs):
 
 class FPFilter(django_filters.FilterSet):
     search = django_filters.CharFilter(field_name = 'product__name_fr', lookup_expr = 'icontains')
+    fpnumber = django_filters.CharFilter(field_name = 'number', lookup_expr = 'icontains')
+    order = django_filters.CharFilter(field_name = 'productcardorderitems__order__number', lookup_expr = 'icontains')
+    facture = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__facture__number', lookup_expr = 'icontains')
+    specification = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__specificationfactures__specification__number', lookup_expr = 'icontains')
+    tds  = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__tdsfactures__tds__number', lookup_expr = 'icontains')
+    declaration  = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__declarationfactures__declaration_number', lookup_expr = 'icontains')
+    coo  = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__facturetocoo__coo__number', lookup_expr = 'icontains')
+
     class Meta:
         model = ProductCard
-        fields = ['project', 'trade', 'lot']
+        fields = ['project', 'trade', 'lot', 'annexe5']
+
 
 class SiteFilterView(FilterView):
     model = ProductCard
@@ -200,10 +209,21 @@ class SiteFilterView(FilterView):
     ordering = ['-created_at']
     filterset_class = FPFilter
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     filter = FPFilter(self.request.GET, queryset)
-    #     return filter.qs
+
+class SiteListView(generic.ListView):
+    model = ProductCard
+    context_object_name = 'fps'
+    template_name = 'site/site.html'
+    ordering = ['-created_at']
+
+    def get_context_data(self, **kwargs):
+        context = super(SiteListView, self).get_context_data(**kwargs)
+        # context['filter'] = FPFilter(self.request.GET, queryset = self.get_queryset())
+        return context
+    
+    def get_queryset(self):
+        queryset = super(SiteListView, self).get_queryset()
+        return set(FPFilter(self.request.GET, queryset = queryset).qs)
 
 
 class FPListView(generic.ListView):
@@ -213,11 +233,11 @@ class FPListView(generic.ListView):
     ordering = ['-created_at']
 
 
-class SiteListView(generic.ListView):
-    model = ProductCard
-    context_object_name  = 'fps'
-    template_name = 'site/site.html'
-    ordering = ['-created_at']
+# class SiteListView(generic.ListView):
+#     model = ProductCard
+#     context_object_name  = 'fps'
+#     template_name = 'site/site.html'
+#     ordering = ['-created_at']
 
 
 class FPDetailView(generic.DetailView):

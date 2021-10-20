@@ -201,7 +201,7 @@ class FactureItem(models.Model):
     no = models.CharField(max_length=20, blank=True, null=True)
     package_type = models.ForeignKey(PackageType,on_delete=models.SET_NULL, blank=True, null=True)
     hs_code  = models.CharField(max_length = 10, blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem, on_delete=models.SET_NULL, blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem,related_name='orderitemsinfactureitems', on_delete=models.SET_NULL, blank=True, null=True)
     currency = models.ForeignKey(Currency,on_delete=models.SET_NULL, blank=True, null=True)
     provider = models.ForeignKey(Provider, on_delete=models.SET_NULL, blank=True, null=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)

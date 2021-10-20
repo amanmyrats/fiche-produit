@@ -21,7 +21,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-from fiche_produit.views import home_view, SiteFilterView, export_view, fpcreate_view, products_view, \
+from fiche_produit.views import home_view, SiteListView, SiteFilterView, export_view, fpcreate_view, products_view, \
                                 product_create_view, fpchange_view,fpprint_view, FPListView, FPDetailView, SiteListView
 from achat.views import achat_view, order_create_view, OrderListView, OrderDetailView, order_edit_view
 from logistics.views import logistics_view, facture_create_view, FactureListView, FactureDetailView, facture_edit_view
@@ -31,7 +31,7 @@ urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     
-    path('site/', SiteFilterView.as_view(), name='site'),
+    path('site/', SiteListView.as_view(), name='site'),
     path('fps/', FPListView.as_view(), name='fplist'),
     path('fps/<int:pk>/', FPDetailView.as_view(), name='fpdetail'),
     path('fps/create/', fpcreate_view, name='fpcreate'),
