@@ -93,38 +93,31 @@ html {
 <section style="padding-top: 10px;">
   <div class="container">
     <div class="row justify-content-center padding">
-      <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
+      <div class="col-md-10 ftco-animate fadeInUp ftco-animated">
         <form type="GET" action="" class="domain-form">
           <div class="form-group d-md-flex">
-
-            <select name="project"  class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
-              <!-- <option selected>
-                {{ users_selections.project }}
-              </option> -->
               
-              {% if request.GET.project is None %}
-                  <option value="" selected> All</option>
-              {% else %}
-                  <option  value="">All</option>
-              {% endif %}
-
-              {% for project in projects %}
-                {% if request.GET.project|floatformat:"0" == project.id|floatformat:"0" %}
-                  <option value="{{project.id}}" selected>{{project.code}}</option>
+              <select name="project"  class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2 "  id="projectSelect" style="min-width: 110px; ">
+                {% if request.GET.project is None %}
+                  <option value="" selected> All Projects</option>
                 {% else %}
-                  <option value="{{project.id}}">{{project.code}}</option>
+                  <option  value=""> All Projects</option>
                 {% endif %}
-              {% endfor %}
+                
+                {% for project in projects %}
+                  {% if request.GET.project|floatformat:"0" == project.id|floatformat:"0" %}
+                    <option value="{{project.id}}" selected>{{project.code}}</option>
+                  {% else %}
+                    <option value="{{project.id}}">{{project.code}}</option>
+                  {% endif %}
+                {% endfor %}
             </select>
 
-            <select name = "trade" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
-              <!-- <option selected>
-                {{ users_selections.trade }}
-              </option> -->
+            <select name = "trade" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="tradeSelect" style="min-width: 150px;">
               {% if request.GET.trade is None %}
-                  <option value=""  selected> All</option>
+                  <option value=""  selected> All Trades</option>
               {% else %}
-                  <option value="" >All</option>
+                  <option value="" >All Trades</option>
               {% endif %}
 
               {% for trade in trades %}
@@ -136,18 +129,34 @@ html {
               {% endfor %}
             </select>
 
-            <select name="lot" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="inlineFormCustomSelectPref" style="min-width: 100px;">
+            <select name="lot" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="lotSelect" style="min-width: 140px;">
               {% if request.GET.lot is None %}
-                  <option  value="" selected>All</option>
+                  <option  value="" selected>All Lots</option>
               {% else %}
-                  <option value="" > All</option>
+                  <option value="" > All Lots</option>
               {% endif %}
 
               {% for lot in lots %}
-              {% if request.GET.lot|floatformat:"0" == lot.id|floatformat:"0" %}
+                {% if request.GET.lot|floatformat:"0" == lot.id|floatformat:"0" %}
                   <option value="{{lot.id}}" selected>{{lot}}</option>
                 {% else %}
                 <option value="{{lot.id}}">{{lot}}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+
+            <select name="annexe5" class="custom-select my-1 mx-1 mr-sm-2 border rounded px-1 py-2" id="annexe5Select" style="min-width: 150px;">
+              {% if request.GET.annexe5 is None %}
+                  <option  value="" selected>All Annexe-5</option>
+              {% else %}
+                  <option value="" > All Annexe-5</option>
+              {% endif %}
+
+              {% for annexe5 in annexe5s %}
+                {% if request.GET.annexe5|floatformat:"0" == annexe5.id|floatformat:"0" %}
+                  <option value="{{annexe5.id}}" selected>{{ annexe5 }}</option>
+                {% else %}
+                <option value="{{annexe5.id}}">{{ annexe5 }}</option>
                 {% endif %}
               {% endfor %}
             </select>
@@ -162,71 +171,80 @@ html {
         </form>
       </div>
       
-      <div class="row col-4 justify-content-end">
-        <a href="?" class="btn btn-info col-5 mx-1">Clear Filter</a>
-        <button type="button" id="advancedbutton" class="btn btn-info col-5 mx-1" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Advanced Search</button>
-      </div>
-      
-      <div class="modal fade bd-example-modal-lg" tabindex="-1" id="advanvedsearch" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content px-4 py-5">
-            <h1>Advanced Search</h1>
-            
-            <form type="GET" action="" class="domain-form mx-3">
-              <!-- Order -->
-              <div class="form-group row">
-                <label for="ordersearch" class="col-sm-2 col-form-label my-2">Order</label>
-                <div class="col-sm-10">
-                  <input type="text" name='order' class="form-control" id="ordersearch" placeholder="Order">
-                </div>
-              </div>
+      <!-- Clear Filter and Advanced Search -->
+      <div class="row col-2 justify-content-end">
+        <a href="?" class="btn btn-info col-5 m-1">Clear Filter</a>
+        <button type="button" id="advancedbutton" class="btn btn-info col-6 m-1" data-bs-toggle="modal" data-bs-target=".bd-example-modal-lg">Advanced Search</button>
+        
+        <div class="modal fade bd-example-modal-lg" tabindex="-1" id="advanvedsearch" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content px-4 py-5">
+              <h1>Advanced Search</h1>
               
-              <!-- Facture -->
-              <div class="form-group row">
-                <label for="facturesearch" class="col-sm-2 col-form-label my-2">Facture</label>
-                <div class="col-sm-10">
-                  <input type="text" name='facture'  class="form-control" id="facturesearch" placeholder="Facture">
+              <form type="GET" action="" class="domain-form mx-3">
+                
+                <!-- Number -->
+                <div class="form-group row">
+                  <label for="ordersearch" class="col-sm-2 col-form-label my-2">FP Number</label>
+                  <div class="col-sm-10">
+                    <input type="text" name='number' class="form-control" id="numbersearch" placeholder="FP Number">
+                  </div>
                 </div>
-              </div>
-              
-              <!-- Specification -->
-              <div class="form-group row">
-                <label for="specificationsearch" class="col-sm-2 col-form-label my-2">Specification</label>
-                <div class="col-sm-10">
-                  <input type="text" name='specification'  class="form-control" id="specificationsearch" placeholder="Specification">
+                
+                <!-- Order -->
+                <div class="form-group row">
+                  <label for="ordersearch" class="col-sm-2 col-form-label my-2">Order</label>
+                  <div class="col-sm-10">
+                    <input type="text" name='order' class="form-control" id="ordersearch" placeholder="Order">
+                  </div>
                 </div>
-              </div>
-              
-              <!-- TDS -->
-              <div class="form-group row">
-                <label for="tdssearch" class="col-sm-2 col-form-label my-2">TDS</label>
-                <div class="col-sm-10">
-                  <input type="text" name="tds" class="form-control" id="tdssearch" placeholder="TDS">
+                
+                <!-- Facture -->
+                <div class="form-group row">
+                  <label for="facturesearch" class="col-sm-2 col-form-label my-2">Facture</label>
+                  <div class="col-sm-10">
+                    <input type="text" name='facture'  class="form-control" id="facturesearch" placeholder="Facture">
+                  </div>
                 </div>
-              </div>
-
-              <!-- COO -->
-              <div class="form-group row">
-                <label for="coosearch" class="col-sm-2 col-form-label my-2">COO</label>
-                <div class="col-sm-10">
-                  <input type="text" name="coo" class="form-control" id="coosearch" placeholder="COO">
+                
+                <!-- Specification -->
+                <div class="form-group row">
+                  <label for="specificationsearch" class="col-sm-2 col-form-label my-2">Specification</label>
+                  <div class="col-sm-10">
+                    <input type="text" name='specification'  class="form-control" id="specificationsearch" placeholder="Specification">
+                  </div>
                 </div>
-              </div>
-              
-              <!-- Submit Button -->
-              <div class="form-group row py-2 mt-3">
-                <div class="col-sm-10">
-                  <button type="submit" class="btn btn-primary">Search very advanced</button>
+                
+                <!-- TDS -->
+                <div class="form-group row">
+                  <label for="tdssearch" class="col-sm-2 col-form-label my-2">TDS</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="tds" class="form-control" id="tdssearch" placeholder="TDS">
+                  </div>
                 </div>
-              </div>
-
-
+                
+                <!-- COO -->
+                <div class="form-group row">
+                  <label for="coosearch" class="col-sm-2 col-form-label my-2">COO</label>
+                  <div class="col-sm-10">
+                    <input type="text" name="coo" class="form-control" id="coosearch" placeholder="COO">
+                  </div>
+                </div>
+                
+                <!-- Submit Button -->
+                <div class="form-group row py-2 mt-3">
+                  <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Search very advanced</button>
+                  </div>
+                </div>
+                
+                
               </form>
+            </div>
           </div>
-        </div>
-      </div>
-
-
+        </div> <!-- modal ending -->
+      </div> <!-- Advanced Search is ending ending -->
+        
     </div>
   </div>
 </section>
@@ -251,7 +269,7 @@ html {
       </tr>
     </thead>
     <tbody>
-      {% for fp in fps %}
+      {% for fp in page_obj %}
       <tr class="px-4 ">
         <td scope="row" class="">{{ fp.project.code }}</td>
         <td scope="row" class="">{{ fp.number }}</td>
@@ -372,11 +390,29 @@ html {
     </tbody>
   </div>
 </table>
+
+?{% for key, value in request.GET.items %}
+  &{{ key }}={{ value }}
+{% endfor %}
 <nav class="pgntn" aria-label="Pagination">
   <ul class="pagination">
-    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    {% if page_obj.has_previous %}
+
+    <!-- <li class="page-item"><a class="page-link" 
+      href="?page=1{% for key, value in request.GET.items %}{% if key==key %}&{{key}}={{value}}{% endif %}{% endfor %}">&laquo; First</a>
+    </li> -->
+    {% endif %}
+    <li class="page-item">
+      <span class="current page-item">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+    </span>
+      </li>
+  {% if page_obj.has_next %}
+
+  <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% for key, value in request.GET.items %}&{{key}}={{value}}{% endfor %}">
+    Last &raquo;</a>
+  </li>
+  {% endif %}
   </ul>
 </nav>
 

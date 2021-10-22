@@ -86,6 +86,7 @@ TEMPLATES = [
                 'fiche_produit.context_processors.project_renderer',
                 'fiche_produit.context_processors.trade_renderer',
                 'fiche_produit.context_processors.lot_renderer',
+                'fiche_produit.context_processors.annexe5_renderer',
             ],
         },
     },

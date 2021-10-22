@@ -1,4 +1,4 @@
-from .models import Project, Lot, Trade
+from .models import Annexe5, Project, Lot, Trade
 
 def project_renderer(request):
     return {
@@ -13,4 +13,9 @@ def lot_renderer(request):
 def trade_renderer(request):
     return {
         'trades': Trade.objects.all()
+    }
+
+def annexe5_renderer(request):
+    return {
+        'annexe5s': Annexe5.objects.all()
     }

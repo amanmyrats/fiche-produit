@@ -188,8 +188,9 @@ def fpprint_view(request, **kwargs):
 
 
 class FPFilter(django_filters.FilterSet):
+    search = django_filters.CharFilter(field_name = 'product__name_ru', lookup_expr = 'icontains')
     search = django_filters.CharFilter(field_name = 'product__name_fr', lookup_expr = 'icontains')
-    fpnumber = django_filters.CharFilter(field_name = 'number', lookup_expr = 'icontains')
+    number = django_filters.CharFilter(field_name = 'number', lookup_expr = 'icontains')
     order = django_filters.CharFilter(field_name = 'productcardorderitems__order__number', lookup_expr = 'icontains')
     facture = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__facture__number', lookup_expr = 'icontains')
     specification = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__specificationfactures__specification__number', lookup_expr = 'icontains')
@@ -215,6 +216,7 @@ class SiteListView(generic.ListView):
     context_object_name = 'fps'
     template_name = 'site/site.html'
     ordering = ['-created_at']
+    paginate_by  = 3
 
     def get_context_data(self, **kwargs):
         context = super(SiteListView, self).get_context_data(**kwargs)
@@ -223,7 +225,7 @@ class SiteListView(generic.ListView):
     
     def get_queryset(self):
         queryset = super(SiteListView, self).get_queryset()
-        return set(FPFilter(self.request.GET, queryset = queryset).qs)
+        return list(set(FPFilter(self.request.GET, queryset = queryset).qs))
 
 
 class FPListView(generic.ListView):
