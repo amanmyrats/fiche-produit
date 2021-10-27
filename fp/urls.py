@@ -15,7 +15,8 @@ Including another URLconf
 """
 from os import name
 from django.contrib import admin
-from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from django.urls import path, include, reverse
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -23,13 +24,18 @@ from django.conf.urls.static import static
 
 from fiche_produit.views import home_view, SiteListView, SiteFilterView, export_view, fpcreate_view, products_view, \
                                 product_create_view, fpchange_view,fpprint_view, FPListView, FPDetailView, SiteListView
-from achat.views import achat_view, order_create_view, OrderListView, OrderDetailView, order_edit_view
-from logistics.views import logistics_view, facture_create_view, FactureListView, FactureDetailView, facture_edit_view
+from achat.views import achat_view, order_create_view, AchatListView, OrderListView, OrderDetailView, order_edit_view
+from logistics.views import logistics_view, LogisticsListView, facture_create_view, FactureListView, FactureDetailView, facture_edit_view
 from qs.views import qs_view
 
 urlpatterns = [
     path('', home_view, name='home'),
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    # path('accounts/login/', auth_views.LoginView.as_view(template_name = 'registration/login.html', success_url='home'), name='login'),
+    # path('accounts/logout/', auth_views.LogoutView.as_view(template_name='home.html', next_page='home'), name='logout'),
+    # path('accounts/password_change/', auth_views.PasswordChangeView.as_view(template_name='registration/password_change.html',success_url='/?passwordchanged=1'), name='password_change'),
     
     path('site/', SiteListView.as_view(), name='site'),
     path('fps/', FPListView.as_view(), name='fplist'),
@@ -38,13 +44,13 @@ urlpatterns = [
     path('fps/<int:pk>/change/', fpchange_view, name='fpchange'),
     path('fps/<int:pk>/print/', fpprint_view, name='fpprint'),
 
-    path('achat/', achat_view, name='achat'),
+    path('achat/', AchatListView.as_view(), name='achat'),
     path('orders/', OrderListView.as_view(), name = 'orderlist'),
     path('orders/<int:pk>/', OrderDetailView.as_view(), name = 'orderdetail'),
     path('orders/create/', order_create_view, name = 'ordercreate'),
     path('orders/<int:pk>/edit/', order_edit_view, name = 'orderedit'),
 
-    path('logistics/', logistics_view, name='logistics'),
+    path('logistics/', LogisticsListView.as_view(), name='logistics'),
     path('factures/', FactureListView.as_view(), name = 'facturelist'),
     path('factures/<int:pk>/', FactureDetailView.as_view(), name = 'facturedetail'),
     path('factures/create/', facture_create_view, name = 'facturecreate'),

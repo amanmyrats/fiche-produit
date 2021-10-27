@@ -8,6 +8,7 @@ import json
 import django_filters
 from django_filters.views import FilterView
 
+from django.db.models import Q
 from django.template.response import TemplateResponse
 from rest_framework  import status
 from requests.api import get
@@ -18,7 +19,7 @@ from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 import shutil
 
-from fiche_produit.models import Product, ProductCard, Specification
+from fiche_produit.models import Order, Product, ProductCard, Specification
 from .forms import ProductModelForm, FPModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
 
@@ -188,9 +189,6 @@ def fpprint_view(request, **kwargs):
 
 
 class FPFilter(django_filters.FilterSet):
-    search = django_filters.CharFilter(field_name = 'product__name_ru', lookup_expr = 'icontains')
-    search = django_filters.CharFilter(field_name = 'product__name_fr', lookup_expr = 'icontains')
-    number = django_filters.CharFilter(field_name = 'number', lookup_expr = 'icontains')
     order = django_filters.CharFilter(field_name = 'productcardorderitems__order__number', lookup_expr = 'icontains')
     facture = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__facture__number', lookup_expr = 'icontains')
     specification = django_filters.CharFilter(field_name = 'productcardorderitems__orderitemsinfactureitems__specificationfactures__specification__number', lookup_expr = 'icontains')
@@ -200,7 +198,43 @@ class FPFilter(django_filters.FilterSet):
 
     class Meta:
         model = ProductCard
-        fields = ['project', 'trade', 'lot', 'annexe5']
+        fields = ['project', 'trade', 'lot', 'annexe5', 'provider']
+
+
+class FPCustomAdvancedSearch(django_filters.FilterSet):
+    search = django_filters.CharFilter(method = 'search_everywhere', label='Search')
+
+    class Meta:
+        model = ProductCard
+        fields = ['search']
+    
+    def search_everywhere(self, queryset, name, value):
+        return ProductCard.objects.filter(
+            Q(project__code__icontains=value) | Q(number__icontains=value) | Q(product__name_fr__icontains=value) | Q(product__name_ru__icontains=value) \
+                 | Q(product__name_tm__icontains=value) | Q(product__name_en__icontains=value) | Q(lot__number__icontains=value) \
+                      | Q(annexe5__code__icontains=value) | Q(annexe5__name_fr__icontains=value) | Q(productcardorderitems__order__number__icontains=value) \
+                          | Q(productcardorderitems__orderitemsinfactureitems__facture__number__icontains=value) \
+                              | Q(productcardorderitems__orderitemsinfactureitems__specificationfactures__specification__number__icontains=value) \
+                                  | Q(productcardorderitems__orderitemsinfactureitems__declarationfactures__declaration__number__icontains=value) \
+                                      | Q(productcardorderitems__orderitemsinfactureitems__facturetocoo__coo__number__icontains=value)
+        )
+
+
+class FPCustomSearch(django_filters.FilterSet):
+    search = django_filters.CharFilter(method = 'search_everywhere', label='Search')
+
+    class Meta:
+        model = ProductCard
+        fields = ['search']
+    
+    def search_everywhere(self, queryset, name, value):
+        return ProductCard.objects.filter(
+            Q(project__code__icontains=value) | Q(number__icontains=value) | Q(product__name_fr__icontains=value) | Q(product__name_ru__icontains=value) \
+                 | Q(product__name_tm__icontains=value) | Q(product__name_en__icontains=value) | Q(lot__number__icontains=value) \
+                      | Q(annexe5__code__icontains=value) | Q(annexe5__name_fr__icontains=value) | Q(provider__code__icontains=value) \
+                           | Q(provider__name_fr__icontains=value) | Q(location__no__icontains=value) | Q(location__name_fr__icontains=value) \
+                                | Q(location__name_ru__icontains=value) | Q(location__name_tm__icontains=value)
+        )
 
 
 class SiteFilterView(FilterView):
@@ -218,13 +252,14 @@ class SiteListView(generic.ListView):
     ordering = ['-created_at']
     paginate_by  = 3
 
-    def get_context_data(self, **kwargs):
-        context = super(SiteListView, self).get_context_data(**kwargs)
-        # context['filter'] = FPFilter(self.request.GET, queryset = self.get_queryset())
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(SiteListView, self).get_context_data(**kwargs)
+    #     # context['filter'] = FPFilter(self.request.GET, queryset = self.get_queryset())
+    #     return context
     
     def get_queryset(self):
         queryset = super(SiteListView, self).get_queryset()
+        queryset = FPCustomAdvancedSearch(self.request.GET, queryset = queryset).qs
         return list(set(FPFilter(self.request.GET, queryset = queryset).qs))
 
 
@@ -233,13 +268,12 @@ class FPListView(generic.ListView):
     context_object_name  = 'fps'
     template_name = 'site/fplist.html'
     ordering = ['-created_at']
+    paginate_by  = 3
 
-
-# class SiteListView(generic.ListView):
-#     model = ProductCard
-#     context_object_name  = 'fps'
-#     template_name = 'site/site.html'
-#     ordering = ['-created_at']
+    def get_queryset(self):
+        queryset = super(FPListView, self).get_queryset()
+        queryset = FPCustomSearch(self.request.GET, queryset = queryset).qs
+        return list(set(FPFilter(self.request.GET, queryset = queryset).qs))
 
 
 class FPDetailView(generic.DetailView):

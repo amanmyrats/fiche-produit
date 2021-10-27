@@ -24,7 +24,9 @@
   </style>
   {% endblock %}
   {% block content %}
-
+  {% if "passwordchanged" in request.GET %}
+    <h3>Password was changed successfully</h3>
+  {% endif %}
   <main>
   
     <div class="album py-3 bg-light">

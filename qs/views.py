@@ -11,13 +11,13 @@ def qs_view(request):
     annexe_items = cra.annexe5_set.all()
     orders = cra.order_set.all()
     factures = cra.facture_set.all()
-    print('factures:', factures)
+    # print('factures:', factures)
     facture_items_for_tds_and_declaration = FactureItem.objects.filter(facture__in = factures)
-    print('facture items:', facture_items_for_tds_and_declaration)
+    # print('facture items:', facture_items_for_tds_and_declaration)
     tdss = TdsItem.objects.filter(facture_item__in = facture_items_for_tds_and_declaration)
-    print('tdss:',tdss )
+    # print('tdss:',tdss )
     declarations = DeclarationItem.objects.filter(facture_item__in = facture_items_for_tds_and_declaration)
-    print('declarations:', declarations)
+    # print('declarations:', declarations)
     annexe_total = 0
     order_total = 0
     facture_total = 0

@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.views import generic
 
 from rest_framework  import status
+import django_filters
+from django.db.models import Q
 
 from .forms import   OrderItemModelForm, OrderModelForm
 from fiche_produit.models import Order
@@ -22,17 +24,6 @@ def achat_view(request):
         'orders':orders
     }
     return render(request, 'achat/achat.html', context)
-
-
-class OrderListView(generic.ListView):
-    model = Order
-    context_object_name = 'orders' 
-    template_name = 'achat/orderlist.html'
-
-class OrderDetailView(generic.DeleteView):
-    queryset = Order.objects.all()
-    context_object_name = 'order' 
-    template_name = 'achat/orderdetail.html'
 
 def order_create_view(request):
     orderform = OrderModelForm
@@ -100,16 +91,70 @@ def order_edit_view(request, **kwargs):
     }
     return render(request, 'achat/orderitemform.html', context)
 
-# def order_edit_view(request, **kwargs):
-#     order_id = kwargs.get('pk')
-#     order = get_object_or_404(Order, pk=order_id)
-#     existing_items = order.orderorderitems.all()
-#     orderitemform = OrderItemModelForm
-#     if request.method == 'POST':
-#         pass
-#     context = {
-#         'order':order,
-#         'existing_items':existing_items,
-#         'orderitemform':orderitemform
-#     }
-#     return render(request, 'achat/orderitemform.html', context)
+class OrderFilter(django_filters.FilterSet):
+    trade = django_filters.CharFilter(field_name = 'orderorderitems__product_card__trade')
+    lot = django_filters.CharFilter(field_name = 'orderorderitems__product_card__lot')
+    annexe5 = django_filters.CharFilter(field_name = 'orderorderitems__product_card__annexe5')
+    provider  = django_filters.CharFilter(field_name = 'orderorderitems__product_card__provider')
+    
+    class Meta:
+        model = Order
+        fields = ['project']
+
+
+class OrderCustomSearch(django_filters.FilterSet):
+    search = django_filters.CharFilter(method = 'search_everywhere', label='Search')
+
+    class Meta:
+        model = Order
+        fields = ['search']
+    
+    def search_everywhere(self, queryset, name, value):
+        return Order.objects.filter(
+            # Q(location__name_tm__icontains=value)
+            Q(project__code__icontains=value) | Q(number__icontains=value) \
+                | Q(orderorderitems__product_card__product__name_en__icontains=value) \
+                | Q(orderorderitems__product_card__product__name_fr__icontains=value) \
+                | Q(orderorderitems__product_card__product__name_ru__icontains=value) \
+                | Q(orderorderitems__product_card__product__name_tm__icontains=value) \
+                    | Q(orderorderitems__product_card__trade__name_fr__icontains=value) \
+                        | Q(orderorderitems__product_card__lot__number__icontains=value) \
+                        | Q(orderorderitems__product_card__lot__name_fr__icontains=value) \
+                        | Q(orderorderitems__product_card__lot__name_ru__icontains=value) \
+                            | Q(orderorderitems__product_card__annexe5__code__icontains=value) \
+                            | Q(orderorderitems__product_card__annexe5__name_fr__icontains=value) \
+                                | Q(orderorderitems__product_card__provider__code__icontains=value) \
+                                | Q(orderorderitems__product_card__provider__name_fr__icontains=value)
+        )
+
+
+class AchatListView(generic.ListView):
+    model = Order
+    context_object_name = 'orders' 
+    template_name = 'achat/achat.html'
+    ordering = ['-created_at']
+    paginate_by = 3
+
+    def get_queryset(self):
+        queryset = super(AchatListView, self).get_queryset()
+        queryset = OrderCustomSearch(self.request.GET, queryset = queryset).qs
+        
+        return list(set(OrderFilter(self.request.GET, queryset=queryset).qs))
+
+
+class OrderListView(generic.ListView):
+    model = Order
+    context_object_name = 'orders' 
+    template_name = 'achat/orderlist.html'
+    paginate_by = 3
+
+    def get_queryset(self):
+        queryset = super(OrderListView, self).get_queryset()
+        queryset = OrderCustomSearch(self.request.GET, queryset = queryset).qs
+        return list(set(OrderFilter(self.request.GET, queryset=queryset).qs))
+
+class OrderDetailView(generic.DeleteView):
+    queryset = Order.objects.all()
+    context_object_name = 'order' 
+    template_name = 'achat/orderdetail.html'
+
