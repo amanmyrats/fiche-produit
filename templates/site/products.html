@@ -171,7 +171,7 @@ html {
         <td class="">{{ product.desc_fr }}</td>
         <td class="">{{ product.desc_ru }}</td>
         <!-- <td class="">{{ product.desc_tm }}</td> -->
-        <td class=""><img style="max-height: 150px;" src="{{ product.image }}" alt=""></td>
+        <td class=""><img style="max-height: 150px;" src="{{ product.image_url }}" alt=""></td>
         <td class=""><a href="{% url 'fpcreate' %}?product_id={{ product.id }}" class="btn btn-primary">Create Fiche Produit using this Product</a></td>
       </tr>
       {% endfor %}

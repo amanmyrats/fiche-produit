@@ -26,6 +26,20 @@ class Product(models.Model):
         else:
             return super().__str__()
     
+    @property
+    def image_url(self):
+        try:
+            return self.image.url
+        except:
+            return 'No image'
+        
+    @property
+    def technical_detail_url(self):
+        try:
+            return self.technical_detail.url
+        except:
+            return 'No technical detail'
+
     
 class Lot(models.Model):
     number = models.CharField(max_length=5, blank=True, null=True)
@@ -35,7 +49,8 @@ class Lot(models.Model):
     name_tm = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return str(self.number) + ' - ' + str(self.name_fr)
+        return str(self.number) + ' - ' + str(self.name_fr) if self.number else super().__str__()
+
 
 class Unit(models.Model):
     name_en = models.CharField(max_length=10, blank=True, null=True)
@@ -44,7 +59,8 @@ class Unit(models.Model):
     name_tm = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Currency(models.Model):
     short_name_en = models.CharField(max_length=3, blank=True, null=True)
@@ -57,7 +73,8 @@ class Currency(models.Model):
     name_tm = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
-        return self.short_name_fr
+        return str(self.short_name_fr) if self.short_name_fr else super().__str__()
+
 
 class PackageType(models.Model):
     name_en = models.CharField(max_length=10, blank=True, null=True)
@@ -66,7 +83,8 @@ class PackageType(models.Model):
     name_tm = models.CharField(max_length=10, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Project(models.Model):
     code = models.CharField(max_length=3, blank=True, null=True)
@@ -78,7 +96,7 @@ class Project(models.Model):
     contract_total = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
     def __str__(self):
-        return self.code
+        return str(self.code) if self.code else super().__str__()
     
     @property
     def total_sum(self):
@@ -90,6 +108,7 @@ class Project(models.Model):
         print(total_sum)
         return total_sum
 
+
 class Provider(models.Model):
     code = models.CharField(max_length=20, blank=True, null=True)
     name_en = models.CharField(max_length=200, blank=True, null=True)
@@ -99,7 +118,8 @@ class Provider(models.Model):
     country = models.ForeignKey('Country',on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Country(models.Model):
     code = models.CharField(max_length=2, blank=True, null=True)
@@ -109,7 +129,8 @@ class Country(models.Model):
     name_tm = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Room(models.Model):
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
@@ -124,7 +145,8 @@ class Room(models.Model):
     plan = models.ImageField(upload_to = 'room_plan/', blank=True, null = True)
 
     def __str__(self):
-        return self.no + ' - ' + self.name_fr
+        return str(self.no) + ' - ' + (self.name_fr)  if self.no else super().__str__()
+
 
 class Client(models.Model):
     name_en = models.CharField(max_length=200, blank=True, null=True)
@@ -134,7 +156,8 @@ class Client(models.Model):
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Employee(models.Model):
     name_en = models.CharField(max_length=200, blank=True, null=True)
@@ -143,13 +166,15 @@ class Employee(models.Model):
     name_tm = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
+
 
 class Phase(models.Model):
     name = models.CharField(max_length=3, blank=True, null=True)
 
     def __str__ (self):
-        return self.name
+        return str(self.name) if self.name else super().__str__()
+
 
 class Trade(models.Model):
     name_en = models.CharField(max_length=200, blank=True, null=True)
@@ -158,13 +183,14 @@ class Trade(models.Model):
     name_tm = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__ (self):
-        return self.name_fr
+        return str(self.name_fr) if self.name_fr else super().__str__()
     
+
 class Department(models.Model):
     name = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__ (self):
-        return self.name
+        return str(self.name) if self.name else super().__str__()
 
 
 class OrderItem(models.Model):
@@ -260,7 +286,10 @@ class FPType(models.Model):
     name = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.name
+        try:
+            return self.name
+        except:
+            return super().__str__()
 
 
 class ProductCard(models.Model):
@@ -297,10 +326,7 @@ class ProductCard(models.Model):
     note_for_achat = models.TextField(max_length=500, blank=True, null=True)
 
     def __str__(self):
-        try:
-            return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr)
-        except:
-            return super().__str__()
+        return str(self.project) + ' - ' + str(self.number) + ' - ' + str(self.product.name_fr) if self.project and self.number else super().__str__()
     
     @property
     def product_name(self):
@@ -342,8 +368,15 @@ class ProductCard(models.Model):
         try:
             return self.product.image.url
         except:
-            return 'no image'
+            return 'No image'
     
+    @property
+    def technical_detail_url(self):
+        try:
+            return self.product.technical_detail.url
+        except:
+            return 'No technical detail'
+
     @property
     def order_numbers(self):
         order_items = OrderItem.objects.filter(product_card = self.pk)
@@ -430,10 +463,19 @@ class Annexe5(models.Model):
     country = models.ForeignKey('Country',on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
-        return str(self.code) + ' - ' + str(self.name_fr)
+        return str(self.code) + ' - ' + str(self.name_fr) if self.code else super().__str__()
+
+    def save(self, *args, **kwargs):
+        try:
+            self.total_price = self.quantity * self.unit_price
+        except:
+            self.total_price = 0
+        super(Annexe5, self).save(*args, **kwargs)
+
 
     class Meta:
         constraints = [models.UniqueConstraint(fields=['project','code'], name = 'project-annexe-code')]
+
 
 class Order(models.Model):
     number = models.CharField(max_length=20,unique=True, blank=True, null=True)
@@ -442,10 +484,8 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
     def __str__(self):
-        try:
-            return str(self.number)
-        except:
-            return 'Without order number.'
+        return str(self.number) if self.number else 'Without order number.'
+    
     @property
     def total_sum(self):
         orderitems = self.orderorderitems.all()
