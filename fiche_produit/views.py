@@ -198,7 +198,7 @@ class FPFilter(django_filters.FilterSet):
 
     class Meta:
         model = ProductCard
-        fields = ['project', 'trade', 'lot', 'annexe5', 'provider']
+        fields = ['project', 'trade', 'lot', 'provider']
 
 
 class FPCustomAdvancedSearch(django_filters.FilterSet):
@@ -212,7 +212,7 @@ class FPCustomAdvancedSearch(django_filters.FilterSet):
         return ProductCard.objects.filter(
             Q(project__code__icontains=value) | Q(number__icontains=value) | Q(product__name_fr__icontains=value) | Q(product__name_ru__icontains=value) \
                  | Q(product__name_tm__icontains=value) | Q(product__name_en__icontains=value) | Q(lot__number__icontains=value) \
-                      | Q(annexe5__code__icontains=value) | Q(annexe5__name_fr__icontains=value) | Q(productcardorderitems__order__number__icontains=value) \
+                      | Q(productcardorderitems__order__number__icontains=value) \
                           | Q(productcardorderitems__orderitemsinfactureitems__facture__number__icontains=value) \
                               | Q(productcardorderitems__orderitemsinfactureitems__specificationfactures__specification__number__icontains=value) \
                                   | Q(productcardorderitems__orderitemsinfactureitems__declarationfactures__declaration__number__icontains=value) \
@@ -231,9 +231,8 @@ class FPCustomSearch(django_filters.FilterSet):
         return ProductCard.objects.filter(
             Q(project__code__icontains=value) | Q(number__icontains=value) | Q(product__name_fr__icontains=value) | Q(product__name_ru__icontains=value) \
                  | Q(product__name_tm__icontains=value) | Q(product__name_en__icontains=value) | Q(lot__number__icontains=value) \
-                      | Q(annexe5__code__icontains=value) | Q(annexe5__name_fr__icontains=value) | Q(provider__code__icontains=value) \
-                           | Q(provider__name_fr__icontains=value) | Q(location__no__icontains=value) | Q(location__name_fr__icontains=value) \
-                                | Q(location__name_ru__icontains=value) | Q(location__name_tm__icontains=value)
+                      | Q(provider__code__icontains=value) \
+                           | Q(provider__name_fr__icontains=value)
         )
 
 

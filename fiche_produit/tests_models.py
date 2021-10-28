@@ -1,3 +1,4 @@
+import builtins
 from os import name
 from django.test import TestCase
 from .models import *
@@ -182,6 +183,136 @@ class ModelsTest(TestCase):
         self.assertTrue('Without' in str(order2))
         self.assertEqual(50, order.total_sum)
 
+    def test_facture(self):
+        project = self.create_project()
+        facture = self.create_facture(number='NCC-TK-001', project=project)
+        facture2 = self.create_facture()
+        factureitem = self.create_factureitem(facture=facture )
+        self.assertTrue(isinstance(facture, Facture))
+        self.assertTrue(isinstance(facture2, Facture))
+        self.assertEqual('NCC-TK-001', str(facture))
+        self.assertTrue('Without' in str(facture2))
+        self.assertEqual(50, facture.total_sum)
+
+    def test_factureitem(self):
+        project = self.create_project()
+        facture = self.create_facture(number='NCC-TK-002', project=project)
+        factureitem = self.create_factureitem(facture=facture, no='1')
+        factureitem2 = self.create_factureitem(quantity=0, price=0)
+        self.assertTrue(isinstance(factureitem, FactureItem))
+        self.assertTrue(isinstance(factureitem2, FactureItem))
+        self.assertEqual('1' , str(factureitem))
+        
+    def test_routage(self):
+        routage = self.create_routage(number='AV001' )
+        routage2 = self.create_routage()
+        self.assertTrue(isinstance(routage, Routage))
+        self.assertTrue(isinstance(routage2, Routage))
+        self.assertEqual('AV001', str(routage))
+        self.assertTrue('Without' in str(routage2))
+    
+    def test_routageitem(self):
+        routage = self.create_routage(number='AV002')
+        facture = self.create_facture(number='NCC-TK-004')
+        routageitem = self.create_routageitem(routage=routage, facture=facture)
+        routageitem2 = self.create_routageitem()
+        self.assertTrue(isinstance(routageitem, RoutageItem))
+        self.assertTrue(isinstance(routageitem2, RoutageItem))
+        self.assertEqual('NCC-TK-004', str(routageitem))
+        self.assertTrue('There is no' in str(routageitem2))
+
+    def test_specification(self):
+        specification = self.create_specification(number='SPEC001')
+        specification2 = self.create_specification()
+        self.assertTrue(isinstance(specification, Specification))
+        self.assertTrue (isinstance(specification2, Specification))
+        self.assertEqual('SPEC001', str(specification))
+        self.assertTrue('Without' in str(specification2))
+    
+    def test_specificationitem(self):
+        specification = self.create_specification(number='SPEC002')
+        product = self.create_product()
+        product_card2 = self.create_productcard2(number='fp001specitem', product=product)
+        order_item = self.create_orderitem(product_card=product_card2, desc_fr='french')
+        facture_item = self.create_factureitem(order_item=order_item)
+        specificationitem = self.create_specificationitem(specification=specification, no=111, facture_item=facture_item)
+        specificationitem2 = self.create_specificationitem()
+        self.assertTrue(isinstance(specificationitem, SpecificationItem))
+        self.assertTrue(isinstance(specificationitem2, SpecificationItem))
+        self.assertEqual('french', str(specificationitem))
+        self.assertTrue('No name' in str(specificationitem2))
+
+    def test_tds(self):
+        tds = self.create_tds(number='TDS001')
+        tds2 = self.create_tds()
+        self.assertTrue(isinstance(tds, Tds))
+        self.assertTrue(isinstance(tds2, Tds))
+        self.assertEqual('TDS001', str(tds))
+        self.assertTrue('Without' in str(tds2))
+    
+    def test_tdsitem(self):
+        tds = self.create_tds(number='TDS002')
+        product = self.create_product()
+        product_card2 = self.create_productcard2(number='fp001specitem', product=product)
+        order_item = self.create_orderitem(product_card=product_card2, desc_fr='french')
+        facture_item = self.create_factureitem(order_item=order_item)
+        tdsitem = self.create_tdsitem(tds=tds, facture_item=facture_item)
+        tdsitem2 = self.create_tdsitem()
+        self.assertTrue(isinstance(tdsitem, TdsItem))
+        self.assertTrue(isinstance(tdsitem2, TdsItem))
+        self.assertEqual('french', str(tdsitem))
+        self.assertEqual('No name', str(tdsitem2))
+
+    def test_fptype(self):
+        fptype = self.create_fptype(name='FP')
+        fptype2 = self.create_fptype()
+        self.assertTrue(isinstance(fptype, FPType))
+        self.assertTrue(isinstance(fptype2, FPType))
+        self.assertEqual('FP', str(fptype))
+        self.assertTrue('object' in str(fptype2))
+    
+    def test_declaration(self):
+        declaration = self.create_declaration(number='DEC001')
+        declaration2 = self.create_declaration()
+        self.assertTrue(isinstance(declaration, Declaration))
+        self.assertTrue(isinstance(declaration2, Declaration))
+        self.assertEqual('DEC001', str(declaration))
+        self.assertTrue('Without' in str(declaration2))
+    
+    def test_declarationitem(self):
+        product = self.create_product()
+        product_card2 = self.create_productcard2(number='fp001decitem', product=product)
+        order_item = self.create_orderitem(product_card=product_card2, desc_fr='french')
+        facture_item = self.create_factureitem(order_item=order_item)
+        declaration = self.create_declaration(number='DEC002')
+        declarationitem = self.create_declarationitem(declaration=declaration, no=1, facture_item=facture_item)
+        declarationitem2 = self.create_declarationitem()
+        self.assertTrue(isinstance(declarationitem, DeclarationItem))
+        self.assertTrue(isinstance(declarationitem2, DeclarationItem))
+        self.assertEqual('french', str(declarationitem))
+        self.assertEqual('No name', str(declarationitem2))
+
+    def test_coo(self):
+        coo = self.create_coo(number='COO001')
+        coo2 = self.create_coo()
+        self.assertTrue(isinstance(coo, Coo))
+        self.assertTrue(isinstance(coo2, Coo))
+        self.assertEqual('COO001', str(coo))
+        self.assertTrue('Without' in str(coo2))
+    
+    def test_coofacture(self):
+        product = self.create_product()
+        product_card2 = self.create_productcard2(number='fp001cooitem', product=product)
+        order_item = self.create_orderitem(product_card=product_card2, desc_fr='french')
+        facture = self.create_facture(number='NCC-COO-001')
+        facture_item = self.create_factureitem(order_item=order_item, facture=facture)
+        coo = self.create_coo(number='COO002')
+        coofacture = self.create_coofacture(coo=coo, facture_item=facture_item)
+        coofacture2 = self.create_coofacture()
+        self.assertTrue(isinstance(coofacture, CooFacture))
+        self.assertTrue(isinstance(coofacture2, CooFacture))
+        self.assertEqual('COO002 - NCC-COO-001', str(coofacture))
+        self.assertTrue('There is no' in str(coofacture2))
 
 
 
@@ -208,7 +339,7 @@ class ModelsTest(TestCase):
                                             department=department, location=room, trade=trade, lot=lot, phase=phase, 
                                                 annexe5=annexe5)
     
-    def create_productcard2(self, number=None):
+    def create_productcard2(self, number=None, product=None):
         product2 = self.create_product(name_fr=None)
         project2 = self.create_project(code=None, name_fr=None)
         provider2 = self.create_provider(code=None, name_fr=None)
@@ -233,10 +364,10 @@ class ModelsTest(TestCase):
                 name_fr=name_fr, 
                 )
             
-    def create_product2(self, desc_fr= 'Some french description', desc_en = 'Some english description',
-                        desc_ru = 'Some russian description', desc_tm = 'Some turkmen description', 
-                        name_fr = 'Some french name', name_en = 'Some english name', name_ru = 'Some russian name',
-                        name_tm = 'Some turkmen name'):
+    def create_product2(self, desc_fr= None, desc_en = None,
+                        desc_ru = None, desc_tm = None, 
+                        name_fr = None, name_en = None, name_ru = None,
+                        name_tm = None):
         return Product.objects.create( desc_fr=desc_fr,
                 desc_ru=desc_ru, desc_tm=desc_tm, desc_en=desc_en, 
                 name_en = name_en, name_ru=name_ru, name_tm=name_tm,
@@ -287,5 +418,44 @@ class ModelsTest(TestCase):
     def create_order(self, number=None, project=None):
         return Order.objects.create(number=number, project=project)
 
-    def create_orderitem(self, no=1, order=None, product_card=None, quantity =5, price =10):
-        return OrderItem.objects.create(no=no, order=order, product_card=product_card, quantity =quantity , price =price )
+    def create_orderitem(self, no=1, order=None, product_card=None, quantity =5, price =10, desc_fr=None):
+        return OrderItem.objects.create(no=no, order=order, product_card=product_card, quantity =quantity , price =price, desc_fr=desc_fr )
+    
+    def create_facture(self, number=None, project=None):
+        return Facture.objects.create(number=number, project=project)
+    
+    def create_factureitem(self, facture=None, no=None, order_item=None, quantity=5, price=10):
+        return FactureItem.objects.create(facture=facture, no=no, order_item=order_item, quantity=quantity, price=price)
+
+    def create_routage(self, number=None):
+        return Routage.objects.create(number=number)
+    
+    def create_routageitem(self, routage=None, facture=None):
+        return RoutageItem.objects.create(routage=routage, facture=facture)
+
+    def create_specification(self, number=None):
+        return Specification.objects.create(number=number)
+    
+    def create_specificationitem(self, specification=None, no=None, facture_item=None):
+        return SpecificationItem.objects.create(specification=specification, no=no, facture_item=facture_item)
+
+    def create_tds(self, number=None):
+        return Tds.objects.create(number=number)
+    
+    def create_tdsitem(self, tds=None, facture_item=None):
+        return TdsItem.objects.create(tds=tds, facture_item=facture_item)
+    
+    def create_fptype(self, name=None):
+        return FPType.objects.create(name=name)
+    
+    def create_declaration(self, number=None):
+        return Declaration.objects.create(number=number)
+    
+    def create_declarationitem(self, declaration=None, no=None, facture_item=None):
+        return DeclarationItem.objects.create(declaration=declaration, no=no, facture_item=facture_item)
+    
+    def create_coo(self, number=None):
+        return Coo.objects.create(number=number)
+
+    def create_coofacture(self, coo=None, facture_item=None):
+        return CooFacture.objects.create(coo=coo, facture_item=facture_item)

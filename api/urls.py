@@ -16,7 +16,8 @@ from rest_framework.routers import DefaultRouter
 
 from .views import FPViewSet, ProductViewSet, ProductViewSet, OrderViewSet, FactureViewSet, \
     SpecificationViewSet, DeclarationViewSet, TdsViewSet, CooViewSet, RoutageViewSet, \
-        OrderItemViewSet, FactureItemViewSet
+        OrderItemViewSet, FactureItemViewSet, ProductCardAnnexe5ViewSet, \
+            fp_number_generator
 
 
 
@@ -32,6 +33,7 @@ router.register(r'tds', TdsViewSet)
 router.register(r'declarations', DeclarationViewSet)
 router.register(r'coo', CooViewSet)
 router.register(r'routages', RoutageViewSet)
+router.register(r'fpannexe5', ProductCardAnnexe5ViewSet)
 # router.register(r'tests', ServiceAchatView)
 
 
@@ -40,4 +42,5 @@ urlpatterns = [
     # path('api/fps/', FPListCreateAPIView.as_view(), name='api-fps'),
     # path('api/fps/<int:pk>/', FPRetrieveAPIView.as_view(), name='api-fps-detail'),
     path(r'api/', include(router.urls)),
+    path(r'api/newnumber/', fp_number_generator, name='fp-number-generator')
 ]

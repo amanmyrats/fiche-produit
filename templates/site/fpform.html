@@ -13,7 +13,7 @@
 </style>
 {% endblock %}
 
-  
+
 {% block content %}
 
 <!-- PRODUCT Form -->
@@ -22,6 +22,16 @@
   <form method="POST">
     {% csrf_token %}
     <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputCity">Project</label>
+        {{ form.project }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Lot</label>
+        {{ form.lot }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
       <div class="form-group col-md-2">
         <label for="inputState">Number</label>
         {{ form.number }}
@@ -32,6 +42,9 @@
         {{ form.product }}
         <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
       </div>
+    </div>
+      <div class="row justify-content-center">
+        
       <div class="form-group col-md-2">
         <label for="inputPassword4">Provider</label>
         {{ form.provider }}
@@ -50,11 +63,6 @@
     </div>
     <div class="row justify-content-center">
       <div class="form-group col-md-2">
-        <label for="inputCity">Project</label>
-        {{ form.project }}
-        <!-- <input type="text" class="form-control" id="inputCity"> -->
-      </div>
-      <div class="form-group col-md-2">
         <label for="inputZip">Location</label>
         {{ form.location }}
         <!-- <input type="text" class="form-control" id="inputZip"> -->
@@ -62,11 +70,6 @@
       <div class="form-group col-md-2">
         <label for="inputZip">Trade</label>
         {{ form.trade }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Lot</label>
-        {{ form.lot }}
         <!-- <input type="text" class="form-control" id="inputZip"> -->
       </div>
       <div class="form-group col-md-2">
@@ -123,4 +126,58 @@
 <!-- </div> -->
 
 
+{% endblock %}
+{% block js %}
+<script>
+  // Project change
+  $("#id_project").change(function(){
+    var projectValue = $(this).val() || 0;
+    var lotValue = $("#id_lot").val() || 0;
+
+    if (projectValue == 0 ) {
+      $("#id_number").val("");
+      return
+    }
+    if (lotValue == 0) {
+      $("#id_number").val("");
+      return
+    } 
+      generateFPNumber(lotValue, projectValue);
+  });
+
+  // Lot change
+  $("#id_lot").change(function(){
+
+    var projectValue = $("#id_project").val() || 0;
+    var lotValue = $(this).val() || 0;
+    console.log(projectValue)
+    console.log(lotValue)
+
+    if (projectValue == 0 ) {
+      $("#id_number").val("");
+      return
+    } 
+    if (lotValue == 0 ) {
+      $("#id_number").val("");
+      return
+    }
+      generateFPNumber(lotValue, projectValue);
+  });
+
+function generateFPNumber(lotValue, projectValue){
+  console.log("http://127.0.0.1:8000/api/newnumber/?lot_id=" + lotValue + "&number_type=fp&project_id=" + projectValue)
+  $.ajax({
+        url: "http://127.0.0.1:8000/api/newnumber/?lot_id=" + lotValue + "&number_type=fp&project_id=" + projectValue,
+        type: "GET",
+        dataType: "json",
+        success: (data) =>{
+          console.log(data)
+          $("#id_number").val(data.new_number);
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      });
+}
+</script>
 {% endblock %}

@@ -1,4 +1,5 @@
-from .models import Annexe5, Project, Lot, Trade
+from .models import Annexe5, Project, Lot, Trade, Provider
+
 
 def project_renderer(request):
     return {
@@ -18,4 +19,9 @@ def trade_renderer(request):
 def annexe5_renderer(request):
     return {
         'annexe5s': Annexe5.objects.all()
+    }
+
+def provider_renderer(request):
+    return {
+        'providers': Provider.objects.all()
     }

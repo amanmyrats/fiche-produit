@@ -2,7 +2,7 @@ from django.db.models import fields
 from django.db.models.query_utils import select_related_descend
 from fiche_produit.models import FactureItem, OrderItem, Product, ProductCard, Order, Facture, OrderItem, FactureItem, Specification, \
     SpecificationItem, Facture, Specification, Declaration, DeclarationItem, TdsItem, Tds, CooFacture, Coo, \
-        RoutageItem, Routage
+        RoutageItem, Routage, ProductCardAnnexe5, ProductCardRoom
 from django.db import models
 from rest_framework import serializers
 
@@ -142,12 +142,14 @@ class CooModelSerializer(serializers.ModelSerializer):
         model = Coo
         fields = ['number', 'cootofacture']
     
-    # def get_facturesofcoo(self, instance):
-    #     coo_factures = CooFacture.objects.filter(pk = instance.pk)
-    #     factures = {'factures':[]}
-    #     for coo_facture in coo_factures:
-    #         factures['factures'].append(coo_facture.facture_item.facture.number)
-    #     return factures
 
+class ProductCardAnnexe5ModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCardAnnexe5
+        fields = '__all__'
+
+
+class FPNewNumberSerializer(serializers.Serializer):
+    new_number = serializers.CharField()
 
 
