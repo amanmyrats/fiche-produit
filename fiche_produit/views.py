@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import fields
 from django.shortcuts import get_object_or_404, render, HttpResponse, redirect
 from django.views import generic
+from django.urls import reverse
 import requests
 import json
 
@@ -19,8 +20,8 @@ from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 import shutil
 
-from fiche_produit.models import Order, Product, ProductCard, Specification
-from .forms import ProductModelForm, FPModelForm
+from fiche_produit.models import Order, Product, ProductCard, Specification, ProductCardRoom, ProductCardAnnexe5
+from .forms import ProductModelForm, FPModelForm, ProductCardAnnexe5ModelForm, ProductCardRoomModelForm
 from .utility import fp_excel_works, fp_pdf_works, download
 
 mysitedomain = 'http://127.0.0.1:8000/'
@@ -119,7 +120,6 @@ def fpcreate_view(request):
     return render(request, 'site/fpform.html', context)
 
 def fpchange_view(request, **kwargs):
-    # fp_id = request.GET.get('fp_id')
     fp_id = kwargs.get('pk')
     print('fp will change fp with an id:', fp_id)
     fp = get_object_or_404(ProductCard, pk = fp_id)
@@ -148,6 +148,123 @@ def fpchange_view(request, **kwargs):
             context['errors'] = form.errors
 
     return render(request, 'site/fpform.html', context)
+
+
+
+def fpedit_view(request, **kwargs):
+    fp_id = kwargs.get('pk')
+    fpannexe5_id = request.GET.get('fpannexe5')
+    fproom_id = request.GET.get('fproom')
+    print('fp will edit fp with an id:', fp_id)
+
+    # Objects
+    fp = get_object_or_404(ProductCard, pk = fp_id)
+    productcardannexe5s = ProductCardAnnexe5.objects.filter(productcard = fp)
+    productcardrooms = ProductCardRoom.objects.filter(productcard = fp)
+    fp_submit_button_name = 'Save Changes'
+
+    # Forms
+    fp_form = FPModelForm(instance = fp)
+    if request.GET.get('editannexe5'):
+        productcardannexe5_to_edit_id = request.GET.get('editannexe5')
+        productcardannexe5_to_edit = ProductCardAnnexe5.objects.get(id=productcardannexe5_to_edit_id)
+        fpannexe5_form = ProductCardAnnexe5ModelForm(instance=productcardannexe5_to_edit) 
+        annexe5_submit_button_name = 'Save Changes'
+    else:
+        fpannexe5_form = ProductCardAnnexe5ModelForm()
+        annexe5_submit_button_name = 'Add New Annexe5'
+
+    if request.GET.get('editroom'):
+        productcardroom_to_edit_id = request.GET.get('editroom')
+        productcardroom_to_edit = ProductCardRoom.objects.get(id=productcardroom_to_edit_id)
+        fproom_form = ProductCardRoomModelForm(instance=productcardroom_to_edit) 
+        room_submit_button_name = 'Save Changes'
+    else:
+        fproom_form = ProductCardRoomModelForm()
+        room_submit_button_name = 'Add New Room'
+
+    context = {'fp_form': fp_form}
+    context['fpannexe5_form'] = fpannexe5_form
+    context['fproom_form'] = fproom_form
+    context['fp'] = fp
+    context['productcardrooms'] = productcardrooms
+    context['productcardannexe5s'] = productcardannexe5s
+    context['annexe5_submit_button_name'] = annexe5_submit_button_name
+    context['room_submit_button_name'] = room_submit_button_name
+    context['fp_submit_button_name'] = fp_submit_button_name
+
+    if request.method=='POST':
+        print(request.GET.get('editfp'))
+        print(request.GET.get('addannexe5'))
+        print(request.GET.get('editannexe5'))
+        print(request.GET.get('addroom'))
+        print(request.GET.get('editroom'))
+        if request.GET.get('editfp'):
+            api_change_fp = mysitedomain + 'api/fps/{}/'.format(fp_id)
+            create_request = requests.patch(url = api_change_fp, data = request.POST)
+            print(create_request.status_code)
+            response =create_request.json()
+            print('this is response from api request:', response)
+            if status.is_success(create_request.status_code):
+                    print(response['id'])
+                    context = {'success': 'FP has been edited, you are now redirected to fp list.'}
+                    # Here it must be fp detail list with Kerim's template
+
+        if request.GET.get('addannexe5'):
+            fpannexe5_form = ProductCardAnnexe5ModelForm(request.POST)
+            if fpannexe5_form.is_valid():
+                annexe5 = request.POST.get('annexe5')
+                quantity = request.POST.get('quantity')
+                fp.annexe5s.add(annexe5, through_defaults={'quantity': quantity})
+            else:
+                context['errors'] = fpannexe5_form.errors
+
+        if request.GET.get('editannexe5'):
+            existing_productcardannexe5 = request.GET.get('editannexe5')
+            new_annexe5 = request.POST.get('annexe5')
+            new_quantity = request.POST.get('quantity')
+            try:
+                ProductCardAnnexe5.objects.filter(id=existing_productcardannexe5).update(annexe5=new_annexe5, quantity=new_quantity)
+            except:
+                context['errors'] = 'Error happened when updating Annexe-5.'
+                
+        if request.GET.get('addroom'):
+            fproom_form = ProductCardRoomModelForm(request.POST)
+            if fproom_form.is_valid():
+                room = request.POST.get('room')
+                quantity = request.POST.get('quantity')
+                fp.rooms.add(room, through_defaults={'quantity': quantity})
+            else:
+                context['errors'] = fproom_form.errors
+        
+        if request.GET.get('editroom') or request.GET.get('deleteroom'):
+            existing_productcardroom = request.GET.get('editroom')
+            new_room = request.POST.get('room')
+            new_quantity = request.POST.get('quantity')
+            try:
+                ProductCardRoom.objects.filter(id=existing_productcardroom).update(room=new_room, quantity=new_quantity)
+            except:
+                context['errors'] = 'Error happened when editing room.'
+
+        print('redirecting')
+        return redirect('/fps/{}/edit/'.format(fp_id))
+    
+    else:
+        if request.GET.get('deleteannexe5'):
+            productCardAnnexe5_id = request.GET.get('deleteannexe5')
+            try:
+                ProductCardAnnexe5.objects.get(id=productCardAnnexe5_id).delete()
+            except:
+                context['errors'] = 'Error happened when deleting Annexe5.'
+        
+        if request.GET.get('deleteroom'):
+            room_to_delete = request.GET.get('deleteroom')
+            try:
+                ProductCardRoom.objects.filter(id=room_to_delete).delete()
+            except:
+                context['errors'] = 'Error happened when deleting room'
+
+    return render(request, 'site/fpedit.html', context)
 
 def products_view(request):
     products = requests.get(url=mysitedomain + 'api/products/')

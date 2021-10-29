@@ -267,7 +267,7 @@ html {
         <th scope="col">TDS</th>
         <th scope="col">Declaration</th>
         <th scope="col">COO</th>
-        <th scope="col">Export</th>
+        <!-- <th scope="col">Export</th> -->
       </tr>
     </thead>
     <tbody>
@@ -380,12 +380,12 @@ html {
         <td class="">{{ fp.tds_numbers }}</td>
         <td class="">{{ fp.declaration_numbers }}</td>
         <td class="">{{ fp.coo_numbers }}</td> -->
-        <td class="row justify-content-center" style="max-width: 120px; min-width: 100px;">
-          <a href="{% url 'export' %}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary mb-1">To Excel</a>
-          <a href="/fps/{{ fp.id }}/change/" class="btn btn-info mb-1">Edit</a>
-          <a href="/fps/{{ fp.id }}/print/" class="btn btn-info mb-1">Print</a>
+        <!-- <td class="row justify-content-center" style="max-width: 120px; min-width: 100px;"> -->
+          <!-- <a href="{% url 'export' %}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary mb-1">To Excel</a> -->
+          <!-- <a href="/fps/{{ fp.id }}/change/" class="btn btn-info mb-1">Edit</a> -->
+          <!-- <a href="/fps/{{ fp.id }}/print/" class="btn btn-info mb-1">Print</a> -->
           <!-- <a href="{% url 'export'%}?what=fp&towhat=pdf&pk={{fp.id}}" class="btn btn-info">To PDF</a> -->
-        </td>
+        <!-- </td> -->
       </tr>
       {% endfor %}
   

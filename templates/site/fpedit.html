@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+<style>
+  body {
+    background-color: #dee9ff;
+  }
+  textarea {
+    min-height: 200px;
+  }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<a href="{% url 'fplist' %}" class="btn btn-lg btn-warning">Go to List Of Fiche Produits</a>
+<a href="{% url 'products' %}" class="btn btn-lg btn-warning">Create New Fiche Produit</a>
+<br><br>
+<a href="?editfp=True" class="btn btn-info">Edit This Fiche Produit</a>
+<a href="?addannexe5=True" class="btn btn-info">Add New Annexe-5 Code</a>
+<a href="?addroom=True" class="btn btn-info">Add New Room</a>
+<!-- PRODUCT Form -->
+<!-- <div class="container-fluid"> -->
+  <h4>{{ fp_form.errors }}</h4>
+  <h4>{{ errors }}</h4>
+  
+
+  <!-- FICHE PRODUIT EDIT FORM -->
+{% if request.GET.editfp %}
+  <form method="POST">
+    {% csrf_token %}
+    <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputCity">Project</label>
+        {{ fp_form.project }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Lot</label>
+        {{ fp_form.lot }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputState">Number</label>
+        {{ fp_form.number }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="name_en">Product</label>
+        {{ fp_form.product }}
+        <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
+      </div>
+    </div>
+      <div class="row justify-content-center">
+        
+      <div class="form-group col-md-2">
+        <label for="inputPassword4">Provider</label>
+        {{ fp_form.provider }}
+        <!-- <input type="text" class="form-control" id="inputPassword4" placeholder="Name (FR)"> -->
+      </div>
+      <div class="form-group  col-md-2">
+          <label for="inputAddress">Origin</label>
+          {{ fp_form.origin }}
+          <!-- <input type="text" class="form-control" id="inputAddress" placeholder="RU"> -->
+        </div>
+        <div class="form-group  col-md-2">
+            <label for="inputAddress2">Manufactured in</label>
+            {{ fp_form.manufactured_in }}
+            <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+        </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="form-group col-md-2">
+        <label for="inputZip">Location</label>
+        {{ fp_form.location }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Trade</label>
+        {{ fp_form.trade }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Annexe-5</label>
+        {{ fp_form.annexe5 }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+    </div>
+    </div>
+
+    <div class="row justify-content-center">
+      
+      <div class="form-group col-md-2">
+        <label for="inputState">Department</label>
+        {{ fp_form.department }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputCity">FP Type</label>
+        {{ fp_form.fp_type }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputCity">Phase</label>
+        {{ fp_form.phase }}
+        <!-- <input type="text" class="form-control" id="inputCity"> -->
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Index</label>
+        {{ fp_form.index }}
+        <!-- <input type="text" class="form-control" id="inputZip"> -->
+      </div>
+    </div>
+      
+      <div class="row justify-content-center">
+        <div class="form-group col-md-4">
+          <label for="inputCity">Protocol</label>
+          {{ fp_form.protocol }}
+          <!-- <input type="text" class="form-control" id="inputCity"> -->
+        </div>
+        <div class="form-group col-md-4">
+          <label for="inputState">Observation</label>
+          {{ fp_form.observation }}
+          <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+      </div>
+
+  <div class="row justify-content-center m-5">
+
+      <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ fp_submit_button_name }}</button>
+    </div>
+
+  </form>
+{% else %}
+<!-- FP Detail -->
+  <table class="mt-3">
+    <thead>
+      <th>Name</th>
+      <th>Value</th>
+    </thead>
+    <tbody>
+      <tr><td>Project</td><td>{{ fp.project }}</td></tr>
+      <tr><td>Number</td><td>{{ fp.number }}</td></tr>
+      <tr><td>Name</td><td>{{ fp.product.name_fr }}</td></tr>
+      <tr><td>Description</td><td class="" style="max-width: 700px;">{{ fp.product.desc_fr }}</td></tr>
+      <tr><td>Quantity</td><td>{{ fp.quantity }}</td></tr>
+
+    </tbody>
+  </table>
+{% endif %}
+
+<div class="row">
+  <!-- Annexe-5 TABLE -->
+  <table class="mt-5 col">
+    <thead>
+      <th>Annexe-5</th>
+      <th>Quantity</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {% for productcardannexe5 in productcardannexe5s %}
+      <tr><td>{{productcardannexe5.annexe5.code}}</td><td>{{productcardannexe5.quantity}}</td>
+        <td>
+          <a href="?editannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Edit</a>
+          <a href="?deleteannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Room TABLE -->
+  <table class="mt-5 col">
+    <thead>
+      <th>Room</th>
+      <th>Quantity</th>
+      <th>Actions</th>
+    </thead>
+    <tbody>
+      {% for productcardroom in productcardrooms %}
+      <tr><td>{{productcardroom.room.no}}</td><td>{{productcardroom.quantity}}</td>
+        <td>
+          <a href="?editroom={{productcardroom.id}}" class="btn btn-secondary">Edit</a>
+          <a href="?deleteroom={{productcardroom.id}}" class="btn btn-secondary">Delete</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+
+      <!-- Fiche Produit Annexe-5 Form  -->
+      {% if request.GET.addannexe5 or request.GET.editannexe5 %}
+      <form method="POST">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+          <div class="form-group col-md-2">
+            <label for="inputCity">Annexe-5</label>
+            {{ fpannexe5_form.annexe5 }}
+            <!-- <input type="text" class="form-control" id="inputCity"> -->
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Quantity</label>
+            {{ fpannexe5_form.quantity }}
+            <!-- <input type="text" class="form-control" id="inputZip"> -->
+          </div>
+        </div>
+      <div class="row justify-content-center m-5">
+          <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{annexe5_submit_button_name}}</button>
+        </div>
+      </form>
+      {% endif %}
+
+      <!-- Fiche Produit Room Form  -->
+      {% if request.GET.addroom or request.GET.editroom %}
+      <form method="POST">
+      {% csrf_token %}
+      <div class="row justify-content-center">
+        <div class="form-group col-md-2">
+          <label for="inputCity">Room</label>
+          {{ fproom_form.room }}
+          <!-- <input type="text" class="form-control" id="inputCity"> -->
+        </div>
+        <div class="form-group col-md-2">
+          <label for="inputZip">Quantity</label>
+          {{ fproom_form.quantity }}
+          <!-- <input type="text" class="form-control" id="inputZip"> -->
+        </div>
+      </div>
+    <div class="row justify-content-center m-5">
+        <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{room_submit_button_name}}</button>
+      </div>
+        </form>
+      {% endif %}
+        
+
+{% endblock %}
+{% block js %}
+<script>
+  // Project change
+  $("#id_project").change(function(){
+    var projectValue = $(this).val() || 0;
+    var lotValue = $("#id_lot").val() || 0;
+
+    if (projectValue == 0 ) {
+      $("#id_number").val("");
+      return
+    }
+    if (lotValue == 0) {
+      $("#id_number").val("");
+      return
+    } 
+      generateFPNumber(lotValue, projectValue);
+  });
+
+  // Lot change
+  $("#id_lot").change(function(){
+
+    var projectValue = $("#id_project").val() || 0;
+    var lotValue = $(this).val() || 0;
+    console.log(projectValue)
+    console.log(lotValue)
+
+    if (projectValue == 0 ) {
+      $("#id_number").val("");
+      return
+    } 
+    if (lotValue == 0 ) {
+      $("#id_number").val("");
+      return
+    }
+      generateFPNumber(lotValue, projectValue);
+  });
+
+function generateFPNumber(lotValue, projectValue){
+  console.log("http://127.0.0.1:8000/api/newnumber/?lot_id=" + lotValue + "&number_type=fp&project_id=" + projectValue)
+  $.ajax({
+        url: "http://127.0.0.1:8000/api/newnumber/?lot_id=" + lotValue + "&number_type=fp&project_id=" + projectValue,
+        type: "GET",
+        dataType: "json",
+        success: (data) =>{
+          console.log(data)
+          $("#id_number").val(data.new_number);
+        },
+        error: (error) => {
+          console.log(error)
+        }
+      });
+}
+</script>
+{% endblock %}

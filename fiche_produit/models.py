@@ -299,6 +299,7 @@ class ProductCard(models.Model):
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
     
     location = models.CharField(max_length=300, blank=True, null=True)
+    rooms = models.ManyToManyField(Room, blank=True, null=True,  through='ProductCardRoom')
     
     trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
     lot = models.ForeignKey(Lot, on_delete=models.SET_NULL, blank=True, null=True)
@@ -308,7 +309,7 @@ class ProductCard(models.Model):
     protocol = models.TextField(max_length=500, blank=True, null=True)
     observation =models.TextField(max_length=500, blank=True, null=True)
 
-    # annexe5 = models.ForeignKey('Annexe5', on_delete=models.SET_NULL, blank=True, null=True)
+    annexe5s = models.ManyToManyField('Annexe5', blank=True, null=True,  through='ProductCardAnnexe5')
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
     
     sign_contractor1 = models.ForeignKey(Employee, on_delete=models.SET_NULL, blank=True, null=True, related_name='sign_emetteur')
@@ -478,15 +479,18 @@ class Annexe5(models.Model):
 
 
 class ProductCardAnnexe5(models.Model):
-    productcard = models.ManyToManyField (ProductCard, blank=True, null=True)
-    annexe5 = models.ManyToManyField(Annexe5, blank=True, null=True)
+    productcard = models.ForeignKey (ProductCard, on_delete=models.CASCADE, blank=True)
+    annexe5 = models.ForeignKey(Annexe5, on_delete=models.CASCADE, blank=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
 
 
 class ProductCardRoom(models.Model):
-    productcard = models.ManyToManyField(ProductCard, blank=True, null=True)
-    room = models.ManyToManyField(Room, blank=True, null=True)
+    productcard = models.ForeignKey(ProductCard, on_delete=models.CASCADE, blank=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True)
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
+    
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['productcard','room'], name = 'productcard-room')]
 
 
 class Order(models.Model):
