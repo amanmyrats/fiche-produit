@@ -23,7 +23,8 @@ from django.conf.urls.static import static
 
 
 from fiche_produit.views import home_view, SiteListView, SiteFilterView, export_view, fpcreate_view, products_view, \
-                                product_create_view, fpchange_view, fpedit_view, fpprint_view, FPListView, FPDetailView, SiteListView
+                                product_create_view, fpchange_view, fpedit_view, fpprint_view, FPListView, FPDetailView, SiteListView,\
+                                    test_view
 from achat.views import achat_view, order_create_view, AchatListView, OrderListView, OrderDetailView, order_edit_view
 from logistics.views import logistics_view, LogisticsListView, facture_create_view, FactureListView, FactureDetailView, facture_edit_view
 from qs.views import qs_view
@@ -61,6 +62,8 @@ urlpatterns = [
     path('export/', export_view, name='export'),
     path('products/', products_view, name='products'),
     path('products/create/', product_create_view, name='product-create'),
+
+    path('test/', test_view, name='test'),
 
     path('', include('api.urls')),
 ] 

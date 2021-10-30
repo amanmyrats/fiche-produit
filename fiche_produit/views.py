@@ -19,10 +19,16 @@ from django.conf import settings
 from django.http import HttpResponse
 from wsgiref.util import FileWrapper
 import shutil
+ # pywin32
+import win32com.client as win32
+import pythoncom
+import tempfile
+import os
+
 
 from fiche_produit.models import Order, Product, ProductCard, Specification, ProductCardRoom, ProductCardAnnexe5
 from .forms import ProductModelForm, FPModelForm, ProductCardAnnexe5ModelForm, ProductCardRoomModelForm
-from .utility import fp_excel_works, fp_pdf_works, download
+from .utility import fp_excel_works, fp_pdf_works, download, fp_excel_works_pywin32
 
 mysitedomain = 'http://127.0.0.1:8000/'
 
@@ -45,9 +51,45 @@ def export_view(request):
         print('inside excel if')
         
         shutil.copy(Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp.xlsx', Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp_temp.xlsx')
-        excel_path = Path(settings.MEDIA_ROOT) / 'excel_template' / 'fp_temp.xlsx'
+        excel_path = Path(settings.MEDIA_ROOT)  / 'excel_template' / 'fp_temp.xlsx'
         parent_path = Path(settings.MEDIA_ROOT) / 'excel_template' 
-        print('path of openpyxl', excel_path)
+        # os_excel = 
+        # print('path of excel', excel_path)
+        # print('parent path', parent_path)
+        # print('current directory', os.getcwd())
+
+        # try:
+        #     pythoncom.CoInitialize()
+        #     print('inside pywin32')
+        #     try:
+        #         excel = win32.gencache.EnsureDispatch('Excel.Application')
+        #     except Exception as e:
+        #         print('Exception inside function: ', e )
+        #     excel.ScreenUpdating = False
+        #     excel.EnableEvents = False
+        #     excel.DisplayAlerts = False
+        #     excel.AskToUpdateLinks = False
+        #     excel.Visible = True
+
+        #     print('trying to open excel')
+        #     try:
+        #         fp = excel.Workbooks.Open(excel_path)
+        #         print('opened')
+        #     except Exception as e:
+        #         print('exception happened when opening excel file.')
+        #         try:
+        #             if Path(Path(tempfile.gettempdir()) / 'gen_py').exists():
+        #                 shutil.rmtree(Path(Path(tempfile.gettempdir()) / 'gen_py'))
+        #                 print('I deleted gen_py :)')
+        #                 fp = excel.Workbooks.Open(excel_path)
+        #                 print('opened in 2nd try')
+        #         except Exception as e:
+        #             print('Error failed to close gen_py or some issue with: ', e)
+
+        #     fp_excel_works_pywin32(excel = excel, fp = fp, parent_path = parent_path)
+        # except:
+        #     print('some error happened when calling function')
+
         # try:
         wb = load_workbook(excel_path)
         print('wb loaded successfully')
@@ -294,7 +336,7 @@ def product_create_view(request):
 
 
 def test_view(request, **kwargs):
-    pass
+    return render(request, 'fiche_produit/fiche_produit.html', {'test':'test'})
 
 
 def fpprint_view(request, **kwargs):
