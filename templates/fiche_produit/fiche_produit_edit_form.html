@@ -1,6 +1,11 @@
 {% load static %}
 
-<div class="container border border-dark" style="width:210mm; height: 297mm;">
+
+
+<form method="POST">
+    {% csrf_token %}
+
+<div class="container border border-dark " style="width:210mm; height: 297mm;">
     
 <!-- Logo and Name -->
 <div class="row border border-dark" style="height: 100px;">
@@ -18,7 +23,7 @@
                 Nom du produit: 
             </div>
             <div class="col-9 text-center p-0">
-                МОНИТОР МЕТАБОЛИЗМА Q-NRG
+                {{ fp_form.product }}
             </div>
         </div>
         <div class="row border-top border-info p-0" style="height: 35px;">
@@ -26,7 +31,7 @@
                 Наименование изделия:
             </div>
             <div class="col-9 text-center p-0">
-                Тренажер для сгибания ног в коленях
+                <!-- Тренажер для сгибания ног в коленях -->
             </div>
         </div>
     </div>
@@ -45,8 +50,8 @@
                     Pаздел N°:
                 </div>
             </div>
-            <div class="col-4 text-center h4">
-                70
+            <div class="col-4 text-center h4 px-1" >
+                {{ fp_form.lot }}
             </div>
         </div>
     </div>
@@ -63,10 +68,10 @@
             </div>
             <div class="col-10 border">
                 <div class="row border">
-                    Complexe des bâtiments du Centre des conférences internationales
+                    {{ fp_form.project }}
                 </div>
                 <div class="row border">
-                    Комплекс зданий Центра международных конференций
+                    <!-- {{ fp_form.project }} -->
                 </div>
             </div>
         </div>
@@ -74,24 +79,24 @@
 </div>
 
 <!-- Provider and Country -->
-<div class="row border border-dark p-0"  style="height: 76px;">
+<div class="row border border-dark p-0"  style="height: 45px;">
     <div class="col-4 h-100 border border-dark">
         <div class="row">
             <div class="col-4">
                 <div class="row border" style="height: 36px; font-size: 15px;">
                     Fournisseur:
                 </div>
-                <div class="row border" style="height: 36px; font-size: 15px;">
-                    Поставщик:
-                </div>
+                <!-- <div class="row border" style="height: 36px; font-size: 15px;"> -->
+                    <!-- Поставщик: -->
+                <!-- </div> -->
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    GYM 80
+                    {{ fp_form.provider }}
                 </div>
-                <div class="row border" style="height: 36px;">
+                <!-- <div class="row border" style="height: 36px;">
                     ДЖИМ 80
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -101,17 +106,17 @@
                 <div class="row border" style="height: 36px; font-size: 15px;">
                     Origine:
                 </div>
-                <div class="row border" style="height: 36px; font-size: 11px;">
+                <!-- <div class="row border" style="height: 36px; font-size: 11px;">
                     Происхождение:
-                </div>
+                </div> -->
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    Europe
+                    {{ fp_form.origin }}
                 </div>
-                <div class="row border" style="height: 36px;">
+                <!-- <div class="row border" style="height: 36px;">
                     Европа
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -121,30 +126,30 @@
                 <div class="row border" style="height: 36px; font-size: 12px;">
                     Lieu de fabrication:
                 </div>
-                <div class="row border" style="height: 36px; font-size: 12px;">
+                <!-- <div class="row border" style="height: 36px; font-size: 12px;">
                     Место производства:
-                </div>
+                </div> -->
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    Allemagne
+                    {{ fp_form.manufactured_in }}
                 </div>
-                <div class="row border" style="height: 36px;">
+                <!-- <div class="row border" style="height: 36px;">
                     Германия
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
 </div>
 
 <!-- Localisation  -->
-<div class="row border border-dark" style="height: 53px;">
+<div class="row border border-dark" style="height: 85px;">
     <div class="row p-0 m-0">
         <div class="col-3 border">
             Localisation:
         </div>
         <div class="col-9 border">
-            00.A4.SPA.307     Salle de fitness
+            {{ fp_form.location_fr }}
         </div>
     </div>
     <div class="row p-0 m-0">
@@ -152,13 +157,13 @@
             Размещение:
         </div>
         <div class="col-9 border">
-            00.A4.SPA.307     Фитнес-зал
+            {{ fp_form.location_ru }}
         </div>
     </div>
 </div>
 
 <!-- Description  -->
-<div class="row border border-dark" style="height: 230px;">
+<div class="row border border-dark" style="height: 130px;">
     <div class="row p-0 m-0">
         <div class="col-6 border">
             DESCRIPTION DU PRODUIT:
@@ -169,7 +174,7 @@
     </div>
     <div class="row p-0 m-0" style="font-size: 12px;">
         <div class="col-6 border">
-            Moniteur de Métabolisme Q-NRG
+            <!-- Moniteur de Métabolisme Q-NRG
             <br><br>
             Système de surveillance diagnostique pour la mesure des échanges métaboliques Q-NRG. Chariot d'équipement complet + imprimante, consommables.<br>
             DIMENSIONS: <br>
@@ -177,10 +182,10 @@
             Longueur: 800 mm <br>
             Largeur: 400 mm <br>
             <br>
-            Qty: 1
+            Qty: 1 -->
         </div>
         <div class="col-6 border">
-            МОНИТОР МЕТАБОЛИЗМА Q-NRG
+            <!-- МОНИТОР МЕТАБОЛИЗМА Q-NRG
             <br><br>
             Диагностическая система мониторинга  для измерения метаболического обмена Q-NRG   +  принтер, расходные материалы, набор тележек <br>
             Размеры: <br>
@@ -188,7 +193,7 @@
             Длина: 800 мм <br>
             Ширина: 400 мм <br>
             <br>
-            Кол-во: 1 <br>
+            Кол-во: 1 <br> -->
         </div>
     </div>
 </div>
@@ -222,42 +227,42 @@
 </div>
 
 <!-- Protocol and Observation  -->
-<div class="row border border-dark " style="height: 150px;font-size: 14px;">
+<div class="row border border-dark " style="height: 260px;font-size: 14px;">
     <div class="border border-dark p-0 m-0">
 
-        <div class="row p-0 border border-end m-0" style="height: 36px;">
+        <div class="row p-0 border border-end m-0" style="height: 65px;">
             <div class="col-3  p-0 m-0">
                 Procès verbaux:
             </div>
             <div class="col-9  p-0 m-0">
-                Some Protocol Here
+                {{ fp_form.protocol_fr }}
             </div>
         </div>
-        <div class="row p-0 m-0" style="height: 36px;">
+        <div class="row p-0 m-0" style="height: 30px;">
             <div class="col-3  p-0 m-0">
                 Протоколы:
             </div>
             <div class="col-9  p-0 m-0">
-                Some Protocol Here
+                {{ fp_form.protocol_ru }}
             </div>
         </div>
     </div>
     <div class="border border-dark p-0 m-0">
 
-        <div class="row p-0 border border-end m-0" style="height: 37px;">
+        <div class="row p-0 border border-end m-0" style="height: 65px;">
             <div class="col-3  p-0 m-0" style="font-size: 12px;">
                 Observations et avis de l'organisme de contrôle:
             </div>
             <div class="col-9  p-0 m-0">
-                Some Observation Here
+                {{ fp_form.observation_fr }}
             </div>
         </div>
-        <div class="row p-0 m-0" style="height: 37px;">
+        <div class="row p-0 m-0" style="height: 30px;">
             <div class="col-3  p-0 m-0" style="font-size: 12px;">
                 Замечания И Заключение Тех. Надзора:
             </div>
             <div class="col-9  p-0 m-0">
-                Some Observation Here
+                {{ fp_form.observation_ru }}
             </div>
         </div>
     </div>
@@ -330,25 +335,25 @@
         имя:
     </div>
     <div class="col-2 border-start border-dark">
-        H.LOUMASSINE <br>
-        H.LOUMASSINE
+        {{ fp_form.sign_contractor1 }} <br>
+        <!-- H.LOUMASSINE -->
     </div>
     <div class="col-3 border">
-        S.LEVENARD <br>
-        S.LEVENARD
+        {{ fp_form.sign_contractor2 }} <br>
+        <!-- S.LEVENARD -->
     </div>
     <div class="col-3 border-start border-dark">
-        CLIENT NAME <br>
-        CLIENT NAME
+        {{ fp_form.sign_tehnadzor }} <br>
+        <!-- CLIENT NAME -->
     </div>
     <div class="col-3 border-start border-dark">
-        CLIENT NAME <br>
-        CLIENT NAME
+        {{ fp_form.sign_client }} <br>
+        <!-- CLIENT NAME -->
     </div>
 </div>
 
 <!-- Signature  Sign -->
-<div class="row  border-dark" style="height: 50px;">
+<!-- <div class="row  border-dark" style="height: 50px;">
     <div class="col-1 h-100 px-1" style="font-size: 13px;">
         VISAS: 
         подписи:
@@ -362,7 +367,7 @@
     </div>
     <div class="col-3 border-start border-dark h-100">
     </div>
-</div>
+</div> -->
 
 <!-- Footer Title-->
 <div class="row  border-dark" style="font-size: 11px; height: 32px;">
@@ -403,30 +408,30 @@
 </div>
 
 <!-- Footer Data-->
-<div class="row border border" style="font-size: 14px; height: 32px;">
+<div class="row border border" style="font-size: 14px; height: 45px;">
     <div class="col-4 border border-dark h-100 text-center">
-                CRA
+                {{ fp_form.project }}
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                PEO
+    <div class="col-1 border border-dark h-100 text-center px-1">
+                {{ fp_form.phase}}
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                70
+    <div class="col-1 border border-dark h-100 text-center px-1">
+                {{ fp_form.lot }}
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                FP
+    <div class="col-1 border border-dark h-100 text-center px-1">
+                {{ fp_form.fp_type }}
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                ++
+    <div class="col-1 border border-dark h-100 text-center px-1">
+                {{ fp_form.zone }}
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                ++
+    <div class="col-1 border border-dark h-100 text-center px-1">
+                {{ fp_form.level }}
     </div>
     <div class="col-2 border border-dark h-100 text-center">
-                00060
+                {{ fp_form.number }}
     </div>
     <div class="col-1 border border-dark h-100 text-center">
-                0
+                {{ fp_form.index }}
     </div>
 </div>
 
@@ -434,3 +439,6 @@
     
 </div> 
 <!-- container ends here -->
+
+<button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ fp_submit_button_name }}</button>
+</form>

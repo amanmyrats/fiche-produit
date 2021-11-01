@@ -298,7 +298,10 @@ class ProductCard(models.Model):
     project = models.ForeignKey(Project,on_delete=models.SET_NULL, blank=True, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, blank=True, null=True)
     
-    location = models.CharField(max_length=300, blank=True, null=True)
+    location_fr = models.CharField(max_length=300, blank=True, null=True)
+    location_ru = models.CharField(max_length=300, blank=True, null=True)
+    zone = models.CharField(max_length=2, blank=True, null=True)
+    level = models.CharField(max_length=2, blank=True, null=True)
     rooms = models.ManyToManyField(Room, blank=True, null=True,  through='ProductCardRoom')
     
     trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
@@ -306,8 +309,10 @@ class ProductCard(models.Model):
     fp_type =  models.ForeignKey(FPType, on_delete=models.SET_NULL, blank=True, null=True)
     phase = models.ForeignKey(Phase, on_delete=models.SET_NULL, blank=True, null=True)
     index = models.CharField(max_length=2, blank=True, null=True)
-    protocol = models.TextField(max_length=500, blank=True, null=True)
-    observation =models.TextField(max_length=500, blank=True, null=True)
+    protocol_fr = models.TextField(max_length=500, blank=True, null=True)
+    protocol_ru = models.TextField(max_length=500, blank=True, null=True)
+    observation_fr =models.TextField(max_length=500, blank=True, null=True)
+    observation_ru =models.TextField(max_length=500, blank=True, null=True)
 
     annexe5s = models.ManyToManyField('Annexe5', blank=True, null=True,  through='ProductCardAnnexe5')
     quantity = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)

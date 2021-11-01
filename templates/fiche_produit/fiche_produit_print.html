@@ -1,0 +1,15 @@
+{% extends 'base_print.html' %}
+{% load static %}
+{% block head_extra %}
+<style>
+    .row {
+  display: flex;
+  align-items: center;
+}
+</style>
+{% endblock %}
+{% block content %}
+
+    {% include "fiche_produit/fiche_produit.html" %}
+
+{% endblock %}

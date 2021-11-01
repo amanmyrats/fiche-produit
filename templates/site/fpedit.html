@@ -26,31 +26,32 @@
   <h4>{{ fp_form.errors }}</h4>
   <h4>{{ errors }}</h4>
   
-
+  
   <!-- FICHE PRODUIT EDIT FORM -->
-{% if request.GET.editfp %}
-  <form method="POST">
+  {% if request.GET.editfp %}
+  {% include "fiche_produit/fiche_produit_edit_form.html" with fp_form=fp_form %}
+  <!-- <form method="POST">
     {% csrf_token %}
     <div class="row justify-content-center">
       <div class="form-group col-md-2">
         <label for="inputCity">Project</label>
         {{ fp_form.project }}
-        <!-- <input type="text" class="form-control" id="inputCity"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputZip">Lot</label>
         {{ fp_form.lot }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputState">Number</label>
         {{ fp_form.number }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+       
       </div>
       <div class="form-group col-md-2">
         <label for="name_en">Product</label>
         {{ fp_form.product }}
-        <!-- <input type="text" class="form-control" id="inputEmail4" placeholder="Name (EN)"> -->
+        
       </div>
     </div>
       <div class="row justify-content-center">
@@ -58,34 +59,34 @@
       <div class="form-group col-md-2">
         <label for="inputPassword4">Provider</label>
         {{ fp_form.provider }}
-        <!-- <input type="text" class="form-control" id="inputPassword4" placeholder="Name (FR)"> -->
+        
       </div>
       <div class="form-group  col-md-2">
           <label for="inputAddress">Origin</label>
           {{ fp_form.origin }}
-          <!-- <input type="text" class="form-control" id="inputAddress" placeholder="RU"> -->
+          
         </div>
         <div class="form-group  col-md-2">
             <label for="inputAddress2">Manufactured in</label>
             {{ fp_form.manufactured_in }}
-            <!-- <input type="text" class="form-control" id="inputAddress2" placeholder="Name (TM)"> -->
+            
         </div>
     </div>
     <div class="row justify-content-center">
       <div class="form-group col-md-2">
         <label for="inputZip">Location</label>
         {{ fp_form.location }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputZip">Trade</label>
         {{ fp_form.trade }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputZip">Annexe-5</label>
         {{ fp_form.annexe5 }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
     </div>
     </div>
 
@@ -94,22 +95,22 @@
       <div class="form-group col-md-2">
         <label for="inputState">Department</label>
         {{ fp_form.department }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputCity">FP Type</label>
         {{ fp_form.fp_type }}
-        <!-- <input type="text" class="form-control" id="inputCity"> -->
+       
       </div>
       <div class="form-group col-md-2">
         <label for="inputCity">Phase</label>
         {{ fp_form.phase }}
-        <!-- <input type="text" class="form-control" id="inputCity"> -->
+        
       </div>
       <div class="form-group col-md-2">
         <label for="inputZip">Index</label>
         {{ fp_form.index }}
-        <!-- <input type="text" class="form-control" id="inputZip"> -->
+        
       </div>
     </div>
       
@@ -117,12 +118,12 @@
         <div class="form-group col-md-4">
           <label for="inputCity">Protocol</label>
           {{ fp_form.protocol }}
-          <!-- <input type="text" class="form-control" id="inputCity"> -->
+        
         </div>
         <div class="form-group col-md-4">
           <label for="inputState">Observation</label>
           {{ fp_form.observation }}
-          <!-- <input type="text" class="form-control" id="inputZip"> -->
+         
         </div>
       </div>
 
@@ -131,7 +132,7 @@
       <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ fp_submit_button_name }}</button>
     </div>
 
-  </form>
+  </form> -->
 {% else %}
 <!-- FP Detail -->
   <table class="mt-3">

@@ -336,7 +336,7 @@ def product_create_view(request):
 
 
 def test_view(request, **kwargs):
-    return render(request, 'fiche_produit/fiche_produit.html', {'test':'test'})
+    return render(request, 'fiche_produit/fiche_produit_print.html', {'test':'test'})
 
 
 def fpprint_view(request, **kwargs):
