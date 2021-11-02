@@ -16,7 +16,6 @@ class Product(models.Model):
     desc_ru  = models.TextField(max_length=1000, blank=True, null=True)
     desc_tm  = models.TextField(max_length=1000, blank=True, null=True)
     image = models.ImageField(upload_to='product_image/',blank=True, null=True)
-    technical_detail = models.FileField(upload_to='technical_detail/', blank=True, null=True)
     created_by = models.ForeignKey('Employee', on_delete=models.SET_NULL, blank=True, null=True)
     created_at = models.DateTimeField(auto_now=True, blank=True, null=True)
 
@@ -445,6 +444,16 @@ class ProductCard(models.Model):
     
     class Meta:
         constraints = [models.UniqueConstraint(fields=['project','number'], name = 'project-fp-number')]
+
+
+class TechnicalDetailFile(models.Model):
+    productcard = models.ForeignKey(ProductCard, on_delete=models.CASCADE, blank=True, null=True)
+    technical_file = models.FileField(upload_to='technical_file/', blank=True, null=True)
+
+
+class TechnicalDetailImage(models.Model):
+    productcard = models.ForeignKey(ProductCard, on_delete=models.CASCADE, blank=True, null=True)
+    technical_image = models.ImageField(upload_to='technical_image/', blank=True, null=True)
 
 
 class Annexe5(models.Model):

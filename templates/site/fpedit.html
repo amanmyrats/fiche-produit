@@ -21,175 +21,70 @@
 <a href="?editfp=True" class="btn btn-info">Edit This Fiche Produit</a>
 <a href="?addannexe5=True" class="btn btn-info">Add New Annexe-5 Code</a>
 <a href="?addroom=True" class="btn btn-info">Add New Room</a>
+<a href="/fps/{{ fp.id }}/print/" class="btn btn-info">Print This Fiche Produit</a>
+
+
 <!-- PRODUCT Form -->
 <!-- <div class="container-fluid"> -->
   <h4>{{ fp_form.errors }}</h4>
   <h4>{{ errors }}</h4>
-  
-  
-  <!-- FICHE PRODUIT EDIT FORM -->
-  {% if request.GET.editfp %}
-  {% include "fiche_produit/fiche_produit_edit_form.html" with fp_form=fp_form %}
-  <!-- <form method="POST">
-    {% csrf_token %}
-    <div class="row justify-content-center">
-      <div class="form-group col-md-2">
-        <label for="inputCity">Project</label>
-        {{ fp_form.project }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Lot</label>
-        {{ fp_form.lot }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputState">Number</label>
-        {{ fp_form.number }}
-       
-      </div>
-      <div class="form-group col-md-2">
-        <label for="name_en">Product</label>
-        {{ fp_form.product }}
-        
-      </div>
-    </div>
-      <div class="row justify-content-center">
-        
-      <div class="form-group col-md-2">
-        <label for="inputPassword4">Provider</label>
-        {{ fp_form.provider }}
-        
-      </div>
-      <div class="form-group  col-md-2">
-          <label for="inputAddress">Origin</label>
-          {{ fp_form.origin }}
-          
-        </div>
-        <div class="form-group  col-md-2">
-            <label for="inputAddress2">Manufactured in</label>
-            {{ fp_form.manufactured_in }}
-            
-        </div>
-    </div>
-    <div class="row justify-content-center">
-      <div class="form-group col-md-2">
-        <label for="inputZip">Location</label>
-        {{ fp_form.location }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Trade</label>
-        {{ fp_form.trade }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Annexe-5</label>
-        {{ fp_form.annexe5 }}
-        
-    </div>
-    </div>
-
-    <div class="row justify-content-center">
+  <div class="row">
+    <div class="col-6">
       
-      <div class="form-group col-md-2">
-        <label for="inputState">Department</label>
-        {{ fp_form.department }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputCity">FP Type</label>
-        {{ fp_form.fp_type }}
-       
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputCity">Phase</label>
-        {{ fp_form.phase }}
-        
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Index</label>
-        {{ fp_form.index }}
-        
-      </div>
+      {% if request.GET.editfp %}
+        <!-- FICHE PRODUIT EDIT FORM -->
+        {% include "fiche_produit/fiche_produit_edit_form.html" with fp_form=fp_form %}
+      {% else %}
+        <!-- FP Detail -->
+        {% include "fiche_produit/fiche_produit.html" with fp=fp %}
+      {% endif %}
+
     </div>
+    <div class="col-6">
       
-      <div class="row justify-content-center">
-        <div class="form-group col-md-4">
-          <label for="inputCity">Protocol</label>
-          {{ fp_form.protocol }}
-        
-        </div>
-        <div class="form-group col-md-4">
-          <label for="inputState">Observation</label>
-          {{ fp_form.observation }}
-         
-        </div>
+      <div class="row">
+        <!-- Annexe-5 TABLE -->
+        <table class="mt-5 col">
+          <thead>
+            <th>Annexe-5</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </thead>
+          <tbody>
+            {% for productcardannexe5 in productcardannexe5s %}
+            <tr><td>{{productcardannexe5.annexe5.code}}</td><td>{{productcardannexe5.quantity}}</td>
+              <td>
+                <a href="?editannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Edit</a>
+                <a href="?deleteannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      
+        <!-- Room TABLE -->
+        <table class="mt-5 col">
+          <thead>
+            <th>Room</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </thead>
+          <tbody>
+            {% for productcardroom in productcardrooms %}
+            <tr><td>{{productcardroom.room.no}}</td><td>{{productcardroom.quantity}}</td>
+              <td>
+                <a href="?editroom={{productcardroom.id}}" class="btn btn-secondary">Edit</a>
+                <a href="?deleteroom={{productcardroom.id}}" class="btn btn-secondary">Delete</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
 
-  <div class="row justify-content-center m-5">
-
-      <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ fp_submit_button_name }}</button>
     </div>
+  </div>
 
-  </form> -->
-{% else %}
-<!-- FP Detail -->
-  <table class="mt-3">
-    <thead>
-      <th>Name</th>
-      <th>Value</th>
-    </thead>
-    <tbody>
-      <tr><td>Project</td><td>{{ fp.project }}</td></tr>
-      <tr><td>Number</td><td>{{ fp.number }}</td></tr>
-      <tr><td>Name</td><td>{{ fp.product.name_fr }}</td></tr>
-      <tr><td>Description</td><td class="" style="max-width: 700px;">{{ fp.product.desc_fr }}</td></tr>
-      <tr><td>Quantity</td><td>{{ fp.quantity }}</td></tr>
-
-    </tbody>
-  </table>
-{% endif %}
-
-<div class="row">
-  <!-- Annexe-5 TABLE -->
-  <table class="mt-5 col">
-    <thead>
-      <th>Annexe-5</th>
-      <th>Quantity</th>
-      <th>Actions</th>
-    </thead>
-    <tbody>
-      {% for productcardannexe5 in productcardannexe5s %}
-      <tr><td>{{productcardannexe5.annexe5.code}}</td><td>{{productcardannexe5.quantity}}</td>
-        <td>
-          <a href="?editannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Edit</a>
-          <a href="?deleteannexe5={{productcardannexe5.id}}" class="btn btn-secondary">Delete</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <!-- Room TABLE -->
-  <table class="mt-5 col">
-    <thead>
-      <th>Room</th>
-      <th>Quantity</th>
-      <th>Actions</th>
-    </thead>
-    <tbody>
-      {% for productcardroom in productcardrooms %}
-      <tr><td>{{productcardroom.room.no}}</td><td>{{productcardroom.quantity}}</td>
-        <td>
-          <a href="?editroom={{productcardroom.id}}" class="btn btn-secondary">Edit</a>
-          <a href="?deleteroom={{productcardroom.id}}" class="btn btn-secondary">Delete</a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
 
 
       <!-- Fiche Produit Annexe-5 Form  -->
@@ -231,7 +126,7 @@
         </div>
       </div>
     <div class="row justify-content-center m-5">
-        <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{room_submit_button_name}}</button>
+        <button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ room_submit_button_name }}</button>
       </div>
         </form>
       {% endif %}

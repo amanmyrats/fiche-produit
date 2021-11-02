@@ -1,39 +1,47 @@
 {% load static %}
 
-<div class="container border border-dark" style="width:210mm; height: 297mm;">
+<div class="container border border-dark rounded-3" style="width:210mm; height: 297mm;">
     
 <!-- Logo and Name -->
-<div class="row border border-dark" style="height: 100px;">
-    <div class="col-3 mh-100 bg-info p-0 text-center">
-        <img src="{% static 'img/bytk_logo.png' %}" alt="Bouygues Turkmen" style="height: 90px; width:195px;">
+<div class="row" style="height: 110px;">
+    <div class="col-3 mh-100 p-0 text-center d-flex align-items-center border border-dark rounded-3">
+        <img src="{% static 'img/bytk_logo.png' %}" alt="Bouygues Turkmen" style="height: 100px; width:195px;">
     </div>
-    <div class="col-9 border border-dark">
+    <div class="col-9 border border-dark rounded-3">
         <div class="row p-0">
-            <div class="border-top font-weight-bold text-center h5 p-0" style="height: 15px;">
-                FICHE PRODUIT - КАРТОЧКА ИЗДЕЛИЯ
+            <div class="border-top font-weight-bold text-center h5 p-0 d-flex align-items-center" style="height: 15px;">
+                <div class="text-center w-100">
+                    FICHE PRODUIT - КАРТОЧКА ИЗДЕЛИЯ
+                </div>
             </div>
         </div>
-        <div class="row border-top border-dark p-0" style="height: 35px;">
+        <div class="row border-top border-dark p-0" style="height: 40px;">
             <div class="col-3 border p-0 h-100 d-flex align-items-center">
                 Nom du produit: 
             </div>
-            <div class="col-9 text-center p-0">
-                МОНИТОР МЕТАБОЛИЗМА Q-NRG
+            <div class="col-9 text-center p-0 d-flex align-items-center" style="font-size: 14px;">
+                <div class="text-center w-100">
+                    {{ fp.product.name_fr }}
+                </div>
             </div>
         </div>
-        <div class="row border-top border-info p-0" style="height: 35px;">
+        <div class="row border-top border-dark p-0" style="height: 40px;">
             <div class="col-3 border p-0 h-100 d-flex align-items-center" style=" font-size: 14px;">
-                Наименование изделия:
+                <div>
+                    Наименование изделия:
+                </div>
             </div>
-            <div class="col-9 text-center p-0">
-                Тренажер для сгибания ног в коленях
+            <div class="col-9 text-center p-0 d-flex align-items-center" style="font-size: 14px;">
+                <div class="text-center w-100">
+                    {{ fp.product.name_ru }}
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Lot and Chantier  -->
-<div class="row border border-dark"  style="height: 57px;">
+<div class="row rounded-3"  style="height: 57px;">
     <div class="col-3 border border-dark">
         <div class="row">
 
@@ -45,12 +53,14 @@
                     Pаздел N°:
                 </div>
             </div>
-            <div class="col-4 text-center h4">
-                70
+            <div class="col-4 h4 d-flex align-items-center">
+                <div class="w-100 text-center">
+                    {{ fp.lot.number }}
+                </div>
             </div>
         </div>
     </div>
-    <div class=" col-9 border border-dark">
+    <div class=" col-9 border border-dark rounded-3">
         <div class="row">
 
             <div class="col-2 border">
@@ -62,11 +72,15 @@
                 </div>
             </div>
             <div class="col-10 border">
-                <div class="row border">
-                    Complexe des bâtiments du Centre des conférences internationales
+                <div class="row border d-flex align-items-center" style="font-size: 14px;">
+                    <div class="w-100 text-center">
+                        {{ fp.project.name_fr }}
+                    </div>
                 </div>
-                <div class="row border">
-                    Комплекс зданий Центра международных конференций
+                <div class="row border d-flex align-items-center" style="font-size: 14px;">
+                    <div class="w-100 text-center">
+                        {{ fp.project.name_ru }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,8 +88,8 @@
 </div>
 
 <!-- Provider and Country -->
-<div class="row border border-dark p-0"  style="height: 76px;">
-    <div class="col-4 h-100 border border-dark">
+<div class="row p-0"  style="height: 76px;">
+    <div class="col-4 h-100 border border-dark rounded-3">
         <div class="row">
             <div class="col-4">
                 <div class="row border" style="height: 36px; font-size: 15px;">
@@ -87,15 +101,19 @@
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    GYM 80
+                    <div class="w-100 text-center">
+                        {{ fp.provider.name_fr }}
+                    </div>
                 </div>
-                <div class="row border" style="height: 36px;">
-                    ДЖИМ 80
+                <div class="row border"" style="height: 36px;">
+                    <div class="w-100 text-center">
+                        {{ fp.provider.name_ru }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-4 h-100  border border-dark">
+    <div class="col-4 h-100  border border-dark rounded-3">
         <div class="row">
             <div class="col-4">
                 <div class="row border" style="height: 36px; font-size: 15px;">
@@ -107,15 +125,19 @@
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    Europe
+                    <div class="w-100 text-center">
+                        {{ fp.origin.name_fr }}
+                    </div>
                 </div>
                 <div class="row border" style="height: 36px;">
-                    Европа
+                    <div class="w-100 text-center">
+                        {{ fp.origin.name_ru }}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-4 h-100  border border-dark">
+    <div class="col-4 h-100  border border-dark rounded-3">
         <div class="row">
             <div class="col-4">
                 <div class="row border" style="height: 36px; font-size: 12px;">
@@ -127,10 +149,14 @@
             </div>
             <div class="col-8">
                 <div class="row border" style="height: 36px;">
-                    Allemagne
+                    <div class="w-100 text-center">
+                        {{ fp.manufactured_in.name_fr }}
+                    </div>
                 </div>
                 <div class="row border" style="height: 36px;">
-                    Германия
+                    <div class="w-100 text-center">
+                        {{ fp.manufactured_in.name_ru }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -138,13 +164,15 @@
 </div>
 
 <!-- Localisation  -->
-<div class="row border border-dark" style="height: 53px;">
+<div class="row border border-dark rounded-3" style="height: 53px;">
     <div class="row p-0 m-0">
         <div class="col-3 border">
             Localisation:
         </div>
         <div class="col-9 border">
-            00.A4.SPA.307     Salle de fitness
+            <div class="w-100 text-center">
+                {{ fp.location_fr }}
+            </div>
         </div>
     </div>
     <div class="row p-0 m-0">
@@ -152,14 +180,16 @@
             Размещение:
         </div>
         <div class="col-9 border">
-            00.A4.SPA.307     Фитнес-зал
+            <div class="w-100 text-center">
+                {{ fp.location_ru }}
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Description  -->
-<div class="row border border-dark" style="height: 230px;">
-    <div class="row p-0 m-0">
+<div class="row border border-dark rounded-3" style="height: 230px;">
+    <div class="row p-0 m-0 text-center" style="height: 23px; font-size: 14px;">
         <div class="col-6 border">
             DESCRIPTION DU PRODUIT:
         </div>
@@ -169,41 +199,27 @@
     </div>
     <div class="row p-0 m-0" style="font-size: 12px;">
         <div class="col-6 border">
-            Moniteur de Métabolisme Q-NRG
-            <br><br>
-            Système de surveillance diagnostique pour la mesure des échanges métaboliques Q-NRG. Chariot d'équipement complet + imprimante, consommables.<br>
-            DIMENSIONS: <br>
-            Hauteur: 1400 mm <br>
-            Longueur: 800 mm <br>
-            Largeur: 400 mm <br>
-            <br>
-            Qty: 1
+            {{ fp.product.desc_fr }}
         </div>
         <div class="col-6 border">
-            МОНИТОР МЕТАБОЛИЗМА Q-NRG
-            <br><br>
-            Диагностическая система мониторинга  для измерения метаболического обмена Q-NRG   +  принтер, расходные материалы, набор тележек <br>
-            Размеры: <br>
-            Высота: 1400 мм <br>
-            Длина: 800 мм <br>
-            Ширина: 400 мм <br>
-            <br>
-            Кол-во: 1 <br>
+            {{ fp.product.desc_ru }} 
         </div>
     </div>
 </div>
 
 <!-- Image  -->
 <div class="row border border-dark" style="height: 200px;">
-    <div class="col-3">
+    <div class="col-3 rounded-3">
         <!-- <div class="row"> -->
-            <div class="row border">
-                Descriptif technique: <br> 
+            <div class="row border text-center" style="font-size: 14px;">
+                Descriptif technique:
                 Техническое описание:
             </div>
 
             <div class="row border">
-                Non/нет
+                <div class="w-100 text-center">
+                    Non/Нет
+                </div>
             </div>
         <!-- </div> -->
         <!-- <div class="row"> -->
@@ -212,77 +228,79 @@
             </div>
 
             <div class="row border">
-                Oui/Da
+                <div class="w-100 text-center">
+                    Oui/Да
+                </div>
             </div>
         <!-- </div> -->
     </div>
-    <div class="col-9 border border-dark h-100">
-       
+    <div class="col-9 border-start border-end-0 border-dark h-100  text-center rounded-3">
+       <img src="{{ fp.product.image.url }}" alt="{{ fp.product.name_fr }}" style="height: 190px;">
     </div>
 </div>
 
 <!-- Protocol and Observation  -->
-<div class="row border border-dark " style="height: 150px;font-size: 14px;">
-    <div class="border border-dark p-0 m-0">
+<div class="row border-start-0 border-dark" style="height: 150px;font-size: 14px;">
+    <div class="border border-dark p-0 m-0 rounded-3">
 
-        <div class="row p-0 border border-end m-0" style="height: 36px;">
+        <div class="row p-0 border  border-end m-0" style="height: 36px;">
             <div class="col-3  p-0 m-0">
                 Procès verbaux:
             </div>
-            <div class="col-9  p-0 m-0">
-                Some Protocol Here
+            <div class="col-9  p-0 m-0 text-center">
+                {{ fp.protocol_fr }}
             </div>
         </div>
         <div class="row p-0 m-0" style="height: 36px;">
-            <div class="col-3  p-0 m-0">
+            <div class="col-3  p-0 m-0 te">
                 Протоколы:
             </div>
-            <div class="col-9  p-0 m-0">
-                Some Protocol Here
+            <div class="col-9  p-0 m-0 text-center">
+                {{ fp.protocol_ru }}
             </div>
         </div>
     </div>
-    <div class="border border-dark p-0 m-0">
+    <div class="border border-dark p-0 m-0 rounded-3">
 
         <div class="row p-0 border border-end m-0" style="height: 37px;">
             <div class="col-3  p-0 m-0" style="font-size: 12px;">
                 Observations et avis de l'organisme de contrôle:
             </div>
-            <div class="col-9  p-0 m-0">
-                Some Observation Here
+            <div class="col-9  p-0 m-0 text-center">
+                {{ fp.observation_fr }}
             </div>
         </div>
         <div class="row p-0 m-0" style="height: 37px;">
             <div class="col-3  p-0 m-0" style="font-size: 12px;">
                 Замечания И Заключение Тех. Надзора:
             </div>
-            <div class="col-9  p-0 m-0">
-                Some Observation Here
+            <div class="col-9  p-0 m-0 text-center">
+                {{ fp.observation_ru }}
             </div>
         </div>
     </div>
 </div>
 
 <!-- Signature  Client/Contractor -->
-<div class="row  border-dark border-top text-center" style="font-size: 12px;">
+<div class="row  border-dark border-top border-start border-end text-center rounded-top" style="font-size: 11px; height: 30px;">
     <div class="col-1">
     </div>
     <div class="col-5 ">
-        ПОДРЯДЧИК <br>
-        ENTREPRENEUR
+        ENTREPRENEUR<br>
+        ПОДРЯДЧИК
     </div>
     <div class="col-3 border-dark  border-start">
-        ТЕХ.НАДЗОР <br>
-        ORGANISME DE CONTRÔLE
+        ORGANISME DE CONTRÔLE<br>
+        ТЕХ.НАДЗОР
     </div>
     <div class="col-3 border-dark border-start">
-        ПРЕДСТАВИТЕЛИ ЗАКАЗЧИКА <br>
-        MAÎTRE D'OUVRAGE
+        MAÎTRE D'OUVRAGE<br>
+        ПРЕДСТАВИТЕЛИ ЗАКАЗЧИКА
     </div>
 </div>
 
 <!-- Signature  Title -->
-<div class="row    border-end border-start text-center" style="font-size: 12px;">
+<div class="row    border-end border-start border-dark text-center" style="font-size: 12px;">
     <div class="col-1">
 
     </div>
@@ -305,128 +323,175 @@
 </div>
 
 <!-- Signature  Date -->
-<div class="row border-top border-dark" style="font-size: 14px;">
+<div class="row border-top border-dark border-start border-end" style="font-size: 14px;">
     <div class="col-1" style="font-size: 11px;">
-        LE/дата:
+        Le/Дата:
     </div>
-    <div class="col-2  border-dark border-start">
-        28/09/2020
+    <div class="col-2  border-dark border-start text-center">
+        ___ / ___ / 202 __
     </div>
-    <div class="col-3  border-start">
-        28/09/2020
+    <div class="col-3  border-start text-center"">
+        ___ / ___ / 202 __
     </div>
-    <div class="col-3  border-dark border-start">
-        28/09/2020
+    <div class="col-3  border-dark border-start text-center"">
+        ___ / ___ / 202 __
     </div>
-    <div class="col-3  border-dark border-start">
-        28/09/2020
+    <div class="col-3  border-dark border-start text-center"">
+        ___ / ___ / 202 __
     </div>
 </div>
 
 <!-- Signature  Name -->
-<div class="row border" style="font-size: 14px;">
+<div class="row border-start border-dark border-end" style="font-size: 14px;">
     <div class="col-1">
-        NOM: <br>
-        имя:
+        Nom: <br>
+        Имя:
     </div>
-    <div class="col-2 border-start border-dark">
-        H.LOUMASSINE <br>
-        H.LOUMASSINE
+    <div class="col-2 border-start border-dark p-0">
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_contractor1.name_fr }}
+        </div>
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_contractor1.name_ru }}
+        </div>
     </div>
-    <div class="col-3 border">
-        S.LEVENARD <br>
-        S.LEVENARD
+    <div class="col-3 border-start p-0">
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_contractor2.name_fr }}
+        </div>
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_contractor2.name_ru }}
+        </div>
     </div>
-    <div class="col-3 border-start border-dark">
-        CLIENT NAME <br>
-        CLIENT NAME
+    <div class="col-3 border-start border-dark p-0">
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_tehnadzor.name_fr }}
+        </div>
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_tehnadzor.name_ru }}
+        </div>
     </div>
-    <div class="col-3 border-start border-dark">
-        CLIENT NAME <br>
-        CLIENT NAME
+    <div class="col-3 border-start border-dark p-0">
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_client.name_fr }}
+        </div>
+        <div class="w-100 text-center" style="height: 22px;  white-space: nowrap;">
+            {{ fp.sign_client.name_ru }}
+        </div>
     </div>
 </div>
 
 <!-- Signature  Sign -->
-<div class="row  border-dark" style="height: 50px;">
+<div class="row border-start border-dark border-end rounded-bottom" style="height: 45px;">
     <div class="col-1 h-100 px-1" style="font-size: 13px;">
-        VISAS: 
-        подписи:
+        Visas: 
+        Подписи:
     </div>
-    <div class="col-2 border-start border-dark h-100">
+    <div class="col-2 border-start border-dark  h-100">
 
     </div>
     <div class="col-3 border-start h-100">
     </div>
-    <div class="col-3 border-start border-dark h-100">
+    <div class="col-3 border-start border-dark  h-100">
     </div>
-    <div class="col-3 border-start border-dark h-100">
+    <div class="col-3 border-start border-dark   h-100">
     </div>
 </div>
 
 <!-- Footer Title-->
-<div class="row  border-dark" style="font-size: 11px; height: 32px;">
-    <div class="col-4 border border-dark h-100 text-center">
+<div class="row border-top border-start border-end border-dark rounded-top" style="font-size: 11px; height: 32px;">
+    <div class="col-4 border-start-0 border-top border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Affaire<br>
+            Проект
+        </div>
 
-                Affaire <br>
-                проект
-
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Phase <br>
-                зтап
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Phase <br>
+            Зтап
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Lot <br>
-                Pаздел
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Lot <br>
+            Pаздел
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Type <br>
-                тип
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Type <br>
+            Тип
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Zone <br>
-                зона
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Zone <br>
+            Зона
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Niveau <br>
-                зтаж
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Niveau <br>
+            Зтаж
+        </div>
     </div>
-    <div class="col-2 border border-dark h-100 text-center">
-                Numéro <br>
-                номеp
+    <div class="col-2 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Numéro <br>
+            Номеp
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                Indice <br>
-                Индекс
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            Indice <br>
+            Индекс
+        </div>
     </div>
 </div>
 
 <!-- Footer Data-->
-<div class="row border border" style="font-size: 14px; height: 32px;">
-    <div class="col-4 border border-dark h-100 text-center">
-                CRA
+<div class="row border-start border-end border-bottom border-dark rounded-bottom" style="font-size: 14px; height: 34px;">
+    <div class="col-4 border-top border-start-0 border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.project.code }}
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                PEO
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.phase }}
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                70
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.lot.number }}
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                FP
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.fp_type.name }}
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                ++
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.zone }}
+        </div>
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                ++
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.level }}
+        </div>
     </div>
-    <div class="col-2 border border-dark h-100 text-center">
-                00060
+    <div class="col-2 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.number }}
+        </div>        
     </div>
-    <div class="col-1 border border-dark h-100 text-center">
-                0
+    <div class="col-1 border-top border-start border-dark h-100 d-flex align-items-center">
+        <div class="w-100 text-center">
+            {{ fp.index }}
+        </div>
     </div>
 </div>
 

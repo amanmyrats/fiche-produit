@@ -225,8 +225,8 @@ html {
         <td class="">{{ fp.location }}</td>
         <td class=""><img style="max-height: 130px;" src="{{ fp.image_url }}" alt="{{ fp.product.name_fr }}"></td>
         <td  class="row justify-content-center" style="max-width: 110px;">
-          <a href="{{ fp.id }}/edit/" class="btn btn-primary p-1">Edit</a>
-          <a href="{{ fp.id }}/" class="btn btn-primary my-1 p-1">Detail</a>
+          <a href="{{ fp.id }}/edit/" class="btn btn-primary my-1 p-1">Edit/Detail</a>
+          <!-- <a href="{{ fp.id }}/" class="btn btn-primary my-1 p-1">Detail</a> -->
           <a href="{{ fp.id }}/print/" class="btn btn-primary p-1">Print</a>
           <a href="{% url 'export' %}?what=fp&towhat=excel&pk={{fp.id}}" class="btn btn-primary my-1 p-1">To Excel</a>
           <!-- <a href="{% url 'export'%}?what=fp&towhat=pdf&pk={{fp.id}}" class="btn btn-primary my-1 p-1">To PDF</a> -->

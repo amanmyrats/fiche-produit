@@ -9,7 +9,7 @@
     
 <!-- Logo and Name -->
 <div class="row border border-dark" style="height: 100px;">
-    <div class="col-3 mh-100 bg-info p-0 text-center">
+    <div class="col-3 mh-100 p-0 text-center">
         <img src="{% static 'img/bytk_logo.png' %}" alt="Bouygues Turkmen" style="height: 90px; width:195px;">
     </div>
     <div class="col-9 border border-dark">
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<!-- Lot and Chantier  -->
+<!-- Lot and Project-Chantier  -->
 <div class="row border border-dark"  style="height: 57px;">
     <div class="col-3 border border-dark">
         <div class="row">
@@ -208,7 +208,7 @@
             </div>
 
             <div class="row border">
-                Non/нет
+                Non/Нет
             </div>
         <!-- </div> -->
         <!-- <div class="row"> -->
@@ -217,7 +217,7 @@
             </div>
 
             <div class="row border">
-                Oui/Da
+                Oui/Да
             </div>
         <!-- </div> -->
     </div>
@@ -273,16 +273,16 @@
     <div class="col-1">
     </div>
     <div class="col-5 ">
-        ПОДРЯДЧИК <br>
-        ENTREPRENEUR
+        ENTREPRENEUR<br>
+        ПОДРЯДЧИК
     </div>
     <div class="col-3 border-dark  border-start">
-        ТЕХ.НАДЗОР <br>
-        ORGANISME DE CONTRÔLE
+        ORGANISME DE CONTRÔLE<br>
+        ТЕХ.НАДЗОР
     </div>
     <div class="col-3 border-dark border-start">
-        ПРЕДСТАВИТЕЛИ ЗАКАЗЧИКА <br>
-        MAÎTRE D'OUVRAGE
+        MAÎTRE D'OUVRAGE<br>
+        ПРЕДСТАВИТЕЛИ ЗАКАЗЧИКА
     </div>
 </div>
 
@@ -312,27 +312,27 @@
 <!-- Signature  Date -->
 <div class="row border-top border-dark" style="font-size: 14px;">
     <div class="col-1" style="font-size: 11px;">
-        LE/дата:
+        Le/Дата:
     </div>
-    <div class="col-2  border-dark border-start">
-        28/09/2020
+    <div class="col-2  border-dark border-start text-center">
+        __ /__ / 202 __
     </div>
-    <div class="col-3  border-start">
-        28/09/2020
+    <div class="col-3  border-start text-center">
+        __ /__ / 202 __
     </div>
-    <div class="col-3  border-dark border-start">
-        28/09/2020
+    <div class="col-3  border-dark border-start text-center">
+        __ /__ / 202 __
     </div>
-    <div class="col-3  border-dark border-start">
-        28/09/2020
+    <div class="col-3  border-dark border-start text-center">
+        __ /__ / 202 __
     </div>
 </div>
 
 <!-- Signature  Name -->
 <div class="row border" style="font-size: 14px;">
     <div class="col-1">
-        NOM: <br>
-        имя:
+        Nom: <br>
+        Имя:
     </div>
     <div class="col-2 border-start border-dark">
         {{ fp_form.sign_contractor1 }} <br>
@@ -355,8 +355,8 @@
 <!-- Signature  Sign -->
 <!-- <div class="row  border-dark" style="height: 50px;">
     <div class="col-1 h-100 px-1" style="font-size: 13px;">
-        VISAS: 
-        подписи:
+        Visas: 
+        Подписи:
     </div>
     <div class="col-2 border-start border-dark h-100">
 
@@ -374,12 +374,12 @@
     <div class="col-4 border border-dark h-100 text-center">
 
                 Affaire <br>
-                проект
+                Проект
 
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Phase <br>
-                зтап
+                Зтап
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Lot <br>
@@ -387,19 +387,19 @@
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Type <br>
-                тип
+                Тип
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Zone <br>
-                зона
+                Зона
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Niveau <br>
-                зтаж
+                Зтаж
     </div>
     <div class="col-2 border border-dark h-100 text-center">
                 Numéro <br>
-                номеp
+                Номеp
     </div>
     <div class="col-1 border border-dark h-100 text-center">
                 Indice <br>
@@ -410,7 +410,7 @@
 <!-- Footer Data-->
 <div class="row border border" style="font-size: 14px; height: 45px;">
     <div class="col-4 border border-dark h-100 text-center">
-                {{ fp_form.project }}
+                <!-- {{ fp_form.project }} -->
     </div>
     <div class="col-1 border border-dark h-100 text-center px-1">
                 {{ fp_form.phase}}
@@ -435,10 +435,30 @@
     </div>
 </div>
 
+</div> <!-- container ends here -->
 
-    
-</div> 
-<!-- container ends here -->
+<!-- Extra fields of form -->
+<div class="container border border-dark mt-5 " style="width:210mm; height: 40mm;">
+    <div class="row justify-content-center mt-3">  
+        <div class="form-group col-md-4">
+          <label for="{{fp_form.department.id_for_label}}">Department</label>
+          {{ fp_form.department }}
+        </div>
+        <div class="form-group col-md-4">
+            <label for="{{fp_form.trade.id_for_label}}">Trade</label>
+            {{ fp_form.trade }}
+        </div>
+        <div class="form-group col-md-4">
+            <label for="{{fp_form.quantity.id_for_label}}">Quantity</label>
+            {{ fp_form.quantity }}
+        </div>
+    </div>
+</div>
 
-<button type="submit" class="btn btn-primary" style="max-width: max-content;">{{ fp_submit_button_name }}</button>
+
+<!-- Submit Button -->
+<div class="w-90 text-end p-3">
+
+    <button type="submit" class="btn btn-primary btn-lg" style="height:70px; width:300px;">{{ fp_submit_button_name }}</button>
+</div>
 </form>

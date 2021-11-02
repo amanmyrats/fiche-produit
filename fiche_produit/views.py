@@ -151,7 +151,7 @@ def fpcreate_view(request):
             if status.is_success(create_request.status_code):
                 print(response['id'])
                 context = {'success': 'FP has been created, you are now redirected to fp list.'}
-                return redirect('/fps/')
+                return redirect('/fps/{}/edit'.format(response['id']))
             else:
                 context['form'] = form
                 context['errors'] = form.errors
