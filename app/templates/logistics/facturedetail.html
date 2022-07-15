@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_extra %}
+
+
+<!-- CSS for filter and search -->
+<link rel="stylesheet" href="{% static 'css/site/main.css' %}">
+<style>
+    table th{
+      min-width: 150px;
+      max-width: 400px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'facturelist' %}" class="btn btn-lg btn-warning border border-dark">See full list of Factures</a>
+<a href="{% url 'factureedit' facture.id %}" class="btn btn-lg btn-warning border border-dark">Edit This Facture</a>
+<a href="{% url 'facturecreate' %}" class="btn btn-lg btn-warning border border-dark">Create New Facture</a>
+<br><br><br>
+{{ facture.project.code }}
+{{ facture.number }}
+<br><br>
+
+
+<table class="mt-5">
+    <thead>
+
+        <th>Facture Item No</th>
+        <th>Order Reference</th>
+        <th>HS Code</th>
+        <th>Package Type</th>
+        <th>Quantity</th>
+        <th>Unit</th>
+        <th>Unit Price</th>
+        <th>Currency</th>
+
+    </thead>
+    {% for item in facture.factureitems.all %}
+        <tbody>
+
+            <td style="max-width: 30px;">{{ item.no }}</td>
+            <td style="min-width: 300px;">{{item.order_item}}</td>
+            <td>{{item.hs_code}}</td>
+            <td>{{item.package_type }}</td>
+            <td>{{item.quantity }}</td>
+            <td>{{item.unit}}</td>
+            <td>{{item.price }}</td>
+            <td>{{item.currency }}</td>
+        </tbody>
+        {% endfor %}
+    </table> 
+
+    <br>
+
+
+{% endblock %}
+
+{% block js %}
+
+{% endblock %}
